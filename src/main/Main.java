@@ -12,9 +12,9 @@ public class Main {
 
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
-		Graph graph = fileHandler.loadGraph("db/examples/graph00.graph");
+		Graph graph = fileHandler.loadGraph("db/examples/graph01.graph");
 		
-		//graph.display();
+		graph.display();
 		//graph.display().disableAutoLayout()
 		fileHandler.saveGraph(graph, "filename");
 		
