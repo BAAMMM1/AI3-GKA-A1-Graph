@@ -17,7 +17,7 @@ public class Main {
 		//test comment
 		graph.display();
 		//graph.display().disableAutoLayout();
-		fileHandler.saveGraph(graph, "filename");
+		//fileHandler.saveGraph(graph, "filename");
 		
 
 	}
