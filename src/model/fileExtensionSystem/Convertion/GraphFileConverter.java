@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.AbstractEdge;
 import org.graphstream.graph.implementations.MultiGraph;
 
 public class GraphFileConverter extends FileConverter {
@@ -32,6 +33,7 @@ public class GraphFileConverter extends FileConverter {
 	private final Pattern PATTERN_WEIGHT = Pattern.compile("(?!" + REGEX_IDENTIFIER + ")" + "(?!" + REGEX_ATTRIBUTE + ")" + "(?!" + REGEX_EDGE + ")" + REGEX_WEIGHT);
 	private final Pattern PATTERN_DIGITS = Pattern.compile(REGEX_DIGITS);
 
+	public List<AbstractEdge> edgesList = new ArrayList<AbstractEdge>();
 
 	@Override
 	public Graph fileToGraphObject(List<String> rows) {
@@ -39,6 +41,7 @@ public class GraphFileConverter extends FileConverter {
 		MultiGraph graph = new MultiGraph("Test");
 		List<String> nodes = new ArrayList<String>();
 		List<String> edges = new ArrayList<String>();
+		
 		// Flag gerichtet oder ungerichteter Graph
 		boolean orientation = this.getGraphOrientation(rows.get(0));	; // false für ungerichtet, true für
 
@@ -47,9 +50,11 @@ public class GraphFileConverter extends FileConverter {
 		 */
 		for (int i = 0; i < rows.size(); i++) {
 			boolean validRow = PATTERN_VALID_ROW.matcher(rows.get(i)).matches();
+			/*
 			System.out.println("-----------------------------");
 			System.out.println(
 					"row: - " + rows.get(i) + " - is valid: " + validRow);
+					*/
 
 			// Nur wenn die Zeile überhaupt valid ist, dann lege los
 			if (validRow) {
@@ -90,10 +95,13 @@ public class GraphFileConverter extends FileConverter {
 				if ((node2 != null)) {
 					if (!(edges.contains(node1 + node2))) {
 						edges.add(node1 + node2);
-						graph.addEdge(node1 + node2, node1, node2, orientation);
+						
+						graph.addEdge(node1 + node2, node1, node2, orientation);						
+						
 						
 						if (edge != null) {
 							graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
+							
 						} else {
 							graph.getEdge(node1 + node2).addAttribute("ui.label", graph.getEdge(node1 + node2).getId());
 						}
@@ -106,6 +114,7 @@ public class GraphFileConverter extends FileConverter {
 					}
 				}
 				
+				/*
 				System.out.println("Part1: " + part1);
 				System.out.println("Node1: " + node1);
 				System.out.println("Attribute1: " + attribute1);
@@ -116,10 +125,29 @@ public class GraphFileConverter extends FileConverter {
 				System.out.println("Weight: " + weight);
 				System.out.println("Edge weight: " + edge);
 				System.out.println("");
+				*/
 
 			}
 
 		}
+		
+		/*
+		System.out.println(edgesList.toString());
+		
+		List<AbstractEdge> edgesTest = new ArrayList<AbstractEdge>();
+		edgesTest.addAll(graph.getEdgeSet());
+		
+		List<AbstractEdge> temp = new ArrayList<AbstractEdge>();
+		
+		for(int i = 0 ; i< edgesTest.size() -1 ; i++){			
+			
+			if(edgesTest.get(i).getSourceNode() == graph.getNode("a")){
+				temp.add(edgesTest.get(i));
+			}
+		}
+		
+		System.out.println(temp.toString());
+		*/
 
 		return graph;
 	}
