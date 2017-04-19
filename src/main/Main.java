@@ -14,6 +14,7 @@ public class Main {
 		
 		Graph graph = fileHandler.loadGraph("db/examples/graph01.graph");
 		
+		//test comment
 		graph.display();
 		//graph.display().disableAutoLayout()
 		fileHandler.saveGraph(graph, "filename");
