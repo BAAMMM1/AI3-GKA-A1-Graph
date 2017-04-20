@@ -190,6 +190,7 @@ public class GraphFileConverter extends FileConverter {
 
 	@Override
 	public List<String> graphObjectToString(Graph graph) {
+		System.out.print("to save graph: " + graph.toString());
 		List<String> out = new ArrayList<String>();
 		for(Edge edge : graph.getEachEdge()) {
            String row;
@@ -218,11 +219,9 @@ public class GraphFileConverter extends FileConverter {
 		
 		for(int i = 0; i < out.size() -1; i++){
 			System.out.print(out.get(i));
-		}
-		
-		
+		}		
 
-		return new ArrayList<String>();
+		return out;
 	}
 
 }

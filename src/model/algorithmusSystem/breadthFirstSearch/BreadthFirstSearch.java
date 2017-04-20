@@ -101,7 +101,7 @@ public class BreadthFirstSearch extends Algorithmus{
 			for(int i = 0; i <= nodes.size() -1 ; i++) {
 				int bfs = nodes.get(i).getAttribute("BFS");
 				
-				if( bfs == (highestBFS-1) && this.kanten(nodes.get(i), path.get(counter))){
+				if( bfs == (highestBFS-1) && this.isThereAEdgeBetweenThisNodes(nodes.get(i), path.get(counter))){
 					path.add(nodes.get(i));
 					highestBFS--;
 					counter++;
@@ -117,7 +117,7 @@ public class BreadthFirstSearch extends Algorithmus{
 	}
 	
 	
-	public boolean kanten(AbstractNode bfsNode, AbstractNode targetNode){
+	public boolean isThereAEdgeBetweenThisNodes(AbstractNode bfsNode, AbstractNode targetNode){
 		boolean toReturn = false;
 		
 		for(int i = 0; i <= edges.size() -1 ; i++){
