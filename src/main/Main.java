@@ -19,7 +19,7 @@ public class Main {
 
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
-		Graph graph = fileHandler.loadGraph("db/examples/graph01a.graph");
+		Graph graph = fileHandler.loadGraph("db/examples/graph01.graph");
 		
 		//test comment
 		graph.display();

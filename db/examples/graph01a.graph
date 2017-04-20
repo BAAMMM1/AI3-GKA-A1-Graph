@@ -1,10 +1,10 @@
+# directed;
 s,a;
 s,f;
 a,d;
 a,b;
 a,e;
 f,d;
-f,e;
 d,e;
 b,c;
 b,t;
