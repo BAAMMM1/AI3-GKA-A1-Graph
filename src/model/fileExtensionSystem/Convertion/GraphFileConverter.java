@@ -192,6 +192,17 @@ public class GraphFileConverter extends FileConverter {
 	public List<String> graphObjectToString(Graph graph) {
 		System.out.print("to save graph: " + graph.toString());
 		List<String> out = new ArrayList<String>();
+		
+		// Schau ob eine Kante gerichtet ist, dann ist der Graph gerichtet
+		for(Edge edge : graph.getEachEdge()) {
+			if(edge.isDirected() == true){
+				out.add("#directed;");
+				break;
+			}
+		}
+		
+		
+		
 		for(Edge edge : graph.getEachEdge()) {
            String row;
            String part1 = edge.getNode0().toString();

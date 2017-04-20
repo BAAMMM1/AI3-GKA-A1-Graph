@@ -1,14 +1,9 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.graphstream.graph.Graph;
 
-import model.algorithmusSystem.Algorithmus;
 import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
 import model.fileExtensionSystem.FileExtension;
 import model.fileExtensionSystem.GraphFileExtensionHandler;
 
@@ -19,11 +14,13 @@ public class Main {
 
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
-		Graph graph = fileHandler.loadGraph("db/examples/graph01.graph");
+		Graph graph = fileHandler.loadGraph("db/examples/save5.graph");
 		
 		//test comment
-		graph.display();
+		//graph.display();
 		
+		BreadthFirstSearch2 bfs2 = new BreadthFirstSearch2(graph);
+		bfs2.stpAlgorithmus(graph.getNode("s"), graph.getNode("t"));
 		
 		/*
 
@@ -59,12 +56,14 @@ public class Main {
 		/*
 		System.out.println(bfsTabelle.get("0"));
 		System.out.println(bfsTabelle.get("1"));
-		*/
 		
+		
+		*/
+		/*
 		BreadthFirstSearch bfsAlgo = new BreadthFirstSearch(graph);
 		
 		bfsAlgo.shortestPath("s", "t");
-	
+		*/
 	
 			
 	
