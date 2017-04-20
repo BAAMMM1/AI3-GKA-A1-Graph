@@ -72,15 +72,20 @@ public class BreadthFirstSearch2 extends Algorithmus{
 		
 		
 		// Zurückweg
+				List<Node> pathTemp = new ArrayList<Node>();
 				List<Node> path = new ArrayList<Node>();
-				path.add(target);
+				pathTemp.add(target);
 				int bfslambda = target.getAttribute("BFS");
 				
 				int counter = 0;
 				while(bfslambda > 0 ){					
-					path.add(getNextSmallerBFS(path.get(counter)));					
+					pathTemp.add(getNextSmallerBFS(pathTemp.get(counter)));					
 					counter++;
-					bfslambda = path.get(counter).getAttribute("BFS");
+					bfslambda = pathTemp.get(counter).getAttribute("BFS");
+				}
+				
+				for(int i = pathTemp.size()-1; i >= 0; i--){
+					path.add(pathTemp.get(i));
 				}
 				
 				System.out.println(path.toString());
