@@ -75,6 +75,8 @@ public class gui {
 	View view;
 	JPanel panel_graph;
 	
+	JTextArea textArea;
+	
 	boolean autolayout = true;
 	List<String> graphAsText;
 	/**
@@ -86,15 +88,18 @@ public class gui {
 
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
-		graph = fileHandler.loadGraph("db/examples/graph01.graph");
-		graphAsText = fileHandler.loadFile("db/examples/graph01.graph");
-		
+		//test Graph
+		graph = fileHandler.loadGraph("db/examples/graph03.graph");
+		graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
+		/*
 		// Graphstream integration in die GUI
 		 // create a view *without* a JFrame
 		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
 	    view = viewer.addDefaultView(false);
 	    viewer.enableAutoLayout();
-
+	    */
+	    
+	   
 		
 		
 		
@@ -102,15 +107,20 @@ public class gui {
 		
 		frame = new JFrame();		
 		
-		JTextArea textArea = new JTextArea();	
+		textArea = new JTextArea();	
 		
 		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Headline
-		frame.setTitle("GKA Graphomat");
+		frame.setTitle("GKA-A1-Graph");
 	
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(192, 192, 192)));
+		
+
+		
+		this.setGrapgBuilderTextArea();
+		
 		
 		JButton btnLoadGraph = new JButton("Load Graph");
 		btnLoadGraph.addActionListener(new ActionListener() {
@@ -128,24 +138,13 @@ public class gui {
 		                  chooser.getSelectedFile().getName());
 		            System.out.println("Die zu öffnende Datei ist: " +
 			                  chooser.getSelectedFile().getPath());
-		            graph = fileHandler.loadGraph(chooser.getSelectedFile().getPath());
 		            
-		            graphAsText = fileHandler.loadFile(chooser.getSelectedFile().getPath());
-		            String textAreaString = null;
-		    		for(int i = 0; i<= graphAsText.size()-1; i++ ){
-		    			textAreaString = textAreaString + graphAsText.get(i).toString() + "\n";
-		    		}
-		    		textArea.setText(textAreaString);
+		            graph = fileHandler.loadGraph(chooser.getSelectedFile().getPath());	
+		            setGraphToPanel();
 		            
-		            viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+		            graphAsText = fileHandler.loadFile(chooser.getSelectedFile().getPath());		            
+		            setGrapgBuilderTextArea();
 		            
-		    	    view = viewer.addDefaultView(false);
-		    	    viewer.enableAutoLayout();
-		    	    panel_graph.removeAll();
-		    	    panel_graph.add((Component) view);
-		    	    panel_graph.isDisplayable();
-		    	    panel_graph.revalidate(); 
-		    	    panel_graph.repaint();
 		        }
 			}
 		});
@@ -190,6 +189,7 @@ public class gui {
 		
 		panel_graph = new JPanel();
 		panel_graph.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		panel_graph.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -202,26 +202,28 @@ public class gui {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 321, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 917, Short.MAX_VALUE)
-					.addGap(6))
+					.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 913, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
-							.addContainerGap())
-						.addComponent(panel_graph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+								.addComponent(panel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)))
+					.addContainerGap())
 		);
 		
 		JLabel lblNewLabel = new JLabel("Algorithmen");
@@ -239,9 +241,9 @@ public class gui {
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBox, 0, 299, Short.MAX_VALUE)
+						.addComponent(comboBox, 0, 144, Short.MAX_VALUE)
 						.addComponent(lblNewLabel)
-						.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
+						.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
@@ -253,43 +255,47 @@ public class gui {
 					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton_2)
-					.addContainerGap(12, Short.MAX_VALUE))
+					.addContainerGap(41, Short.MAX_VALUE))
 		);
 		panel_2.setLayout(gl_panel_2);
+		
+		JLabel lblMenl = new JLabel("Options");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(10)
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-								.addComponent(btnLoadGraph, GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)))
+							.addContainerGap()
+							.addComponent(lblMenl))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(btnAutolayout, GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)))
+							.addComponent(btnLoadGraph, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnAutolayout, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(5)
+					.addContainerGap()
+					.addComponent(lblMenl)
+					.addGap(4)
 					.addComponent(btnLoadGraph)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnAutolayout)
-					.addGap(53))
+					.addGap(16))
 		);
 		panel.setLayout(gl_panel);
 		
-			
-		String textAreaString = null;
-		for(int i = 0; i<= graphAsText.size()-1; i++ ){
-			textAreaString = textAreaString + graphAsText.get(i).toString() + "\n";
-		}
-		textArea.setText(textAreaString);
+		
+
 		
 		JButton btnNewButton_1 = new JButton("Graphanzeige aktualisieren");
 		btnNewButton_1.addActionListener(new ActionListener() {
@@ -298,24 +304,24 @@ public class gui {
 		
 				String text = textArea.getText();
 				while(text.length()>0){
-					fromTextArex.add(text.substring(0, text.indexOf("\n")));
-					text = text.substring(text.indexOf("\n")+1);
+					if(text.indexOf("\n") != -1){						
+						fromTextArex.add(text.substring(0, text.indexOf("\n")));
+						text = text.substring(text.indexOf("\n")+1);
+					} else {
+						fromTextArex.add(text);
+						break;
+					}
+					
 				}				
 				System.out.println(fromTextArex.toString());
 				graph = fileHandler.loadGraphFromList(fromTextArex);
-				viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-		    	view = viewer.addDefaultView(false);
-		    	viewer.enableAutoLayout();
-		    	panel_graph.removeAll();
-		    	panel_graph.add((Component) view);
-		    	panel_graph.isDisplayable();
-		    	panel_graph.revalidate(); 
-		    	panel_graph.repaint();
+
+				setGraphToPanel();
 				
 			}
 		});
 		
-		JLabel lblGraph = new JLabel("Graphbuilder:");
+		JLabel lblGraph = new JLabel("Console:");
 		
 		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
@@ -345,8 +351,11 @@ public class gui {
 		scrollPane.setViewportView(textArea);		
 		panel_1.setLayout(gl_panel_1);
 		
-		panel_graph.add((Component) view);
-		panel_graph.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		
+
+		
+		setGraphToPanel();
 
 		
 		frame.getContentPane().setLayout(groupLayout);
@@ -357,5 +366,23 @@ public class gui {
 		
 		
 		
+	}
+	
+	public void setGrapgBuilderTextArea(){
+		String textAreaString = "";
+		for(int i = 0; i<= graphAsText.size()-1; i++ ){
+			textAreaString = textAreaString + graphAsText.get(i).toString() + "\n";
+		}
+		textArea.setText(textAreaString);
+	}
+	
+	public void setGraphToPanel(){
+		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);         
+ 	    view = viewer.addDefaultView(false);
+ 	    viewer.enableAutoLayout(); 	    
+ 	    panel_graph.removeAll();
+ 	    panel_graph.add((Component) view);
+ 	    panel_graph.revalidate(); 
+ 	    panel_graph.repaint();
 	}
 }
