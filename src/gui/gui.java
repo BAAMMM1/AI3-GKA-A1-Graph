@@ -6,20 +6,19 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -29,10 +28,9 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
+import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
 import model.fileExtensionSystem.FileExtension;
 import model.fileExtensionSystem.GraphFileExtensionHandler;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
 public class gui {
 
@@ -80,8 +78,8 @@ public class gui {
 	
 	boolean autolayout = true;
 	List<String> graphAsText;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField textFieldSource;
+	private JTextField textFieldTarget;
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -224,18 +222,33 @@ public class gui {
 		JLabel lblNewLabel = new JLabel("Algorithmen");
 		
 		
+		textFieldSource = new JTextField();
+		textFieldSource.setColumns(10);
+		
+		textFieldTarget = new JTextField();
+		textFieldTarget.setColumns(10);		
 		
 		JButton btnNewButton_3 = new JButton("BFS - Start");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// TODO Prüfen ob das hier auch richtige Knoten sind
+				String source = textFieldSource.getText();
+				String target = textFieldTarget.getText();
+				
+				/*
+				BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
+				bfs.shortestPath(source, target);
+				*/
+				
+				BreadthFirstSearch2 bfs2 = new BreadthFirstSearch2(graph);
+				graph = bfs2.stpAlgorithmus(graph.getNode(source), graph.getNode(target));
+				
+				setGraphToPanel();
+				
 			}
 		});
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
+	
 		
 		
 		
@@ -248,9 +261,9 @@ public class gui {
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblNewLabel)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textFieldSource, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+							.addComponent(textFieldTarget, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
 						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
 					.addContainerGap())
 		);
@@ -261,8 +274,8 @@ public class gui {
 					.addComponent(lblNewLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textFieldSource, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldTarget, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton_3)
 					.addContainerGap(41, Short.MAX_VALUE))

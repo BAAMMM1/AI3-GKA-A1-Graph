@@ -57,7 +57,9 @@ public class BreadthFirstSearch extends Algorithmus{
 			}
 		}
 		
-
+		System.out.println("Source Node: " + source);
+		System.out.println("Target Node: " + target);
+		
 		List<AbstractNode> queue = new ArrayList<AbstractNode>();
 		queue.add(source);
 		
@@ -96,16 +98,24 @@ public class BreadthFirstSearch extends Algorithmus{
 		List<AbstractNode> path = new ArrayList<AbstractNode>();
 		path.add(target);
 		int counter = 0;
-		int highestBFS = target.getAttribute("BFS");;
+		
+		
+		int highestBFS = target.getAttribute("BFS");
 		while(highestBFS != 0){
 			for(int i = 0; i <= nodes.size() -1 ; i++) {
-				int bfs = nodes.get(i).getAttribute("BFS");
-				
-				if( bfs == (highestBFS-1) && this.isThereAEdgeBetweenThisNodes(nodes.get(i), path.get(counter))){
-					path.add(nodes.get(i));
-					highestBFS--;
-					counter++;
+				if(nodes.get(i).getAttribute("BFS") == "not visit"){
+					continue;
+				} else {
+					int bfs = nodes.get(i).getAttribute("BFS");
+					if( bfs == (highestBFS-1) && this.isThereAEdgeBetweenThisNodes(nodes.get(i), path.get(counter))){
+						path.add(nodes.get(i));
+						highestBFS--;
+						counter++;
+					}
 				}
+				
+				
+				
 			}
 		}
 		
