@@ -24,7 +24,7 @@ public class Main {
 		//test comment
 		graph.display();
 		
-		
+		// for president
 		/*
 
 			Iterator<Node> it = graph.getNode("a").getNeighborNodeIterator();
