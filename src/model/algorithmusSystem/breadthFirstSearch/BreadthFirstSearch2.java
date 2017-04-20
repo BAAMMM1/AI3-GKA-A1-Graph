@@ -113,8 +113,19 @@ public class BreadthFirstSearch2 extends Algorithmus{
 		lambda = 0;
 		
 		// -1 = no visist
-		for (Node node : graph.getEachNode())
-            node.setAttribute("BFS", -1);
+		for (Node node : graph.getEachNode()) {
+			node.setAttribute("BFS", -1);
+		}
+            
+		// Raustrennen des labes falls BFS schon einmal auf diesen Graphangewendet wurde
+		for (Node node : graph.getEachNode()) {
+			System.out.println(node.getAttribute("ui.label").toString().indexOf("λ"));
+			if(node.getAttribute("ui.label").toString().indexOf("λ") != -1){
+				node.setAttribute("ui.label", node.getAttribute("ui.label").toString().substring(node.getAttribute("ui.label").toString().indexOf("λ")+2, node.getAttribute("ui.label").toString().indexOf(")")));
+			}
+			
+		}
+            
 		
 	}
 	
