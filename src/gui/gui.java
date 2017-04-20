@@ -32,6 +32,7 @@ import org.graphstream.ui.view.Viewer;
 import model.fileExtensionSystem.FileExtension;
 import model.fileExtensionSystem.GraphFileExtensionHandler;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 public class gui {
 
@@ -79,6 +80,8 @@ public class gui {
 	
 	boolean autolayout = true;
 	List<String> graphAsText;
+	private JTextField textField;
+	private JTextField textField_1;
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -91,15 +94,6 @@ public class gui {
 		//test Graph
 		graph = fileHandler.loadGraph("db/examples/graph03.graph");
 		graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
-		/*
-		// Graphstream integration in die GUI
-		 // create a view *without* a JFrame
-		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
-	    view = viewer.addDefaultView(false);
-	    viewer.enableAutoLayout();
-	    */
-	    
-	   
 		
 		
 		
@@ -144,6 +138,7 @@ public class gui {
 		            
 		            graphAsText = fileHandler.loadFile(chooser.getSelectedFile().getPath());		            
 		            setGrapgBuilderTextArea();
+		            
 		            
 		        }
 			}
@@ -228,22 +223,35 @@ public class gui {
 		
 		JLabel lblNewLabel = new JLabel("Algorithmen");
 		
-		JComboBox comboBox = new JComboBox();
 		
-		JButton btnNewButton_2 = new JButton("Anzeigen");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		
+		JButton btnNewButton_3 = new JButton("BFS - Start");
+		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		
+		
+		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(comboBox, 0, 144, Short.MAX_VALUE)
-						.addComponent(lblNewLabel)
-						.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNewLabel)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel_2.setVerticalGroup(
@@ -252,9 +260,11 @@ public class gui {
 					.addContainerGap()
 					.addComponent(lblNewLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton_2)
+					.addComponent(btnNewButton_3)
 					.addContainerGap(41, Short.MAX_VALUE))
 		);
 		panel_2.setLayout(gl_panel_2);
@@ -377,12 +387,30 @@ public class gui {
 	}
 	
 	public void setGraphToPanel(){
+		this.initializeGraph();
 		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);         
  	    view = viewer.addDefaultView(false);
  	    viewer.enableAutoLayout(); 	    
  	    panel_graph.removeAll();
  	    panel_graph.add((Component) view);
  	    panel_graph.revalidate(); 
- 	    panel_graph.repaint();
+ 	    panel_graph.repaint(); 	   
+	}
+	
+	public void initializeGraph(){
+		// background
+		//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
+		
+		graph.addAttribute("ui.quality");
+		
+		// Wendes Antialiasing zur Kantenglettung auf den Graph an
+		graph.addAttribute("ui.antialias");
+		
+		// Knotennamen ausblenden
+		//graph.addAttribute("ui.stylesheet", "node {	text-mode: hidden;}");
+		
+		graph.addAttribute("ui.stylesheet", "node {	size: 10px, 10px; text-size: 14px; text-alignment: under; text-style: bold;}");
+		
+		
 	}
 }
