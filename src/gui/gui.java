@@ -106,6 +106,7 @@ public class gui {
 		
 		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// Headline
 		frame.setTitle("GKA Graphomat");
 	
 		JPanel panel = new JPanel();
