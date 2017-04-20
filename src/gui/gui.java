@@ -106,6 +106,7 @@ public class gui {
 		
 		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("GKA Graphomat");
 	
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(192, 192, 192)));
@@ -289,7 +290,7 @@ public class gui {
 		}
 		textArea.setText(textAreaString);
 		
-		JButton btnNewButton_1 = new JButton("Graph Anzeigen");
+		JButton btnNewButton_1 = new JButton("Graphanzeige aktualisieren");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> fromTextArex = new ArrayList<String>();
