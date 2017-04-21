@@ -2,6 +2,7 @@ package main;
 
 import org.graphstream.graph.Graph;
 
+import model.algorithmusSystem.Dijkstra.Dijkstra;
 import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
 import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
 import model.fileExtensionSystem.FileExtension;
@@ -14,13 +15,15 @@ public class Main {
 
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
-		Graph graph = fileHandler.loadGraph("db/examples/save5.graph");
+		Graph graph = fileHandler.loadGraph("db/examples/dijkstra.graph");
 		
 		//test comment
 		//graph.display();
 		
+		/*
 		BreadthFirstSearch2 bfs2 = new BreadthFirstSearch2(graph);
 		bfs2.stpAlgorithmus(graph.getNode("s"), graph.getNode("t"));
+		 */
 		
 		/*
 
@@ -65,6 +68,10 @@ public class Main {
 		bfsAlgo.shortestPath("s", "t");
 		*/
 	
+		Dijkstra djk = new Dijkstra(graph);
+
+		
+		graph = djk.runStart(graph.getNode("v4"), graph.getNode("v1"));
 			
 	
 				

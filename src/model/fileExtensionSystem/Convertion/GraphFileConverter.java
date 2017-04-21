@@ -224,7 +224,7 @@ public class GraphFileConverter extends FileConverter {
            }
            
            
-           row = part1 + "," + part2 +";\n";
+           row = part1 + "," + part2 +";";
            out.add(row);
         }
 		
