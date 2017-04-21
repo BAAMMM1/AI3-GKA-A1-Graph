@@ -1,21 +1,24 @@
 package main;
 
-import org.graphstream.graph.Graph;
-
-import model.algorithmusSystem.Dijkstra.Dijkstra;
-import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
-import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
-import model.fileExtensionSystem.FileExtension;
-import model.fileExtensionSystem.GraphFileExtensionHandler;
+import mvc.controller.Controller;
+import mvc.model.Model;
+import mvc.view.View;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
+		/*
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
 		Graph graph = fileHandler.loadGraph("db/examples/dijkstra.graph");
+		*/
+		
+		Model model = new Model();
+		View view = new View();
+		Controller controller = new Controller(model, view);
+		controller.initController();
 		
 		//test comment
 		//graph.display();
@@ -68,10 +71,12 @@ public class Main {
 		bfsAlgo.shortestPath("s", "t");
 		*/
 	
+		/*
 		Dijkstra djk = new Dijkstra(graph);
 
 		
 		graph = djk.runStart(graph.getNode("v4"), graph.getNode("v1"));
+		*/
 			
 	
 				

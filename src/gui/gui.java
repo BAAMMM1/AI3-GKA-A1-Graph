@@ -28,10 +28,10 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
-import model.algorithmusSystem.Dijkstra.Dijkstra;
-import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
-import model.fileExtensionSystem.FileExtension;
-import model.fileExtensionSystem.GraphFileExtensionHandler;
+import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
+import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.model.fileExtensionSystem.FileExtension;
+import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class gui {
 
@@ -350,7 +350,7 @@ public class gui {
 				bfs.shortestPath(source, target);
 				*/
 				
-				BreadthFirstSearch2 bfs2 = new BreadthFirstSearch2(graph);
+				BreadthFirstSearch bfs2 = new BreadthFirstSearch(graph);
 				graph = bfs2.stpAlgorithmus(graph.getNode(source), graph.getNode(target));
 				
 				setGraphToPanel();

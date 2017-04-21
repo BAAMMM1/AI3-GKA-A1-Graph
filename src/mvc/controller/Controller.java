@@ -1,0 +1,226 @@
+package mvc.controller;
+
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.graphstream.ui.view.Viewer;
+
+import mvc.model.Model;
+import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
+import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.view.View;
+
+public class Controller {
+	
+	private Model model;
+	private View view;
+	
+	private Viewer viewer;
+	private org.graphstream.ui.view.View viewer_view;
+	
+	/*
+	 * --------------------------------------------
+	 */
+	private List<String> graphAsText;
+	private boolean autolayout = true;
+	/*
+	 * --------------------------------------------
+	 */
+	
+	public Controller(Model model, View classView){
+		this.model = model;
+		this.view = classView;
+		this.initView();
+	}
+	
+	private void initView(){
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+		
+		
+		graphAsText = model.getFileHandler().loadFile("db/examples/dijkstra.graph");
+		this.setGrapgBuilderTextArea();
+		
+	}
+	
+	public void initController(){
+		this.view.getBtnLoadGraph().addActionListener(e -> this.saveGraph());
+		this.view.getBtnSave().addActionListener(e -> this.loadGraph());
+		this.view.getBtnAutolayout().addActionListener(e -> this.autolayoutGraph());
+		this.view.getBtnDijkstra().addActionListener(e -> this.btnDijkstra());
+		this.view.getBtnBFS().addActionListener(e -> this.btnBFS());
+		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigen());
+			
+		// TODO Fehlerhafter load
+		
+		
+		this.setGraphToPanel();
+		this.setGrapgBuilderTextArea();
+		
+		
+
+	}
+	
+	private void btnGraphAnzeigen(){
+		List<String> fromTextArex = new ArrayList<String>();
+		
+		String text = view.getTextAreaConsole().getText();
+		while(text.length()>0){
+			if(text.indexOf("\n") != -1){						
+				fromTextArex.add(text.substring(0, text.indexOf("\n")));
+				text = text.substring(text.indexOf("\n")+1);
+			} else {
+				fromTextArex.add(text);
+				break;
+			}
+			
+		}				
+		System.out.println(fromTextArex.toString());
+		model.setGraph(model.getFileHandler().loadGraphFromList(fromTextArex));
+
+		setGraphToPanel();
+	}
+	
+	private void btnBFS(){
+		// TODO Prüfen ob das hier auch richtige Knoten sind
+		String source = view.getTextFieldSource().getText();
+		String target = view.getTextFieldTarget().getText();
+		
+		/*
+		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
+		bfs.shortestPath(source, target);
+		*/
+		
+		BreadthFirstSearch bfs2 = new BreadthFirstSearch(model.getGraph());
+		model.setGraph(bfs2.stpAlgorithmus(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		
+		this.setGraphToPanel();
+	}
+	
+	private void btnDijkstra(){
+		// TODO Prüfen ob das hier auch richtige Knoten sind
+		String source = view.getTextField().getText();
+		String target = view.getTextField_1().getText();
+
+		
+		Dijkstra djk = model.getDijksta();
+		model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		view.getTextArea_1().setText("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());
+		
+		this.setGraphToPanel();
+	}
+		
+	private void autolayoutGraph(){
+		if(autolayout == true){
+			autolayout = false;
+			viewer.disableAutoLayout();
+		} else {
+			autolayout = true;
+			viewer.enableAutoLayout();
+		}
+	}
+	
+	private void loadGraph(){
+		// JFileChooser-Objekt erstellen
+        JFileChooser chooser = new JFileChooser();
+        // Dialog zum Oeffnen von Dateien anzeigen
+        int rueckgabeWert = chooser.showSaveDialog(null);
+        
+        /* Abfrage, ob auf "Öffnen" geklickt wurde */
+        if(rueckgabeWert == JFileChooser.APPROVE_OPTION)
+        {
+             // Ausgabe der ausgewaehlten Datei
+            System.out.println("Die zu speichernde Datei ist: " +
+                  chooser.getSelectedFile().getName());
+            System.out.println("Die zu speichernde Datei ist: " +
+	                  chooser.getSelectedFile().getPath());
+            this.model.getFileHandler().saveGraph(this.model.getGraph(), chooser.getSelectedFile().getPath());
+            
+
+        }
+	}
+	
+	private void saveGraph(){
+		 // JFileChooser-Objekt erstellen
+        JFileChooser chooser = new JFileChooser();
+        // Dialog zum Oeffnen von Dateien anzeigen		        
+        int rueckgabeWert = chooser.showOpenDialog(null);
+        
+        /* Abfrage, ob auf "Öffnen" geklickt wurde */
+        if(rueckgabeWert == JFileChooser.APPROVE_OPTION)
+        {
+             // Ausgabe der ausgewaehlten Datei
+            System.out.println("Die zu öffnende Datei ist: " +
+                  chooser.getSelectedFile().getName());
+            System.out.println("Die zu öffnende Datei ist: " +
+	                  chooser.getSelectedFile().getPath());
+            
+            model.setGraph(model.getFileHandler().loadGraph(chooser.getSelectedFile().getPath()));	
+            setGraphToPanel();
+            
+            
+            graphAsText = model.getFileHandler().loadFile(chooser.getSelectedFile().getPath());		            
+            setGrapgBuilderTextArea();
+        }
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * -----------------------------------------------------
+	 */
+	
+	public void setGrapgBuilderTextArea(){
+		String textAreaString = "";
+		for(int i = 0; i<= graphAsText.size()-1; i++ ){
+			textAreaString = textAreaString + graphAsText.get(i).toString() + "\n";
+		}
+		view.getTextAreaConsole().setText(textAreaString);
+	}
+	
+	public void setGraphToPanel(){
+		this.initializeGraph();
+		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
+ 	    viewer_view = viewer.addDefaultView(false);
+ 	    viewer.enableAutoLayout(); 	    
+ 	    view.getPanelGraphStream().removeAll();
+ 	    view.getPanelGraphStream().add((Component) viewer_view);
+ 	    view.getPanelGraphStream().revalidate(); 
+ 	    view.getPanelGraphStream().repaint(); 	   
+	}
+	
+	public void initializeGraph(){
+		// background
+		//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
+		
+		model.getGraph().addAttribute("ui.quality");
+		
+		// Wendes Antialiasing zur Kantenglettung auf den Graph an
+		model.getGraph().addAttribute("ui.antialias");
+		
+		// Knotennamen ausblenden
+		//graph.addAttribute("ui.stylesheet", "node {	text-mode: hidden;}");
+		
+		model.getGraph().addAttribute("ui.stylesheet", "node {	size: 10px, 10px; text-size: 14px; text-alignment: under; text-style: bold;}");
+		
+		
+	}
+	
+	/*
+	 * -----------------------------------------------------
+	 */
+	
+		
+
+
+}
