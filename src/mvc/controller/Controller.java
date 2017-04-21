@@ -36,14 +36,12 @@ public class Controller {
 	public Controller(Model model, View classView){
 		this.model = model;
 		this.view = classView;
+		this.initController();
 		this.initView();
 	}
 	
 	private void initView(){
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-		
-		
-		graphAsText = model.getFileHandler().loadFile("db/examples/dijkstra.graph");
 		this.setGrapgBuilderTextArea();
 		
 	}
@@ -95,9 +93,8 @@ public class Controller {
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
 		bfs.shortestPath(source, target);
 		*/
-		
-		BreadthFirstSearch bfs2 = new BreadthFirstSearch(model.getGraph());
-		model.setGraph(bfs2.stpAlgorithmus(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		model.setBfs(new BreadthFirstSearch(model.getGraph()));
+		model.setGraph(model.getBfs().stpAlgorithmus(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 		
 		this.setGraphToPanel();
 	}
@@ -106,8 +103,9 @@ public class Controller {
 		// TODO Prüfen ob das hier auch richtige Knoten sind
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();
-
-		
+		System.out.println("---------------->: " + source.toString());
+		System.out.println("---------------->: " + target.toString());
+		model.setDijksta(new Dijkstra(model.getGraph()));
 		Dijkstra djk = model.getDijksta();
 		model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 		view.getTextArea_1().setText("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());
@@ -164,7 +162,7 @@ public class Controller {
             setGraphToPanel();
             
             
-            graphAsText = model.getFileHandler().loadFile(chooser.getSelectedFile().getPath());		            
+            model.setGraphAsText(model.getFileHandler().loadFile(chooser.getSelectedFile().getPath()));		            
             setGrapgBuilderTextArea();
         }
 		
@@ -182,8 +180,8 @@ public class Controller {
 	
 	public void setGrapgBuilderTextArea(){
 		String textAreaString = "";
-		for(int i = 0; i<= graphAsText.size()-1; i++ ){
-			textAreaString = textAreaString + graphAsText.get(i).toString() + "\n";
+		for(int i = 0; i<= model.getGraphAsText().size()-1; i++ ){
+			textAreaString = textAreaString + model.getGraphAsText().get(i).toString() + "\n";
 		}
 		view.getTextAreaConsole().setText(textAreaString);
 	}
