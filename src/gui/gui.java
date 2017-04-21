@@ -28,6 +28,7 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
+import model.algorithmusSystem.Dijkstra.Dijkstra;
 import model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch2;
 import model.fileExtensionSystem.FileExtension;
 import model.fileExtensionSystem.GraphFileExtensionHandler;
@@ -80,6 +81,8 @@ public class gui {
 	List<String> graphAsText;
 	private JTextField textFieldSource;
 	private JTextField textFieldTarget;
+	private JTextField textField;
+	private JTextField textField_1;
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -90,8 +93,8 @@ public class gui {
 		FileExtension fileHandler = new GraphFileExtensionHandler();
 		
 		//test Graph
-		graph = fileHandler.loadGraph("db/examples/graph03.graph");
-		graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
+		graph = fileHandler.loadGraph("db/examples/dijkstra.graph");
+		graphAsText = fileHandler.loadFile("db/examples/dijkstra.graph");
 		
 		
 		
@@ -189,19 +192,29 @@ public class gui {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
 						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 913, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+						.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -209,17 +222,114 @@ public class gui {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(panel_graph, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
-								.addComponent(panel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)))
+								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+							.addGap(10))))
+		);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		
+		JLabel lblNewLabel_4 = new JLabel("Ausgabe:");
+		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
+		gl_panel_4.setHorizontalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_4.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+						.addComponent(lblNewLabel_4))
+					.addContainerGap())
+		);
+		gl_panel_4.setVerticalGroup(
+			gl_panel_4.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panel_4.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblNewLabel_4)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
 		
-		JLabel lblNewLabel = new JLabel("Algorithmen");
+		JTextArea textArea_1 = new JTextArea();
+		scrollPane_1.setViewportView(textArea_1);
+		panel_4.setLayout(gl_panel_4);
+		
+		JLabel lblNewLabel_1 = new JLabel("Dijkstra-Algorithmus");
+		
+		textField = new JTextField();
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		
+		JButton btnNewButton_2 = new JButton("DSF - Anzeigen");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {				
+				// TODO Prüfen ob das hier auch richtige Knoten sind
+				String source = textField.getText();
+				String target = textField_1.getText();
+
+				
+				Dijkstra djk = new Dijkstra(graph);
+				graph = djk.runStart(graph.getNode(source), graph.getNode(target));
+				textArea_1.setText("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());
+				
+				setGraphToPanel();
+			}
+		});
+		
+		JLabel lblNewLabel_2 = new JLabel("Source:");
+		
+		JLabel lblNewLabel_3 = new JLabel("Target:");
+		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+		gl_panel_3.setHorizontalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel_1)
+						.addGroup(Alignment.TRAILING, gl_panel_3.createSequentialGroup()
+							.addComponent(lblNewLabel_2)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(Alignment.TRAILING, gl_panel_3.createSequentialGroup()
+							.addComponent(lblNewLabel_3)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel_3.setVerticalGroup(
+			gl_panel_3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblNewLabel_1)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_2))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_3))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnNewButton_2)
+					.addContainerGap(12, Short.MAX_VALUE))
+		);
+		panel_3.setLayout(gl_panel_3);
+		
+		JLabel lblNewLabel = new JLabel("Breadth-first search");
 		
 		
 		textFieldSource = new JTextField();
@@ -228,7 +338,7 @@ public class gui {
 		textFieldTarget = new JTextField();
 		textFieldTarget.setColumns(10);		
 		
-		JButton btnNewButton_3 = new JButton("BFS - Start");
+		JButton btnNewButton_3 = new JButton("BFS - Anzeigen");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Prüfen ob das hier auch richtige Knoten sind
@@ -248,6 +358,10 @@ public class gui {
 			}
 		});
 		
+		JLabel lblStartknoten = new JLabel("Source:");
+		
+		JLabel lblZielknoten = new JLabel("Target:");
+		
 	
 		
 		
@@ -261,24 +375,34 @@ public class gui {
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblNewLabel)
-								.addComponent(textFieldSource, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(textFieldTarget, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-						.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
-					.addContainerGap())
+								.addComponent(btnNewButton_3, GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
+							.addContainerGap())
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblZielknoten)
+								.addComponent(lblStartknoten))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(textFieldTarget, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+								.addComponent(textFieldSource, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
+							.addContainerGap())))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(lblNewLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(5)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textFieldSource, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textFieldTarget, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblStartknoten))
 					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textFieldTarget, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblZielknoten))
+					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
 					.addComponent(btnNewButton_3)
-					.addContainerGap(41, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		panel_2.setLayout(gl_panel_2);
 		
@@ -287,33 +411,28 @@ public class gui {
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblMenl))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnLoadGraph, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnAutolayout, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)))
+							.addComponent(btnLoadGraph, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnAutolayout, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE))
+						.addComponent(lblMenl))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
+					.addGap(9)
 					.addComponent(lblMenl)
-					.addGap(4)
-					.addComponent(btnLoadGraph)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnAutolayout)
-					.addGap(16))
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnLoadGraph)
+						.addComponent(btnAutolayout)
+						.addComponent(btnNewButton))
+					.addGap(69))
 		);
 		panel.setLayout(gl_panel);
 		
@@ -353,9 +472,9 @@ public class gui {
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addGap(10)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
 						.addComponent(lblGraph)
-						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel_1.setVerticalGroup(
@@ -364,10 +483,10 @@ public class gui {
 					.addGap(11)
 					.addComponent(lblGraph)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton_1)
-					.addGap(11))
+					.addContainerGap())
 		);
 		
 		
@@ -401,7 +520,7 @@ public class gui {
 	
 	public void setGraphToPanel(){
 		this.initializeGraph();
-		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);         
+		viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    view = viewer.addDefaultView(false);
  	    viewer.enableAutoLayout(); 	    
  	    panel_graph.removeAll();
