@@ -34,6 +34,7 @@ public class GraphFileConverter extends FileConverter {
 	private final Pattern PATTERN_DIGITS = Pattern.compile(REGEX_DIGITS);
 
 	public List<AbstractEdge> edgesList = new ArrayList<AbstractEdge>();
+	private boolean orientation = false;
 
 	@Override
 	public Graph fileToGraphObject(List<String> rows) {
@@ -43,7 +44,7 @@ public class GraphFileConverter extends FileConverter {
 		List<String> edges = new ArrayList<String>();
 		
 		// Flag gerichtet oder ungerichteter Graph
-		boolean orientation = this.getGraphOrientation(rows.get(0));	; // false für ungerichtet, true für
+		orientation = this.getGraphOrientation(rows.get(0));	; // false für ungerichtet, true für
 
 		/*
 		 * Zusammenbauen des Graph
@@ -98,19 +99,20 @@ public class GraphFileConverter extends FileConverter {
 						
 						graph.addEdge(node1 + node2, node1, node2, orientation);						
 						
+						if (edge != null) {				
 						
-						if (edge != null) {
-							graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
-							
-						} else {
-							graph.getEdge(node1 + node2).addAttribute("ui.label", graph.getEdge(node1 + node2).getId());
+							if (weight != null) {
+								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
+								graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight));
+								graph.getEdge(node1 + node2).addAttribute("ui.label", graph.getEdge(node1 + node2).getAttribute("ui.label") + " :: " + Integer.valueOf(weight));
+							} else {
+								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
+							}
+						} else if (weight != null){
+							graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight));
+							graph.getEdge(node1 + node2).addAttribute("ui.label", Integer.valueOf(weight));
 						}
 						
-						if (weight != null) {
-							graph.getEdge(node1 + node2).setAttribute("weight", weight);
-							graph.getEdge(node1 + node2).addAttribute("ui.label", weight);
-						}						
-					
 					}
 				}
 				
@@ -126,6 +128,8 @@ public class GraphFileConverter extends FileConverter {
 				System.out.println("Edge weight: " + edge);
 				System.out.println("");
 				*/
+				
+				//TODO Ausgabe der Kosten
 
 			}
 
@@ -234,5 +238,7 @@ public class GraphFileConverter extends FileConverter {
 
 		return out;
 	}
+	
+
 
 }

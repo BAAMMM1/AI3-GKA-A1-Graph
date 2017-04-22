@@ -129,27 +129,40 @@ public class Controller {
 	
 	}
 	
-	private void btnDijkstraAction(){		
-
+	private void btnDijkstraAction(){
 		String source = view.getTextField().getText();
-		String target = view.getTextField_1().getText();
-		
+		String target = view.getTextField_1().getText();		
 		if(this.bfsSourceTargetValid(source, target)){
 		
-		System.out.println("---------------->: " + source.toString());
-		System.out.println("---------------->: " + target.toString());
-		model.setDijksta(new Dijkstra(model.getGraph()));
-		Dijkstra djk = model.getDijksta();
-		model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
-		
-		this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());		
-		
-		this.setGraphToPanel();
-		
+		if(!model.getGraph().getEdge(0).isDirected()){
+			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");
+			// TODO Graph konvertieren		
+			
 		} else {
-			this.setTextFieldAusgabe("BreadthFirstSearch:\nSource oder Target nicht korret.");
+			
+			if(this.model.isGraphDijkstraCorrectWeighted()){
+				
+
+					model.setDijksta(new Dijkstra(model.getGraph()));
+					Dijkstra djk = model.getDijksta();
+					model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+					
+					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());		
+					
+					this.setGraphToPanel();
+				
+				
+			
+			} else {
+				this.setTextFieldAusgabe("Dijkstra:\nGraph Gewichtungsfehler.");
+			}
+		}
+		} else {
+			this.setTextFieldAusgabe("Dijkstra:\nSource oder Target nicht korret.");
 		}
 	}
+	
+
 		
 	private void btnAutoLayoutAction(){
 		if(autolayout == true){
@@ -247,9 +260,21 @@ public class Controller {
 		// Knotennamen ausblenden
 		//graph.addAttribute("ui.stylesheet", "node {	text-mode: hidden;}");
 		
-		model.getGraph().addAttribute("ui.stylesheet", "node {	size: 10px, 10px; text-size: 14px; text-alignment: under; text-style: bold;}");
-		
-		
+		model.getGraph().addAttribute("ui.stylesheet", "node {	size: 10px, 10px; text-size: 14px; text-alignment: under; text-style: bold;} "
+				+ "edge {	size: 1px, 1px; text-size: 14px; text-alignment: under; text-style: normal;}");
+
+
+		/*
+		 * "along" ...
+    "at-left" ...
+    "at-right" ...
+    "center" ...
+    "left" ...
+    "right" ...
+    "under" ...
+    "above" ...
+    "justify" ...
+		 */
 	}
 	
 	/*

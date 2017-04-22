@@ -87,26 +87,37 @@ public class Dijkstra extends Algorithmus {
 			
 		}
 		// Ermittlung des günstigsten Weg
-		List<Node> temp = new ArrayList<Node>(graph.getNodeSet());
-		path = new ArrayList<Node>();
-		path.add(target);
+		
 		boolean run = true;
 		String nextNode = target.getAttribute("Vorg");		
+		path = new ArrayList<Node>();
+		if(nextNode == null){
+			run = false;
+		} else {
+			List<Node> temp = new ArrayList<Node>(graph.getNodeSet());			
+			path.add(target);
+		}	
 
 		while(run){
 			Printer.prompt(this, "NextNode: " + nextNode);
 			Printer.prompt(this, source.getId());
 			if(nextNode != source.getId()){
 				
-				String nextNodeVorgänger = graph.getNode(nextNode).getAttribute("Vorg");
-				if(nextNodeVorgänger != null){
-					path.add(graph.getNode(nextNode));
-					nextNode = graph.getNode(nextNode).getAttribute("Vorg");
+				if(graph.getNode(nextNode).getAttribute("Vorg") != null){
+					String nextNodeVorgänger = graph.getNode(nextNode).getAttribute("Vorg");
+					if(nextNodeVorgänger != null){
+						path.add(graph.getNode(nextNode));
+						nextNode = graph.getNode(nextNode).getAttribute("Vorg");
+					} else {
+						Printer.prompt(this, "Vorg = null");
+						//path ungültig?
+						
+					}
 				} else {
-					Printer.prompt(this, "Vorg = null");
-					//path ungültig?
-					
+					run = false;
+					break;
 				}
+				
 				
 			} else {
 				path.add(graph.getNode(nextNode));
@@ -117,16 +128,20 @@ public class Dijkstra extends Algorithmus {
 		
 		// Pfad ermitteln
 		// Liste umdrehen
-		List<Node> tempList = new ArrayList<Node>();
-		for(int i = path.size() - 1; i >= 0 ; i--){
-			tempList.add(path.get(i));
+		if(!path.isEmpty()){
+			List<Node> tempList = new ArrayList<Node>();
+			for(int i = path.size() - 1; i >= 0 ; i--){
+				tempList.add(path.get(i));
+			}
+			
+			path = tempList;
+			Printer.prompt(this, path.toString());
 		}
 		
-		path = tempList;
 		
 			
 		
-		Printer.prompt(this, path.toString());
+		
 		
 		
 		
@@ -155,7 +170,7 @@ public class Dijkstra extends Algorithmus {
 		
 		for (Edge edge : graph.getEachEdge()) {
 			if((edge.getSourceNode() == node1) && (edge.getTargetNode() == node2)){
-				int weight = Integer.valueOf(edge.getAttribute("weight"));
+				int weight = edge.getAttribute("weight");
 				Printer.errPrompt(this, "SourceNode :" + edge.getSourceNode() + " TargetNode: " + edge.getTargetNode());
 				Printer.errPrompt(this, String.valueOf(weight));
 				toReturn = weight;
@@ -240,6 +255,7 @@ public class Dijkstra extends Algorithmus {
 		
 		for (Node node : graph.getEachNode()) {
 			node.setAttribute("Entfernung", 999);
+			node.removeAttribute("Vorg");
 		}	
 		
 		this.setEntfernung(source, 0);		

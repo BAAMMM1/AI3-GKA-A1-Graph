@@ -2,6 +2,7 @@ package mvc.model;
 
 import java.util.List;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 
 import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
@@ -11,7 +12,7 @@ import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class Model {
 	
-	private FileExtension fileHandler;
+	private GraphFileExtensionHandler fileHandler;
 	private Graph graph;
 	private List<String> graphAsText;
 	private BreadthFirstSearch bfs;
@@ -33,7 +34,7 @@ public class Model {
 		return fileHandler;
 	}
 
-	public void setFileHandler(FileExtension fileHandler) {
+	public void setFileHandler(GraphFileExtensionHandler fileHandler) {
 		this.fileHandler = fileHandler;
 	}
 
@@ -68,6 +69,28 @@ public class Model {
 	public void setGraphAsText(List<String> graphAsText) {
 		this.graphAsText = graphAsText;
 	}
+	
+	public boolean isGraphDijkstraCorrectWeighted(){
+		boolean temp = true;
+		for(Edge edge : this.graph.getEachEdge()){
+			
+			if(edge.getAttribute("weight") != null){
+				
+				int weight = edge.getAttribute("weight");
+				if(weight >= 0){
+					temp = temp && true;
+				} else {
+					temp = temp && false;
+				}
+			} else {
+				temp = temp && false;
+			}
+		}
+		
+		System.out.println("isGraphDijkstraCorrectWeighted: " + temp);
+		return temp;
+	}
+		
 	
 	
 
