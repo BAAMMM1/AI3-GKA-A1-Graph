@@ -86,32 +86,69 @@ public class Controller {
 	}
 	
 	private void btnBFSAction(){
-		// TODO Prüfen ob das hier auch richtige Knoten sind
-		String source = view.getTextFieldSource().getText();
-		String target = view.getTextFieldTarget().getText();
+
+				String source = view.getTextFieldSource().getText();
+				String target = view.getTextFieldTarget().getText();
+		
+		if(this.bfsSourceTargetValid(source, target)){
+			
+		
+		
 		
 		/*
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
 		bfs.shortestPath(source, target);
 		*/
 		model.setBfs(new BreadthFirstSearch(model.getGraph()));
+
 		model.setGraph(model.getBfs().stpAlgorithmus(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+			
+		/*
+		 * TODO Auslager in eine Mehtode 
+		 * Weg vorhanden prüfung?
+		 */
+		if(model.getBfs().getShortestPath() == null){
+			this.setTextFieldAusgabe("BreadthFirstSearch:\nKein Weg vorhanden");
+		} else {
+			this.setTextFieldAusgabe("BreadthFirstSearch:\nVon source: " + source + " zu target: " + target + ": "+ model.getBfs().getShortestPath().toString());
+		}		
 		
 		this.setGraphToPanel();
+		} else {
+			this.setTextFieldAusgabe("BreadthFirstSearch:\nSource oder Target nicht korret.");
+		}
 	}
 	
-	private void btnDijkstraAction(){
-		// TODO Prüfen ob das hier auch richtige Knoten sind
+	private boolean bfsSourceTargetValid(String source, String target){
+		
+		if((model.getGraph().getNode(source) == null) || (model.getGraph().getNode(target) == null)){
+			return false;
+		} else {		
+			return true;
+		}
+	
+	}
+	
+	private void btnDijkstraAction(){		
+
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();
+		
+		if(this.bfsSourceTargetValid(source, target)){
+		
 		System.out.println("---------------->: " + source.toString());
 		System.out.println("---------------->: " + target.toString());
 		model.setDijksta(new Dijkstra(model.getGraph()));
 		Dijkstra djk = model.getDijksta();
 		model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
-		view.getTextArea_1().setText("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());
+		
+		this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());		
 		
 		this.setGraphToPanel();
+		
+		} else {
+			this.setTextFieldAusgabe("BreadthFirstSearch:\nSource oder Target nicht korret.");
+		}
 	}
 		
 	private void btnAutoLayoutAction(){
@@ -188,6 +225,7 @@ public class Controller {
 	}
 	
 	public void setGraphToPanel(){
+		this.initGraph();
 		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    viewer_view = viewer.addDefaultView(false);
  	    viewer.enableAutoLayout(); 	    
@@ -218,6 +256,10 @@ public class Controller {
 	 * -----------------------------------------------------
 	 */
 	
+	
+	public void setTextFieldAusgabe(String text){
+		view.getTextArea_1().setText(text);
+	}
 		
 
 

@@ -14,6 +14,7 @@ public class Main {
 		View view = new View();
 		Controller controller = new Controller(model, view);
 		
+		/*
 		System.out.println(model.getGraph().getEdge("ab").isDirected());
 		System.out.println(model.getGraph().getEdge("ab").getSourceNode().toString());		
 		System.out.println(model.getGraph().getEdge("ab").getNode0().toString());
@@ -21,7 +22,7 @@ public class Main {
 		System.out.println(model.getGraph().getEdge("ba").isDirected());
 		System.out.println(model.getGraph().getEdge("ba").getSourceNode().toString());		
 		System.out.println(model.getGraph().getEdge("ba").getNode0().toString());
-		
+		*/
 
 	}
 

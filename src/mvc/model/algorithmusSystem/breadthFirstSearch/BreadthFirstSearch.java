@@ -19,7 +19,10 @@ public class BreadthFirstSearch extends Algorithmus{
 	private List<Node> queueList;
 	private List<Node> nodes;
 	private List<Edge> edges;
+	private List<Node> path;
 	int lambda;
+	
+	//TODO Ermittlung aller Lösungswege des getShortestPath()
 	
 	public BreadthFirstSearch(Graph graph){
 		this.graph = graph;
@@ -73,10 +76,15 @@ public class BreadthFirstSearch extends Algorithmus{
 		
 		// Zurückweg
 				List<Node> pathTemp = new ArrayList<Node>();
-				List<Node> path = new ArrayList<Node>();
-				pathTemp.add(target);
+				path = new ArrayList<Node>();
+				
+			
+				
+				
 				int bfslambda = target.getAttribute("BFS");
 				
+				if(bfslambda != -1){
+					pathTemp.add(target);
 				int counter = 0;
 				while(bfslambda > 0 ){					
 					pathTemp.add(getNextSmallerBFS(pathTemp.get(counter)));					
@@ -88,9 +96,12 @@ public class BreadthFirstSearch extends Algorithmus{
 					path.add(pathTemp.get(i));
 				}
 				
+				
+				}
+				
 				System.out.println(path.toString());
 				
-				
+
 				
 				return graph;
 		
@@ -240,7 +251,7 @@ public class BreadthFirstSearch extends Algorithmus{
 		}
 		
 		// Und zurück
-		List<Node> path = new ArrayList<Node>();
+		path = new ArrayList<Node>();
 		path.add(target);
 		int counter = 0;
 		
@@ -284,6 +295,14 @@ public class BreadthFirstSearch extends Algorithmus{
 		return toReturn;
 	}
 	
+	
+	public List<Node> getShortestPath(){
+		if(path.size() != 0){
+			return this.path;
+		} else {
+			return null;
+		}
+	}
 	
 	
 	
