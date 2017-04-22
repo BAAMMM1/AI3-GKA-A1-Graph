@@ -25,8 +25,8 @@ public class Model {
 	
 	public void initializeModel(){
 		this.fileHandler = new GraphFileExtensionHandler();
-		this.graph = fileHandler.loadGraph("db/examples/dijkstra.graph");
-		this.graphAsText = fileHandler.loadFile("db/examples/dijkstra.graph");
+		this.graph = fileHandler.loadGraph("db/examples/simple.graph");
+		this.graphAsText = fileHandler.loadFile("db/examples/simple.graph");
 	}
 
 	public FileExtension getFileHandler() {

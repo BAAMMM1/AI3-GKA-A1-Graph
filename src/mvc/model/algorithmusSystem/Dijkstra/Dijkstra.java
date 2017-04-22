@@ -16,7 +16,7 @@ public class Dijkstra extends Algorithmus {
 	private Graph graph;
 	private Node source;
 	private Node target;
-	List<Node> path;
+	private List<Node> path;
 	
 	public Dijkstra(Graph graph){
 		this.graph = graph;
@@ -162,8 +162,7 @@ public class Dijkstra extends Algorithmus {
 			}
 			
 		}
-		
-		
+
 		return toReturn;
 	}
 	
@@ -230,12 +229,6 @@ public class Dijkstra extends Algorithmus {
 				}				
 			}
 		}
-		
-		
-		
-		
-		
-		
 		
 		return returnNode;
 		

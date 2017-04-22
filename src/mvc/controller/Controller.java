@@ -38,6 +38,7 @@ public class Controller {
 		this.view = classView;
 		this.initController();
 		this.initView();
+		this.initGraph();
 	}
 	
 	private void initView(){
@@ -47,12 +48,12 @@ public class Controller {
 	}
 	
 	public void initController(){
-		this.view.getBtnLoadGraph().addActionListener(e -> this.saveGraph());
-		this.view.getBtnSave().addActionListener(e -> this.loadGraph());
-		this.view.getBtnAutolayout().addActionListener(e -> this.autolayoutGraph());
-		this.view.getBtnDijkstra().addActionListener(e -> this.btnDijkstra());
-		this.view.getBtnBFS().addActionListener(e -> this.btnBFS());
-		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigen());
+		this.view.getBtnLoadGraph().addActionListener(e -> this.btnLoadAction());
+		this.view.getBtnSave().addActionListener(e -> this.btnSaveAction());
+		this.view.getBtnAutolayout().addActionListener(e -> this.btnAutoLayoutAction());
+		this.view.getBtnDijkstra().addActionListener(e -> this.btnDijkstraAction());
+		this.view.getBtnBFS().addActionListener(e -> this.btnBFSAction());
+		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigenAction());
 			
 		// TODO Fehlerhafter load
 		
@@ -64,7 +65,7 @@ public class Controller {
 
 	}
 	
-	private void btnGraphAnzeigen(){
+	private void btnGraphAnzeigenAction(){
 		List<String> fromTextArex = new ArrayList<String>();
 		
 		String text = view.getTextAreaConsole().getText();
@@ -84,7 +85,7 @@ public class Controller {
 		setGraphToPanel();
 	}
 	
-	private void btnBFS(){
+	private void btnBFSAction(){
 		// TODO Prüfen ob das hier auch richtige Knoten sind
 		String source = view.getTextFieldSource().getText();
 		String target = view.getTextFieldTarget().getText();
@@ -99,7 +100,7 @@ public class Controller {
 		this.setGraphToPanel();
 	}
 	
-	private void btnDijkstra(){
+	private void btnDijkstraAction(){
 		// TODO Prüfen ob das hier auch richtige Knoten sind
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();
@@ -113,7 +114,7 @@ public class Controller {
 		this.setGraphToPanel();
 	}
 		
-	private void autolayoutGraph(){
+	private void btnAutoLayoutAction(){
 		if(autolayout == true){
 			autolayout = false;
 			viewer.disableAutoLayout();
@@ -123,7 +124,7 @@ public class Controller {
 		}
 	}
 	
-	private void loadGraph(){
+	private void btnSaveAction(){
 		// JFileChooser-Objekt erstellen
         JFileChooser chooser = new JFileChooser();
         // Dialog zum Oeffnen von Dateien anzeigen
@@ -143,7 +144,7 @@ public class Controller {
         }
 	}
 	
-	private void saveGraph(){
+	private void btnLoadAction(){
 		 // JFileChooser-Objekt erstellen
         JFileChooser chooser = new JFileChooser();
         // Dialog zum Oeffnen von Dateien anzeigen		        
@@ -187,7 +188,6 @@ public class Controller {
 	}
 	
 	public void setGraphToPanel(){
-		this.initializeGraph();
 		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    viewer_view = viewer.addDefaultView(false);
  	    viewer.enableAutoLayout(); 	    
@@ -197,7 +197,7 @@ public class Controller {
  	    view.getPanelGraphStream().repaint(); 	   
 	}
 	
-	public void initializeGraph(){
+	public void initGraph(){
 		// background
 		//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
 		

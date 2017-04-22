@@ -1,35 +1,25 @@
 package mvc.view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
-
-import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
-import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
-import mvc.model.fileExtensionSystem.FileExtension;
-import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class View {
 	
@@ -64,6 +54,12 @@ public class View {
 	private JLabel labelConsole;
 	private JScrollPane scrollPaneConsole;
 	private GroupLayout gl_panelConsole;
+	private GroupLayout groupLayout;
+	private GroupLayout gl_panelBFS;
+	private JLabel labelBFSTarget;		
+	private JLabel labelBFSSource;
+	private JLabel labelOptions ;
+	private GroupLayout gl_panelOptions;
 	
 	private Graph graph;
 	private Viewer viewer;
@@ -122,33 +118,43 @@ public class View {
 		labelConsole = new JLabel("Console:");
 		scrollPaneConsole = new JScrollPane();
 		gl_panelConsole = new GroupLayout(panelConsole);
+		groupLayout = new GroupLayout(frameMain.getContentPane());
+		gl_panelBFS = new GroupLayout(panelBFS);
+		labelBFSTarget = new JLabel("Source:");		
+		labelBFSSource = new JLabel("Target:");
+		labelOptions = new JLabel("Options");
+		gl_panelOptions = new GroupLayout(panelOptions);
 		
-		
-		
-		frameMain.setBounds(100, 100, 1280, 720);
-		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// TODO Headline über den Konstruktor
 		frameMain.setTitle("GKA-A1-Graph");
-
-		panelOptions.setBorder(new LineBorder(new Color(192, 192, 192)));
-		
-		panelGraphStream.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		frameMain.setBounds(100, 100, 1280, 720);
+		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
 		panelGraphStream.setLayout(new GridLayout(1, 0, 0, 0));
+		panelAusgabe.setLayout(gl_panelAusgabe);
+		panelDijkstra.setLayout(gl_panelDijkstra);
+		panelBFS.setLayout(gl_panelBFS);
+		panelOptions.setLayout(gl_panelOptions);
+		panelConsole.setLayout(gl_panelConsole);
+		frameMain.getContentPane().setLayout(groupLayout);
 		
-
-		
-		panelConsole.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		
-		
-		panelBFS.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		
-		
+		panelOptions.setBorder(new LineBorder(new Color(192, 192, 192)));
+		panelGraphStream.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		panelConsole.setBorder(new LineBorder(Color.LIGHT_GRAY));		
+		panelBFS.setBorder(new LineBorder(Color.LIGHT_GRAY));		
 		panelDijkstra.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		panelAusgabe.setBorder(new LineBorder(Color.LIGHT_GRAY));		
+		
+		scrollPaneAusgabe.setViewportView(textArea_1);
+		scrollPaneConsole.setViewportView(textAreaConsole);		
+		
+		textField.setColumns(10);	
+		textField_1.setColumns(10);
+		textFieldSource.setColumns(10);		
+		textFieldTarget.setColumns(10);	
 		
 		
-		panelAusgabe.setBorder(new LineBorder(Color.LIGHT_GRAY));
-		GroupLayout groupLayout = new GroupLayout(frameMain.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -167,6 +173,7 @@ public class View {
 						.addComponent(panelAusgabe, GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE))
 					.addContainerGap())
 		);
+		
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -187,8 +194,7 @@ public class View {
 							.addComponent(panelConsole, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
 							.addGap(10))))
 		);
-		
-		
+
 		gl_panelAusgabe.setHorizontalGroup(
 			gl_panelAusgabe.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelAusgabe.createSequentialGroup()
@@ -198,6 +204,7 @@ public class View {
 						.addComponent(labelAusgabe))
 					.addContainerGap())
 		);
+		
 		gl_panelAusgabe.setVerticalGroup(
 			gl_panelAusgabe.createParallelGroup(Alignment.LEADING)
 				.addGroup(Alignment.TRAILING, gl_panelAusgabe.createSequentialGroup()
@@ -208,19 +215,6 @@ public class View {
 					.addContainerGap())
 		);
 		
-		
-		scrollPaneAusgabe.setViewportView(textArea_1);
-		panelAusgabe.setLayout(gl_panelAusgabe);
-		
-		
-
-		textField.setColumns(10);
-		
-		
-		textField_1.setColumns(10);
-		
-		
-	
 		gl_panelDijkstra.setHorizontalGroup(
 			gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelDijkstra.createSequentialGroup()
@@ -255,25 +249,7 @@ public class View {
 					.addComponent(btnDijkstra)
 					.addContainerGap(12, Short.MAX_VALUE))
 		);
-		panelDijkstra.setLayout(gl_panelDijkstra);
-		
-		
-		
-		textFieldSource.setColumns(10);
-		
-		
-		textFieldTarget.setColumns(10);		
-		
-		
-		JLabel labelBFSTarget = new JLabel("Source:");
-		
-		JLabel labelBFSSource = new JLabel("Target:");
-		
-	
-		
-		
-		
-		GroupLayout gl_panelBFS = new GroupLayout(panelBFS);
+
 		gl_panelBFS.setHorizontalGroup(
 			gl_panelBFS.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelBFS.createSequentialGroup()
@@ -294,6 +270,7 @@ public class View {
 								.addComponent(textFieldSource, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
 							.addContainerGap())))
 		);
+		
 		gl_panelBFS.setVerticalGroup(
 			gl_panelBFS.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelBFS.createSequentialGroup()
@@ -311,10 +288,7 @@ public class View {
 					.addComponent(btnBFS)
 					.addContainerGap())
 		);
-		panelBFS.setLayout(gl_panelBFS);
-		
-		JLabel labelOptions = new JLabel("Options");
-		GroupLayout gl_panelOptions = new GroupLayout(panelOptions);
+
 		gl_panelOptions.setHorizontalGroup(
 			gl_panelOptions.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelOptions.createSequentialGroup()
@@ -341,9 +315,7 @@ public class View {
 						.addComponent(btnSave))
 					.addGap(69))
 		);
-		panelOptions.setLayout(gl_panelOptions);
-		
-		
+
 		gl_panelConsole.setHorizontalGroup(
 			gl_panelConsole.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelConsole.createSequentialGroup()
@@ -366,21 +338,8 @@ public class View {
 					.addContainerGap())
 		);
 		
-		
-		scrollPaneConsole.setViewportView(textAreaConsole);		
-		panelConsole.setLayout(gl_panelConsole);
-		
-
-		frameMain.getContentPane().setLayout(groupLayout);
-		
-		
-		frameMain.setVisible(true);
-		
-		
+		frameMain.setVisible(true);				
 	}
-
-	
-	
 
 
 	public JFrame getFrameMain() {
