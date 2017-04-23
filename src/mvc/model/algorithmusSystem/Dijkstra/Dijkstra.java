@@ -18,6 +18,8 @@ public class Dijkstra extends Algorithmus {
 	private Node target;
 	private List<Node> path;
 	
+	private static final int INFINITY = 999;
+	
 	public Dijkstra(Graph graph){
 		this.graph = graph;
 	}
@@ -153,6 +155,19 @@ public class Dijkstra extends Algorithmus {
 		return path;
 	}
 	
+	public String getShortestPathWithCoast(){
+		String temp = "Kürzester Wege von " + this.source.getId().toString() + " nach " + this.target.getId().toString() + " unter Berücksichtigung der Kantengewichtungen:\n" + "[ ";
+		for(int i = 0; i<path.size();i++){
+			if(i == path.size()-1){
+				temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung");
+			} else {
+				temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung") + " -> ";
+			}
+			
+		}
+		return temp + " ]";
+	}
+	
 	private void setEntfernung(Node node, int value){
 		node.setAttribute("Entfernung", value);
 		node.setAttribute("ui.label", node.getId() + " - Entfernung: " + value);
@@ -254,7 +269,7 @@ public class Dijkstra extends Algorithmus {
 		Printer.prompt(this, "Initialisiere Dijkstra");
 		
 		for (Node node : graph.getEachNode()) {
-			node.setAttribute("Entfernung", 999);
+			node.setAttribute("Entfernung", INFINITY);
 			node.removeAttribute("Vorg");
 		}	
 		
@@ -283,6 +298,36 @@ public class Dijkstra extends Algorithmus {
 		}	
 
 		return toReturn;
+	}
+	
+	public Graph converteUndirectedToDirected(Graph graph){
+		
+		List<Edge> newEdges = new ArrayList<Edge>();
+		
+		for(Edge edge : graph.getEachEdge()){			
+			boolean needToAdd = true;
+			Node source = edge.getSourceNode();
+			Node target = edge.getTargetNode();
+			
+			graph.removeEdge(edge);
+			graph.addEdge(source.getId().toString() + target.getId().toString(), source, target, true);
+			
+			for(Edge edge2 : graph.getEachEdge()){
+				if((edge2.getSourceNode() == target) && (edge2.getTargetNode() == source)){
+					needToAdd = false;
+				}				
+			}
+			
+			if(needToAdd){
+				graph.addEdge(target.getId().toString() + source.getId().toString(), target, source, true);
+			}
+			
+			
+		}
+
+		
+		
+		return graph;		
 	}
 
 	@Override

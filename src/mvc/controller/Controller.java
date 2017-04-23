@@ -136,7 +136,16 @@ public class Controller {
 		
 		if(!model.getGraph().getEdge(0).isDirected()){
 			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");
-			// TODO Graph konvertieren		
+			
+			model.setDijksta(new Dijkstra(model.getGraph()));
+			Dijkstra djk = model.getDijksta();
+			
+			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
+			model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+			
+			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
+			
+			this.setGraphToPanel();
 			
 		} else {
 			
@@ -147,7 +156,7 @@ public class Controller {
 					Dijkstra djk = model.getDijksta();
 					model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
-					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPath().toString());		
+					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 					
 					this.setGraphToPanel();
 				
