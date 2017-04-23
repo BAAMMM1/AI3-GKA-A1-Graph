@@ -49,7 +49,7 @@ public class JUnitTestBFS {
 
 	@Test
 	public void testBFSdirected1() {
-		bfs1.stpAlgorithmus(source_01, target_01);
+		bfs1.start(source_01, target_01);
 		assertEquals(bfs1.getShortestPath(), shortestPathTest1);
 
 		
