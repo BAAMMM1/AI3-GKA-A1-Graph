@@ -1,19 +1,17 @@
 package mvc.controller;
 
 import java.awt.Component;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
 import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
 import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.model.exception.GraphUncorrectSourceOrTarget;
 import mvc.view.View;
 
 public class Controller {
@@ -131,17 +129,19 @@ public class Controller {
 	
 	private void btnDijkstraAction(){
 		String source = view.getTextField().getText();
-		String target = view.getTextField_1().getText();		
+		String target = view.getTextField_1().getText();	
+		
+		model.setDijksta(new Dijkstra(model.getGraph()));
+		Dijkstra djk = model.getDijksta();
+		
 		if(this.sourceTargetValid(source, target)){
 		
 		if(!model.getGraph().getEdge(0).isDirected()){
 			
-			if(this.model.isGraphDijkstraCorrectWeighted()){
-			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");
-			
-			model.setDijksta(new Dijkstra(model.getGraph()));
-			Dijkstra djk = model.getDijksta();
-			
+			if(djk.isGraphCorrectWeighted()){
+				
+			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");		
+	
 			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
 			model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
@@ -155,11 +155,8 @@ public class Controller {
 			
 		} else {
 			
-			if(this.model.isGraphDijkstraCorrectWeighted()){
+			if(djk.isGraphCorrectWeighted()){
 				
-
-					model.setDijksta(new Dijkstra(model.getGraph()));
-					Dijkstra djk = model.getDijksta();
 					model.setGraph(djk.runStart(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
 					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
