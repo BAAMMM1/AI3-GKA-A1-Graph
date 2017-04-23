@@ -25,6 +25,7 @@ public class Dijkstra extends Algorithmus {
 	}
 	
 	public Graph runStart(Node source, Node target){
+		System.clearProperty("org.graphstream.ui.renderer");
 		this.source = source;
 		this.target = target;
 		
@@ -302,29 +303,51 @@ public class Dijkstra extends Algorithmus {
 	
 	public Graph converteUndirectedToDirected(Graph graph){
 		
-		List<Edge> newEdges = new ArrayList<Edge>();
 		
-		for(Edge edge : graph.getEachEdge()){			
+		List<Edge> edges = new ArrayList();
+		edges.addAll(graph.getEdgeSet());
+
+		
+		for(int i = 0; i<edges.size(); i++){
+			Edge toLook = edges.get(i);
+			System.out.println(i);
+			System.out.println("Schaue an: " + toLook.toString());
 			boolean needToAdd = true;
-			Node source = edge.getSourceNode();
-			Node target = edge.getTargetNode();
+			Node source = toLook.getSourceNode();
+			Node target = toLook.getTargetNode();
+
+			// UI Laber mit der bezeichnung fehlt noch)
+			graph.removeEdge(source.toString()+target.toString());
+			graph.addEdge(source.toString() + target.toString(), source, target, true);
 			
-			graph.removeEdge(edge);
-			graph.addEdge(source.getId().toString() + target.getId().toString(), source, target, true);
+			int weigt = toLook.getAttribute("weight");			
+			graph.getEdge(source.toString()+target.toString()).setAttribute("weight", weigt);
+			graph.getEdge(source.toString()+target.toString()).setAttribute("ui.label", toLook.getAttribute("ui.label").toString());
 			
-			for(Edge edge2 : graph.getEachEdge()){
-				if((edge2.getSourceNode() == target) && (edge2.getTargetNode() == source)){
-					needToAdd = false;
-				}				
+			Edge toLook2 = graph.getEdge(target.toString()+source.toString());
+			if(toLook2 != null){
+				System.out.println(target.getId().toString()+source.getId().toString());
+				graph.removeEdge(target.getId().toString()+source.getId().toString());
+				graph.addEdge(target.toString() + source.getId().toString(), target, source, true);
+				
+				int weigt2 = toLook2.getAttribute("weight");			
+				graph.getEdge(target.toString()+source.toString()).setAttribute("weight", weigt2);
+				graph.getEdge(target.toString()+source.toString()).setAttribute("label", toLook2.getAttribute("ui.label").toString());
+				
+			} else {
+				graph.addEdge(target.toString() + source.toString(), target, source, true);		
+				graph.getEdge(target.toString()+source.toString()).setAttribute("weight", weigt);
+				graph.getEdge(target.toString()+source.toString()).setAttribute("ui.label", toLook.getAttribute("ui.label").toString());
 			}
 			
-			if(needToAdd){
-				graph.addEdge(target.getId().toString() + source.getId().toString(), target, source, true);
-			}
+			
 			
 			
 		}
 
+		for(Edge edge: graph.getEachEdge()){
+			System.out.println(edge.toString());
+		}
 		
 		
 		return graph;		
