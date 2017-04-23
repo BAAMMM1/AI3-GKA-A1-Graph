@@ -1,51 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.11" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="mvc.model.fileExtensionSystem.Convertion.FileConverter" project="AI3-GKA-A1-Graph" 
-    file="/AI3-GKA-A1-Graph/src/mvc/model/fileExtensionSystem/Convertion/FileConverter.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="403" y="144"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="mvc.model.algorithmusSystem.Dijkstra.Dijkstra" project="AI3-GKA-A1-Graph" 
-    file="/AI3-GKA-A1-Graph/src/mvc/model/algorithmusSystem/Dijkstra/Dijkstra.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1037" y="733"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="mvc.model.algorithmusSystem.Algorithmus" project="AI3-GKA-A1-Graph" 
-    file="/AI3-GKA-A1-Graph/src/mvc/model/algorithmusSystem/Algorithmus.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1259" y="126"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="4" language="java" name="mvc.model.fileExtensionSystem.Convertion.GraphFileConverter" 
-    project="AI3-GKA-A1-Graph" 
-    file="/AI3-GKA-A1-Graph/src/mvc/model/fileExtensionSystem/Convertion/GraphFileConverter.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="419" y="796"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <package id="5" language="java" name="mvc.model.algorithmusSystem.breadthFirstSearch" project="AI3-GKA-A1-Graph" 
+  <package id="1" language="java" name="mvc.model.algorithmusSystem.breadthFirstSearch" project="AI3-GKA-A1-Graph" 
     file="/AI3-GKA-A1-Graph/src/mvc/model/algorithmusSystem/breadthFirstSearch" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="714" y="111"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
-  <class id="6" language="java" name="mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch" 
+  <class id="2" language="java" name="mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch" 
     project="AI3-GKA-A1-Graph" 
     file="/AI3-GKA-A1-Graph/src/mvc/model/algorithmusSystem/breadthFirstSearch/BreadthFirstSearch.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -56,7 +17,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="mvc.controller.Controller" project="AI3-GKA-A1-Graph" 
+  <class id="3" language="java" name="mvc.controller.Controller" project="AI3-GKA-A1-Graph" 
     file="/AI3-GKA-A1-Graph/src/mvc/controller/Controller.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1030" y="297"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -65,18 +26,6 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="8">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="9">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <generalization id="10">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

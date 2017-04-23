@@ -218,14 +218,13 @@ public class GraphFileConverter extends FileConverter {
            if(edge.getNode1().getAttribute("attr2") != null){        	   
         	   part2 = part2 + ":" + edge.getNode1().getAttribute("attr2");
            }
-           /* edge bezeichner in klammern fehlt hier noch
-           if(edge.getAttribute("weight") != null){        	   
-        	   part2 = part2 + " :: " + edge.getAttribute("weight");
-           }      
-           */     
+           
+           //TODO Kantenbezeichnung abspeichern geht noch nicht
+           
            if(edge.getAttribute("weight") != null){        	   
         	   part2 = part2 + " :: " + edge.getAttribute("weight");
            }
+      
            
            
            row = part1 + "," + part2 +";";

@@ -90,7 +90,7 @@ public class Controller {
 				String source = view.getTextFieldSource().getText();
 				String target = view.getTextFieldTarget().getText();
 		
-		if(this.bfsSourceTargetValid(source, target)){
+		if(this.sourceTargetValid(source, target)){
 			
 		
 		
@@ -119,7 +119,7 @@ public class Controller {
 		}
 	}
 	
-	private boolean bfsSourceTargetValid(String source, String target){
+	private boolean sourceTargetValid(String source, String target){
 		
 		if((model.getGraph().getNode(source) == null) || (model.getGraph().getNode(target) == null)){
 			return false;
@@ -132,9 +132,11 @@ public class Controller {
 	private void btnDijkstraAction(){
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();		
-		if(this.bfsSourceTargetValid(source, target)){
+		if(this.sourceTargetValid(source, target)){
 		
 		if(!model.getGraph().getEdge(0).isDirected()){
+			
+			if(this.model.isGraphDijkstraCorrectWeighted()){
 			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");
 			
 			model.setDijksta(new Dijkstra(model.getGraph()));
@@ -146,6 +148,10 @@ public class Controller {
 			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 			
 			this.setGraphToPanel();
+			System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+			} else {
+				this.setTextFieldAusgabe("Dijkstra:\nGraph Gewichtungsfehler.");
+			}
 			
 		} else {
 			
@@ -247,6 +253,7 @@ public class Controller {
 	}
 	
 	public void setGraphToPanel(){
+		
 		this.initGraph();
 		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    viewer_view = viewer.addDefaultView(false);
