@@ -27,6 +27,7 @@ public class JUnitTestBFS {
 	@Before
 	public void setUp() throws Exception {
 		this.fileHandler = new GraphFileExtensionHandler();
+		
 		this.graph1 = fileHandler.loadGraph("db/testCases/JUnitTest_BFS_directed.graph");
 		this.bfs1 = new BreadthFirstSearch(graph1);
 		
@@ -51,6 +52,7 @@ public class JUnitTestBFS {
 	public void testBFSdirected1() {
 		bfs1.start(source_01, target_01);
 		assertEquals(bfs1.getShortestPath(), shortestPathTest1);
+		
 
 		
 		/*
