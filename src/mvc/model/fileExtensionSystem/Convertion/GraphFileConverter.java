@@ -99,7 +99,8 @@ public class GraphFileConverter extends FileConverter {
 						
 						graph.addEdge(node1 + node2, node1, node2, orientation);						
 						
-						if (edge != null) {				
+						if (edge != null) {	
+							// Edge als Attribut hinzufügen
 						
 							if (weight != null) {
 								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
