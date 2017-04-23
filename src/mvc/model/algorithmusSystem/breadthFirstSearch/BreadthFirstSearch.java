@@ -286,6 +286,7 @@ public class BreadthFirstSearch extends Algorithmus{
 	public boolean isThereAEdgeBetweenThisNodes(Node bfsNode, Node targetNode){
 		boolean toReturn = false;
 		
+		
 		for(int i = 0; i <= edges.size() -1 ; i++){
 			if(edges.get(i).getSourceNode() == bfsNode && edges.get(i).getTargetNode() == targetNode){
 				toReturn = true;

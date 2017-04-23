@@ -70,26 +70,6 @@ public class Model {
 		this.graphAsText = graphAsText;
 	}
 	
-	public boolean isGraphDijkstraCorrectWeighted(){
-		boolean temp = true;
-		for(Edge edge : this.graph.getEachEdge()){
-			
-			if(edge.getAttribute("weight") != null){
-				
-				int weight = edge.getAttribute("weight");
-				if(weight >= 0){
-					temp = temp && true;
-				} else {
-					temp = temp && false;
-				}
-			} else {
-				temp = temp && false;
-			}
-		}
-		
-		System.out.println("isGraphDijkstraCorrectWeighted: " + temp);
-		return temp;
-	}
 		
 	
 	

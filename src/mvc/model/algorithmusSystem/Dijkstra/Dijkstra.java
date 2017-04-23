@@ -157,16 +157,25 @@ public class Dijkstra extends Algorithmus {
 	}
 	
 	public String getShortestPathWithCoast(){
-		String temp = "Kürzester Wege von " + this.source.getId().toString() + " nach " + this.target.getId().toString() + " unter Berücksichtigung der Kantengewichtungen:\n" + "[ ";
-		for(int i = 0; i<path.size();i++){
-			if(i == path.size()-1){
-				temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung");
-			} else {
-				temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung") + " -> ";
+		String temp;
+		if(path.size() != 0) {
+			temp = "Kürzester Wege von " + this.source.getId().toString() + " nach " + this.target.getId().toString() + " unter Berücksichtigung der Kantengewichtungen:\n" + "[ ";
+			for(int i = 0; i<path.size();i++){
+				if(i == path.size()-1){
+					temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung");
+				} else {
+					temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung") + " -> ";
+				}
+				
+				
+				
 			}
-			
+			temp = temp + " ]";
+		} else {
+			temp = "Es gibt keinen Pfad zum Ziel"; 
 		}
-		return temp + " ]";
+		
+		return temp;
 	}
 	
 	private void setEntfernung(Node node, int value){
@@ -356,6 +365,29 @@ public class Dijkstra extends Algorithmus {
 	@Override
 	public String toString() {
 		return "Dijkstra :";
+	}
+	
+	
+	public boolean isGraphCorrectWeighted(){
+		boolean temp = true;
+		for(Edge edge : this.graph.getEachEdge()){
+			
+			if(edge.getAttribute("weight") != null){
+				
+				int weight = edge.getAttribute("weight");
+				if(weight >= 0){
+					temp = temp && true;
+				} else {
+					temp = temp && false;
+				}
+			} else {
+				temp = temp && false;
+			}
+		}
+		
+		System.out.println("isGraphDijkstraCorrectWeighted: " + temp);
+		return temp;
+		
 	}
 	
 	
