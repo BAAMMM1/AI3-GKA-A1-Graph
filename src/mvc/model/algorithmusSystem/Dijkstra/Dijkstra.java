@@ -11,6 +11,9 @@ import org.graphstream.graph.Node;
 import mvc.model.algorithmusSystem.Algorithmus;
 import utility.Printer;
 
+/**
+ * Diese Klasse stellt den Dijkstra-Algorithmus dar
+ */
 public class Dijkstra extends Algorithmus {
 
 	private Graph graph;
@@ -144,10 +147,21 @@ public class Dijkstra extends Algorithmus {
 
 	}
 
+	/**
+	 * Gibt den ermittelten kürzesten Weg zurück
+	 * 
+	 * @return kürzesten Weg
+	 */
 	public List<Node> getShortestPath() {
 		return path;
 	}
 
+	/**
+	 * Gibt einen String zurück, der den kürzesten Weg mit einschließlich seinen
+	 * Kosten enthält
+	 * 
+	 * @return kürzesten Weg mit Kosten
+	 */
 	public String getShortestPathWithCoast() {
 		String temp;
 		if (path.size() != 0) {
@@ -170,6 +184,14 @@ public class Dijkstra extends Algorithmus {
 		return temp;
 	}
 
+	/**
+	 * Diese Mehtode setzt den Entfernungs-Flag eines Knoten
+	 * 
+	 * @param node
+	 *            Knoten bei dem der Flag gesetzt werden soll
+	 * @param value
+	 *            Wert des Entfernungs-Flag
+	 */
 	private void setEntfernung(Node node, int value) {
 		node.setAttribute("Entfernung", value);
 		node.setAttribute("ui.label", node.getId() + " - Entfernung: " + value);
@@ -197,6 +219,14 @@ public class Dijkstra extends Algorithmus {
 		return toReturn;
 	}
 
+	/**
+	 * Gibt eine Liste an Nachbarnknoten aus einer Liste von Nachbarn eines
+	 * Knoten zurück, bei denen der OK-Flag false gesetzt ist
+	 * 
+	 * @param neighbours
+	 *            Alle Nachbarn eines Knoten
+	 * @return Nachbarn mit OK = False
+	 */
 	private List<Node> getValidTargetNodes(List<Node> neighbours) {
 		List<Node> validNeighbours = new ArrayList<Node>();
 
@@ -211,9 +241,11 @@ public class Dijkstra extends Algorithmus {
 	}
 
 	/**
+	 * Gibt alle Knoten zurück die ein Ziel des übergabe Knoten sind
 	 * 
 	 * @param node
-	 * @return
+	 *            Knoten beim dem die Ziel Knoten ermittelt werden soll
+	 * @return Liste aller Zielknoten des Übergabeknoten
 	 */
 	private List<Node> getTargetNodesOfNode(Node node) {
 		List<Node> neighbours = new ArrayList<Node>();
@@ -233,8 +265,11 @@ public class Dijkstra extends Algorithmus {
 
 	/**
 	 * Setzt das OK-Falg eines Knoten
-	 * @param node Knoten bei dem das Flag gesetzt werden sonn
-	 * @param value Wert des OK-Flags
+	 * 
+	 * @param node
+	 *            Knoten bei dem das Flag gesetzt werden sonn
+	 * @param value
+	 *            Wert des OK-Flags
 	 */
 	private void setOKFlag(Node node, boolean value) {
 		Printer.prompt(this, "Setzt OK: ture bei: " + node.toString());
@@ -242,7 +277,9 @@ public class Dijkstra extends Algorithmus {
 	}
 
 	/**
-	 * Ermittelt den Knoten aus der FalseList, welcher den kleinen Entfernungsweert besitzt
+	 * Ermittelt den Knoten aus der FalseList, welcher den kleinen
+	 * Entfernungsweert besitzt
+	 * 
 	 * @param falseList
 	 * @return Knoten mit kleinsten Entfernungswert
 	 */
@@ -269,6 +306,7 @@ public class Dijkstra extends Algorithmus {
 
 	/**
 	 * Ermittelt aus allen Knoten des Graphen mit dem OK-Flag: false
+	 * 
 	 * @return Liste der Knoten mit OK = false
 	 */
 	private List<Node> computeFalseList() {
@@ -322,6 +360,12 @@ public class Dijkstra extends Algorithmus {
 
 	}
 
+	/**
+	 * Stellt fest, ob im Graphen noch ein Knoten ist, bei dem der OK-Flag false
+	 * gesetzt ist
+	 * 
+	 * @return true/false
+	 */
 	private boolean thereIsAfalseNodes() {
 		boolean toReturn = false;
 
@@ -338,6 +382,13 @@ public class Dijkstra extends Algorithmus {
 		return toReturn;
 	}
 
+	/**
+	 * Konvertiert einen undirected Graph zu einem directed Graph, damit der
+	 * Algorithmus auf ihn ausgeführt werden kann
+	 * 
+	 * @param graph Graph der konvertiert werden soll
+	 * @return Konvertierter Graph mit directed = true 
+	 */
 	public Graph converteUndirectedToDirected(Graph graph) {
 
 		List<Edge> edges = new ArrayList();

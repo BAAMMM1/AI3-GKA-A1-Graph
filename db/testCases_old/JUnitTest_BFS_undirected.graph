@@ -1,5 +1,6 @@
 Start,Umweg;
 Umweg,Zwischenschritt;
+Umwer_2,Zwischenschritt;
 Start,Zwischenschritt;
 Graph_ausserhalb_Knoten_1,Graph_ausserhalb_Knoten_2;
 Graph_ausserhalb_Knoten_2,Graph_ausserhalb_Knoten_3;

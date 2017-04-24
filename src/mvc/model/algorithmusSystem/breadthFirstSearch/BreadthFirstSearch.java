@@ -31,6 +31,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 */
 	@Override
 	public Graph start(Node source, Node target) {
+		Printer.prompt(this, "-------------------------------------");
 		Printer.prompt(this, "Starte BreadthFirstSearch-Algorithmus");
 
 		this.initializeBFS(source, target);
@@ -129,7 +130,8 @@ public class BreadthFirstSearch extends Algorithmus {
 			Node nachbar = nodeIterator.next();
 			int nachbarBFS = nachbar.getAttribute("BFS");
 			if (nachbarBFS == nodeBFS - 1) {
-				return nachbar;
+
+						return nachbar;				
 			}
 		}
 		return null;
