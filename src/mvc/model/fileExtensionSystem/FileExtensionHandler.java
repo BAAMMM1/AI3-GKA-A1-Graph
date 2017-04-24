@@ -21,8 +21,6 @@ public abstract class FileExtensionHandler implements FileExtension{
 		
 	}
 	
-	//TODO
-	// Template oder Hook-Methode
 	public abstract String getExtension();
 
 	private FileConverter getConverter() {
@@ -39,8 +37,7 @@ public abstract class FileExtensionHandler implements FileExtension{
 	
 	@Override
 	public final void saveGraph(Graph graph, String filename) {
-		//TODO
-		// Template oder Hook-Methode
+		
 		this.getWriter().writeToFile(this.getConverter().graphObjectToString(graph), filename, this.getExtension());
 	}
 

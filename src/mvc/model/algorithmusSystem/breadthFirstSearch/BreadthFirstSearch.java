@@ -14,7 +14,7 @@ import utility.Printer;
 public class BreadthFirstSearch extends Algorithmus {
 
 	private Graph graph;
-	private List<Node> stack;
+	private List<Node> queue;
 	private List<Node> path;
 	private Node source;
 	private Node target;
@@ -56,17 +56,17 @@ public class BreadthFirstSearch extends Algorithmus {
 	private void computeLambdas() {
 		Printer.prompt(this, "Berechne Lambda-Werte der Knoten");
 
-		this.stack.add(source);
+		this.queue.add(source);
 		this.setLambdaToNode(source, LAMBDA_START);
 
 
-		while (!this.stack.isEmpty()) {
-			Node nextNode = stack.get(0);
-			this.stack.remove(0);
+		while (!this.queue.isEmpty()) {
+			Node nextNode = queue.get(0);
+			this.queue.remove(0);
 			Printer.prompt(this, "Pull from Stack: " + nextNode.toString());
 
 			/*
-			 * Wenn der Zielknoten ereicht ist, beendet den durchlauf
+			 * Wenn der Zielknoten ereicht ist, beendet den Durchlauf
 			 */
 			if (nextNode == target) {
 				Printer.prompt(this, "Zielknoten ereicht");
@@ -77,7 +77,7 @@ public class BreadthFirstSearch extends Algorithmus {
 				 * Lambda-Wert
 				 */
 				List<Node> neighbours = this.notVisitedNeighbuorsOfNode(nextNode);
-				stack.addAll(neighbours);
+				queue.addAll(neighbours);
 
 				int stackLambdaValue = nextNode.getAttribute("BFS");
 				for (int i = 0; i < neighbours.size(); i++) {
@@ -85,7 +85,7 @@ public class BreadthFirstSearch extends Algorithmus {
 				}
 
 			}
-			Printer.prompt(this, "Stack: " + this.stack.toString());
+			Printer.prompt(this, "Stack: " + this.queue.toString());
 		}
 	}
 
@@ -123,7 +123,6 @@ public class BreadthFirstSearch extends Algorithmus {
 	}
 
 	private Node getNextSmallerBFS(Node node) {
-		// Prüfen ob eine Kanten zwischen den beiden existiert
 		Iterator<Node> nodeIterator = node.getNeighborNodeIterator();
 		int nodeBFS = node.getAttribute("BFS");
 		while (nodeIterator.hasNext()) {
@@ -157,7 +156,7 @@ public class BreadthFirstSearch extends Algorithmus {
 		 * Die Warteschlange, wechle die Knoten enthält, die der Algorihtmus als
 		 * nächstes bearbeitet.
 		 */
-		stack = new ArrayList<Node>();
+		queue = new ArrayList<Node>();
 		
 		/*
 		 * Alles Knoten werden als noch nicht besucht initialisiert.
@@ -188,7 +187,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 */
 	private void setLambdaToNode(Node node, int lambda) {
 		node.setAttribute("BFS", lambda);
-		node.setAttribute("ui.label", "λ(" + node.getAttribute("ui.label") + ") = " + lambda);
+		node.setAttribute("ui.label", "l(" + node.getAttribute("ui.label") + ") = " + lambda);
 		Printer.prompt(this, "Knoten: " + node.toString() + " Lambda-Wert: " + node.getAttribute("BFS"));
 		//TODO Einfärbung der Knoten
 	}

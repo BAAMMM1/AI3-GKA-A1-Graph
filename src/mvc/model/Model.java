@@ -26,8 +26,8 @@ public class Model {
 	
 	public void initializeModel(){
 		this.fileHandler = new GraphFileExtensionHandler();
-		this.graph = fileHandler.loadGraph("db/examples/simple.graph");
-		this.graphAsText = fileHandler.loadFile("db/examples/simple.graph");
+		this.graph = fileHandler.loadGraph("db/examples/graph03.graph");
+		this.graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
 	}
 
 	public FileExtension getFileHandler() {

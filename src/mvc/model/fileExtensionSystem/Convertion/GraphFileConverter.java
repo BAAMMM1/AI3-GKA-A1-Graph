@@ -89,7 +89,7 @@ public class GraphFileConverter extends FileConverter {
 				String edgepart = this.patternFromString(PATTERN_EDGE, part2);
 				String weightpart = this.patternFromString(PATTERN_WEIGHT, part2);
 
-				String edge = null; // TODO Wo soll der rein?
+				String edge = null;
 				if (edgepart != null) {
 					edge = this.patternFromString(PATTERN_IDENTIFIER, edgepart);
 				}
@@ -105,6 +105,9 @@ public class GraphFileConverter extends FileConverter {
 				this.addNodeToGraph(node2, nodes, graph);
 				this.addAttributeToNode(node2, attribute2, graph);
 
+				/*
+				 * Kante hinzufügen, nur wenn zwei Knoten da sind
+				 */
 				if ((node2 != null)) {
 					if (!(edges.contains(node1 + node2))) {
 						edges.add(node1 + node2);
@@ -218,7 +221,7 @@ public class GraphFileConverter extends FileConverter {
 
 		// Schau ob eine Kante gerichtet ist, dann ist der Graph gerichtet
 		for (Edge edge : graph.getEachEdge()) {
-			if (edge.isDirected() == true) {
+			if (edge.isDirected()) {
 				out.add("#directed;");
 				break;
 			}
