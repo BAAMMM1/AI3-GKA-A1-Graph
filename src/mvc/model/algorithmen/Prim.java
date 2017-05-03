@@ -8,17 +8,10 @@ import utility.Printer;
 
 public class Prim extends Algorithmus {
 
-	private Graph graph;
-	private Node source;
-	private Node target;
-
-	public Prim(Graph graph) {
-		this.graph = graph;
-	}
 
 	@Override
-	protected Graph procedure(Node source, Node target) {
-		this.initPrim(source, target);
+	protected Graph procedure() {
+		this.initPrim();
 
 		while (this.graphTHasNotAllNodes()) {
 			Edge e = this.getEedgeWithMinimalWeightWichlinkToANodeWhoIsNotInGraphT();
@@ -27,15 +20,10 @@ public class Prim extends Algorithmus {
 
 		}
 
-		return this.graph;
+		return this.getGraph();
 	}
 
-	private void initPrim(Node source, Node target) {
-		Printer.promptTestOut(this, "initialize");
-		Printer.promptTestOut(this, "set source: " + source.toString());
-		Printer.promptTestOut(this, "set target: " + target.toString());
-		this.source = source;
-		this.target = target;
+	private void initPrim() {		
 
 	}
 

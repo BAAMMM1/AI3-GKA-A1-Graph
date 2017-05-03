@@ -7,6 +7,10 @@ import utility.Printer;
 
 public abstract class Algorithmus {
 	
+	private Graph graph;
+	private Node source;
+	private Node target;
+		
 	// TODO command pattern für die Auswahl der Befehle?
 	
 	// TODO getResult() statt geShortestPath usw? Mit Prompt Ausgabe, was das Result gerade ist?
@@ -22,11 +26,13 @@ public abstract class Algorithmus {
 	 * @param target Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	public Graph compute(Node source, Node target) {
-		Printer.prompt(this, "-------------------------------------");
+	public Graph compute(Graph graph, Node source, Node target) {
+		Printer.prompt(this, "-------------------------------------"); // ohne this
 		Printer.prompt(this, "compute algorithmus");
+		
+		this.initAlgorithmus(graph, source, target);
 
-		return this.procedure(source, target);
+		return this.procedure();
 	}
 
 	/**
@@ -37,6 +43,37 @@ public abstract class Algorithmus {
 	 * @param target Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	protected abstract Graph procedure(Node source, Node target);
+	protected abstract Graph procedure();
+	
+	/**
+	 * Initialisiert den Algorithmus auf einen Graphen, einen Startknoten sowie auf ein Zielknoten. Es ist
+	 * die einzige Methode um die sich eine konrekte Klasse Algorithmus kümmern muss.
+	 * @param graph
+	 * @param source
+	 * @param target
+	 */
+	private void initAlgorithmus(Graph graph, Node source, Node target){
+		Printer.promptTestOut(this, "initialize");
+		Printer.promptTestOut(this, "set source: " + source.toString());
+		Printer.promptTestOut(this, "set target: " + target.toString());
+		this.graph = graph;
+		this.source = source;
+		this.target = target;
+	}
+
+	protected Graph getGraph() {
+		return graph;
+	}
+
+	protected Node getSource() {
+		return source;
+	}
+
+	protected Node getTarget() {
+		return target;
+	}
+	
+	
+
 
 }

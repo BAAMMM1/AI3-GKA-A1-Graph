@@ -51,7 +51,7 @@ public class JUnitTestDijkstra {
 		
 		// Test 1 - 9.2.1.1
 		this.graph1 = fileHandler.loadGraph("db/testCases/JUnitTest_Dijkstra_directed.graph");
-		this.djk1 = new Dijkstra(graph1);
+		this.djk1 = new Dijkstra();
 		this.shortestPathTest1 = new ArrayList<Node>();	
 		source_01 = graph1.getNode("Start");
 		step_01_01 = graph1.getNode("BesserWeg");
@@ -64,20 +64,20 @@ public class JUnitTestDijkstra {
 		shortestPathTest1.add(target_01);
 		
 		// Test 2 - 9.2.1.2
-		this.djk2 = new Dijkstra(graph1);
+		this.djk2 = new Dijkstra();
 		this.shortestPathTest2 = new ArrayList<Node>();	
 		source_02 = graph1.getNode("Start");
 		target_02 = graph1.getNode("Graph_ausserhalb_Knoten_1");
 		
 		// Test 3 - 9.2.1.3
-		this.djk3 = new Dijkstra(graph1);
+		this.djk3 = new Dijkstra();
 		this.shortestPathTest3 = new ArrayList<Node>();	
 		source_03 = graph1.getNode("Start");
 		target_03 = graph1.getNode("unerreichbares_Ziel");
 		
 		// Test 4 - 9.2.2.1
 		this.graph2 = fileHandler.loadGraph("db/testCases/JUnitTest_Dijkstra_ungerichtet.graph");
-		this.djk4 = new Dijkstra(graph2);
+		this.djk4 = new Dijkstra();
 		this.shortestPathTest4 = new ArrayList<Node>();	
 		source_04 = graph2.getNode("Start");
 		step_04_01 = graph2.getNode("Zwischenschritt");
@@ -88,7 +88,7 @@ public class JUnitTestDijkstra {
 		shortestPathTest4.add(target_04);
 			
 		// Test 5 - 9.2.2.2
-		this.djk5 = new Dijkstra(graph2);
+		this.djk5 = new Dijkstra();
 		this.shortestPathTest5 = new ArrayList<Node>();	
 		source_05 = graph2.getNode("Start");
 		target_05 = graph2.getNode("Graph_ausserhalb_Knoten_1");
@@ -100,16 +100,16 @@ public class JUnitTestDijkstra {
 	public void testDijkstraWeightedDirected() {
 	
 		// Test 1 - 9.2.1.1
-		djk1.compute(source_01, target_01);
+		djk1.compute(graph1, source_01, target_01);
 		assertEquals(djk1.getShortestPath(), shortestPathTest1);
 		
 		
 		// Test 2 - 9.2.1.2
-		djk2.compute(source_02, target_02);
+		djk2.compute(graph1, source_02, target_02);
 		assertEquals(djk2.getShortestPath(), shortestPathTest2);
 		
 		// Test 3 - 9.2.1.3
-		djk3.compute(source_03, target_03);
+		djk3.compute(graph1, source_03, target_03);
 		assertEquals(djk3.getShortestPath(), shortestPathTest3);
 		
 	}
@@ -117,12 +117,12 @@ public class JUnitTestDijkstra {
 	@Test
 	public void testDijkstraWeightedUnDirected() {
 		// Test 4 - 9.2.2.1
-		djk4.compute(source_04, target_04);
+		djk4.compute(graph2, source_04, target_04);
 		assertEquals(djk4.getShortestPath(), shortestPathTest4);
 		
 		
 		// Test 5 - 9.2.2.2
-		djk5.compute(source_05, target_05);
+		djk5.compute(graph2, source_05, target_05);
 		assertEquals(djk5.getShortestPath(), shortestPathTest5);
 		
 		

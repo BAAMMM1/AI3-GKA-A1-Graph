@@ -97,9 +97,9 @@ public class Controller {
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
 		bfs.shortestPath(source, target);
 		*/
-		model.setBfs(new BreadthFirstSearch(model.getGraph()));
+		model.setBfs(new BreadthFirstSearch());
 
-		model.setGraph(model.getBfs().compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		model.setGraph(model.getBfs().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
 		/*
 		 * TODO Auslager in eine Mehtode 
@@ -131,19 +131,19 @@ public class Controller {
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();	
 		
-		model.setDijksta(new Dijkstra(model.getGraph()));
+		model.setDijksta(new Dijkstra());
 		Dijkstra djk = model.getDijksta();
 		
 		if(this.sourceTargetValid(source, target)){
 		
 		if(!model.getGraph().getEdge(0).isDirected()){
 			
-			if(djk.isGraphCorrectWeighted()){
+			if(djk.isGraphCorrectWeighted(this.model.getGraph())){
 				
 			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");		
 	
 			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
-			model.setGraph(djk.compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+			model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
 			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 			
@@ -155,9 +155,9 @@ public class Controller {
 			
 		} else {
 			
-			if(djk.isGraphCorrectWeighted()){
+			if(djk.isGraphCorrectWeighted(this.model.getGraph())){
 				
-					model.setGraph(djk.compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+					model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
 					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 					

@@ -12,32 +12,29 @@ import utility.Printer;
 
 public class BreadthFirstSearch extends Algorithmus {
 
-	private Graph graph;
 	private List<Node> queue;
 	private List<Node> path;
-	private Node source;
-	private Node target;
 	private static final int NOT_VISITED = -1;
 	private static final int LAMBDA_START = 0;
 
 
-	public BreadthFirstSearch(Graph graph) {
-		this.graph = graph;
+	public BreadthFirstSearch() {
 	}
 
+	// TODO Graph graph, Node source, Node target kann weg
 	/**
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
 	@Override
-	protected Graph procedure(Node source, Node target) {
+	protected Graph procedure() {
 
-		this.initializeBFS(source, target);
+		this.initBFS();
 
 		this.computeLambdas();
 
 		this.computeShortestWay();
 		
-		return graph;
+		return this.getGraph();
 
 	}
 
@@ -51,8 +48,8 @@ public class BreadthFirstSearch extends Algorithmus {
 	private void computeLambdas() {
 		Printer.promptTestOut(this, "Berechne Lambda-Werte der Knoten");
 
-		this.queue.add(source);
-		this.setLambdaToNode(source, LAMBDA_START);
+		this.queue.add(this.getSource());
+		this.setLambdaToNode(this.getSource(), LAMBDA_START);
 
 
 		while (!this.queue.isEmpty()) {
@@ -63,7 +60,7 @@ public class BreadthFirstSearch extends Algorithmus {
 			/*
 			 * Wenn der Zielknoten ereicht ist, beendet den Durchlauf
 			 */
-			if (nextNode == target) {
+			if (nextNode == this.getTarget()) {
 				Printer.promptTestOut(this, "Zielknoten ereicht");
 				break;
 			} else {
@@ -91,13 +88,13 @@ public class BreadthFirstSearch extends Algorithmus {
 	private void computeShortestWay() {
 		List<Node> pathTemp = new ArrayList<Node>();
 
-		int bfslambda = target.getAttribute("BFS");
+		int bfslambda = this.getTarget().getAttribute("BFS");
 
 		/*
 		 * Rückwerts ermittlung
 		 */
 		if (bfslambda != -1) {
-			pathTemp.add(target);
+			pathTemp.add(this.getTarget());
 			int counter = 0;
 			while (bfslambda > 0) {
 				pathTemp.add(getNextSmallerBFS(pathTemp.get(counter)));
@@ -140,13 +137,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 * @param target
 	 *            Zielknoten des Algorithmus
 	 */
-	private void initializeBFS(Node source, Node target) {
-		Printer.promptTestOut(this, "Initialisiere BreadthFirstSearch-Algorithmus");
-		this.source = source;
-		this.target = target;
-		Printer.promptTestOut(this, "Setzte Startknoten: " + source.toString());
-		Printer.promptTestOut(this, "Setzte Zielknoten: " + target.toString());
-
+	private void initBFS() {
 		/*
 		 * Die Warteschlange, wechle die Knoten enthält, die der Algorihtmus als
 		 * nächstes bearbeitet.
@@ -156,7 +147,7 @@ public class BreadthFirstSearch extends Algorithmus {
 		/*
 		 * Alles Knoten werden als noch nicht besucht initialisiert.
 		 */
-		for (Node node : graph.getEachNode()) {
+		for (Node node : this.getGraph().getEachNode()) {
 			node.setAttribute("BFS", NOT_VISITED);
 		}
 
@@ -164,7 +155,7 @@ public class BreadthFirstSearch extends Algorithmus {
 		 * Label der Nodes zurücksetzten, falls sie bereits von einem anderen
 		 * Algorithmus verändert wurden
 		 */
-		for (Node node : graph.getEachNode()) {
+		for (Node node : this.getGraph().getEachNode()) {
 			// TODO Hier fehlt noch das Attribute EdgeIdentifier fals es
 			// vorhanden ist.
 			node.setAttribute("ui.label", node.getId());

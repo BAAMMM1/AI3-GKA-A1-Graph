@@ -46,7 +46,7 @@ public class JUnitTestBFS {
 						
 		// Test 1 - 9.1.1.1
 		this.graph1 = fileHandler.loadGraph("db/testCases/JUnitTest_BFS_directed.graph");
-		this.bfs1 = new BreadthFirstSearch(graph1);		
+		this.bfs1 = new BreadthFirstSearch();		
 		this.shortestPathTest1 = new ArrayList<Node>();	
 		source_01 = graph1.getNode("Start");
 		step_01_01 = graph1.getNode("Zwischenschritt");
@@ -57,19 +57,19 @@ public class JUnitTestBFS {
 		shortestPathTest1.add(target_01);
 		
 		// Test 2 - 9.1.1.2
-		this.bfs2 = new BreadthFirstSearch(graph1);		
+		this.bfs2 = new BreadthFirstSearch();		
 		source_02 = graph1.getNode("Start");
 		target_02 = graph1.getNode("Graph_ausserhalb_Knoten_1");
 				
 		// Test 3 - 9.1.1.3
-		this.bfs3 = new BreadthFirstSearch(graph1);		
+		this.bfs3 = new BreadthFirstSearch();		
 		source_03 = graph1.getNode("Start");
 		target_03 = graph1.getNode("unerreichbares_Ziel");
 		
 		
 		// Test 4 - 9.1.2.1
 		this.graph2 = fileHandler.loadGraph("db/testCases/JUnitTest_BFS_undirected.graph");
-		this.bfs4 = new BreadthFirstSearch(graph2);		
+		this.bfs4 = new BreadthFirstSearch();		
 		this.shortestPathTest4 = new ArrayList<Node>();	
 		source_04 = graph2.getNode("Start");
 		step_04_01 = graph2.getNode("Zwischenschritt");
@@ -81,7 +81,7 @@ public class JUnitTestBFS {
 		
 		
 		// Test 5 - 9.1.2.2
-		this.bfs5 = new BreadthFirstSearch(graph2);		
+		this.bfs5 = new BreadthFirstSearch();		
 		source_05 = graph2.getNode("Start");
 		target_05 = graph2.getNode("Graph_ausserhalb_Knoten_1");		
 
@@ -92,16 +92,16 @@ public class JUnitTestBFS {
 	@Test
 	public void testBFSUnweightedDirected() {
 		// Test 1 - 9.1.1.1
-		bfs1.compute(source_01, target_01);
+		bfs1.compute(graph1, source_01, target_01);
 		assertEquals(bfs1.getShortestPath(), shortestPathTest1);
 		
 		
 		// Test 2 - 9.1.1.2
-		bfs2.compute(source_02, target_02);
+		bfs2.compute(graph1, source_02, target_02);
 		assertEquals(bfs2.getShortestPath(), null);
 		
 		// Test 3 - 9.1.1.3
-		bfs3.compute(source_03, target_03);
+		bfs3.compute(graph1, source_03, target_03);
 		assertEquals(bfs3.getShortestPath(), null);
 		
 		
@@ -111,11 +111,11 @@ public class JUnitTestBFS {
 	public void testBFSUnweightedUnDirected() {		
 		
 		// Test 4 - 9.1.2.1
-		bfs4.compute(source_04, target_04);
+		bfs4.compute(graph2, source_04, target_04);
 		assertEquals(bfs4.getShortestPath(), shortestPathTest4);		
 		
 		// Test 5 - 9.1.2.2
-		bfs5.compute(source_05, target_05);
+		bfs5.compute(graph2, source_05, target_05);
 		assertEquals(bfs5.getShortestPath(), null);
 		
 

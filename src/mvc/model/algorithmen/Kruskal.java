@@ -7,27 +7,19 @@ import utility.Printer;
 
 public class Kruskal extends Algorithmus {
 	
-	private Graph graph;
-	private Node source;
-	private Node target;
 	
-	public Kruskal(Graph graph){
-		this.graph = graph;
+	public Kruskal(){
 	}
 
 	@Override
-	protected Graph procedure(Node source, Node target) {
-		this.initKruskal(source, target);
+	protected Graph procedure() {
+		this.initKruskal();
 		
-		return this.graph;
+		return this.getGraph();
 	}
 	
-	private void initKruskal(Node source, Node target){
-		Printer.promptTestOut(this, "initialize");
-		Printer.promptTestOut(this, "set source: " + source.toString());
-		Printer.promptTestOut(this, "set target: " + target.toString());
-		this.source = source;
-		this.target = target;
+	private void initKruskal(){
+		
 		
 	}
 
