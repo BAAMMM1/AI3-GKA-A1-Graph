@@ -1,12 +1,12 @@
 package mvc.controller;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 
-import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
@@ -189,6 +189,7 @@ public class Controller {
 	private void btnSaveAction(){
 		// JFileChooser-Objekt erstellen
         JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         // Dialog zum Oeffnen von Dateien anzeigen
         int rueckgabeWert = chooser.showSaveDialog(null);
         
@@ -208,7 +209,8 @@ public class Controller {
 	
 	private void btnLoadAction(){
 		 // JFileChooser-Objekt erstellen
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();       
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         // Dialog zum Oeffnen von Dateien anzeigen		        
         int rueckgabeWert = chooser.showOpenDialog(null);
         
