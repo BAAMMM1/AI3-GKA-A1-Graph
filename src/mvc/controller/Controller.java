@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.swing.JFileChooser;
 
+import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
 import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
 import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
-import mvc.model.exception.GraphUncorrectSourceOrTarget;
 import mvc.view.View;
 
 public class Controller {
@@ -254,7 +254,7 @@ public class Controller {
 		this.initGraph();
 		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    viewer_view = viewer.addDefaultView(false);
- 	    viewer.enableAutoLayout(); 	    
+ 	    viewer.enableAutoLayout();
  	    view.getPanelGraphStream().removeAll();
  	    view.getPanelGraphStream().add((Component) viewer_view);
  	    view.getPanelGraphStream().revalidate(); 
