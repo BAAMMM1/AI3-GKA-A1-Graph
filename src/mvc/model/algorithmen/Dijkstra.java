@@ -32,7 +32,6 @@ public class Dijkstra extends Algorithmus {
 	@Override
 	protected Graph procedure(Node source, Node target) {
 		System.clearProperty("org.graphstream.ui.renderer");
-		
 
 		this.initializeDijkstra(source, target);
 
@@ -47,7 +46,6 @@ public class Dijkstra extends Algorithmus {
 		 */
 		this.computeShortestPath();
 
-		
 		return graph;
 
 	}
@@ -384,8 +382,9 @@ public class Dijkstra extends Algorithmus {
 	 * Konvertiert einen undirected Graph zu einem directed Graph, damit der
 	 * Algorithmus auf ihn ausgeführt werden kann
 	 * 
-	 * @param graph Graph der konvertiert werden soll
-	 * @return Konvertierter Graph mit directed = true 
+	 * @param graph
+	 *            Graph der konvertiert werden soll
+	 * @return Konvertierter Graph mit directed = true
 	 */
 	public Graph converteUndirectedToDirected(Graph graph) {
 
@@ -468,6 +467,5 @@ public class Dijkstra extends Algorithmus {
 		return temp;
 
 	}
-
 
 }
