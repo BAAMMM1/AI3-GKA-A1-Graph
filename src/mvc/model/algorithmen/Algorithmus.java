@@ -6,7 +6,14 @@ import org.graphstream.graph.Node;
 import utility.Printer;
 
 public abstract class Algorithmus {
+	
+	// TODO command pattern für die Auswahl der Befehle?
+	
+	// TODO getResult() statt geShortestPath usw? Mit Prompt Ausgabe, was das Result gerade ist?
 
+	// TODO Graph mit übergeben, so dass es von jedem Algortihmus nur ein Objekt geben muss und die interne
+	// variable graph jedes mal geleert wird, vlt eine reset Algortihmus ? bzw im initilaize alle Variable zurück auf
+	// 
 	/**
 	 * Diese Methode berechnet die interne Handlungsvorschrift aus und führt somit
 	 * den Algorithmus aus.
