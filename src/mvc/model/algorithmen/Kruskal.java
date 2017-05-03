@@ -7,9 +7,6 @@ import utility.Printer;
 
 public class Kruskal extends Algorithmus {
 	
-	
-	public Kruskal(){
-	}
 
 	@Override
 	protected Graph procedure() {

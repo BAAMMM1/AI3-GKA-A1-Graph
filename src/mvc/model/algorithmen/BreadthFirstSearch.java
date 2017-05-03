@@ -18,9 +18,6 @@ public class BreadthFirstSearch extends Algorithmus {
 	private static final int LAMBDA_START = 0;
 
 
-	public BreadthFirstSearch() {
-	}
-
 	// TODO Graph graph, Node source, Node target kann weg
 	/**
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da

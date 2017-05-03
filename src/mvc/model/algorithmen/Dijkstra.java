@@ -19,8 +19,6 @@ public class Dijkstra extends Algorithmus {
 
 	private static final int INFINITY = 999;
 
-	public Dijkstra() {
-	}
 
 	/**
 	 * Diese Mehtode stellt die Handlungsvorschrift des Dijkstra-Algorithmus da
