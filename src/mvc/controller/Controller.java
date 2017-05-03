@@ -10,8 +10,8 @@ import org.graphstream.ui.layout.springbox.implementations.LinLog;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
-import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
-import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.model.algorithmen.BreadthFirstSearch;
+import mvc.model.algorithmen.Dijkstra;
 import mvc.view.View;
 
 public class Controller {

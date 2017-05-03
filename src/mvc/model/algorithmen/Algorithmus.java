@@ -1,4 +1,4 @@
-package mvc.model.algorithmusSystem;
+package mvc.model.algorithmen;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;

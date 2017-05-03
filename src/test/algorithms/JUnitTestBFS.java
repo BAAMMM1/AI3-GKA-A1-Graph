@@ -10,7 +10,7 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.model.algorithmen.BreadthFirstSearch;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestBFS {

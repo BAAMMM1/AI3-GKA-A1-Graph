@@ -1,4 +1,4 @@
-package mvc.model.algorithmusSystem.Dijkstra;
+package mvc.model.algorithmen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,7 +8,6 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
-import mvc.model.algorithmusSystem.Algorithmus;
 import utility.Printer;
 
 /**
