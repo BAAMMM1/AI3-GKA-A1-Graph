@@ -92,16 +92,16 @@ public class JUnitTestBFS {
 	@Test
 	public void testBFSUnweightedDirected() {
 		// Test 1 - 9.1.1.1
-		bfs1.start(source_01, target_01);
+		bfs1.compute(source_01, target_01);
 		assertEquals(bfs1.getShortestPath(), shortestPathTest1);
 		
 		
 		// Test 2 - 9.1.1.2
-		bfs2.start(source_02, target_02);
+		bfs2.compute(source_02, target_02);
 		assertEquals(bfs2.getShortestPath(), null);
 		
 		// Test 3 - 9.1.1.3
-		bfs3.start(source_03, target_03);
+		bfs3.compute(source_03, target_03);
 		assertEquals(bfs3.getShortestPath(), null);
 		
 		
@@ -111,11 +111,11 @@ public class JUnitTestBFS {
 	public void testBFSUnweightedUnDirected() {		
 		
 		// Test 4 - 9.1.2.1
-		bfs4.start(source_04, target_04);
+		bfs4.compute(source_04, target_04);
 		assertEquals(bfs4.getShortestPath(), shortestPathTest4);		
 		
 		// Test 5 - 9.1.2.2
-		bfs5.start(source_05, target_05);
+		bfs5.compute(source_05, target_05);
 		assertEquals(bfs5.getShortestPath(), null);
 		
 

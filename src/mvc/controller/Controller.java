@@ -99,7 +99,7 @@ public class Controller {
 		*/
 		model.setBfs(new BreadthFirstSearch(model.getGraph()));
 
-		model.setGraph(model.getBfs().start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		model.setGraph(model.getBfs().compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
 		/*
 		 * TODO Auslager in eine Mehtode 
@@ -143,7 +143,7 @@ public class Controller {
 			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");		
 	
 			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
-			model.setGraph(djk.start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+			model.setGraph(djk.compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
 			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 			
@@ -157,7 +157,7 @@ public class Controller {
 			
 			if(djk.isGraphCorrectWeighted()){
 				
-					model.setGraph(djk.start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+					model.setGraph(djk.compute(model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
 					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
 					

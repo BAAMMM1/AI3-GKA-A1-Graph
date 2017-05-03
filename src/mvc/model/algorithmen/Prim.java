@@ -10,9 +10,11 @@ public class Prim extends Algorithmus {
 	}
 
 	@Override
-	public Graph start(Node source, Node target) {
+	protected Graph procedure(Node source, Node target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 }

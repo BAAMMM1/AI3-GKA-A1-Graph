@@ -27,12 +27,12 @@ public class Dijkstra extends Algorithmus {
 	}
 
 	/**
-	 * Diese Mehtode startet einen Durchlauf des Algoritmus
+	 * Diese Mehtode stellt die Handlungsvorschrift des Dijkstra-Algorithmus da
 	 */
 	@Override
-	public Graph start(Node source, Node target) {
+	protected Graph procedure(Node source, Node target) {
 		System.clearProperty("org.graphstream.ui.renderer");
-		Printer.prompt(this, "Starte Dijkstra-Algorithmus");
+		
 
 		this.initializeDijkstra(source, target);
 
@@ -47,8 +47,7 @@ public class Dijkstra extends Algorithmus {
 		 */
 		this.computeShortestPath();
 
-		Printer.prompt(this, "Beende Dijkstra-Algorithmus");
-
+		
 		return graph;
 
 	}
@@ -62,7 +61,7 @@ public class Dijkstra extends Algorithmus {
 		 * kleinsten Wert von Entfernung
 		 */
 		Node nextNode = this.getNodeWithlowestEntfernungFromFalseList(this.computeFalseList());
-		Printer.prompt(this, "Knoten mit kleinster Entfernung: " + nextNode.toString());
+		Printer.promptTestOut(this, "Knoten mit kleinster Entfernung: " + nextNode.toString());
 
 		this.setOKFlag(nextNode, true);
 		/*
@@ -94,7 +93,7 @@ public class Dijkstra extends Algorithmus {
 	 * kürzesten Weg
 	 */
 	private void computeShortestPath() {
-		Printer.prompt(this, "Berechne kürzesten Weg");
+		Printer.promptTestOut(this, "Berechne kürzesten Weg");
 		boolean run = true;
 		String nextNode = target.getAttribute("Vorg");
 		path = new ArrayList<Node>();
@@ -141,7 +140,7 @@ public class Dijkstra extends Algorithmus {
 			}
 
 			path = tempList;
-			Printer.prompt(this, path.toString());
+			Printer.promptTestOut(this, path.toString());
 		}
 
 	}
@@ -194,7 +193,7 @@ public class Dijkstra extends Algorithmus {
 	private void setEntfernung(Node node, int value) {
 		node.setAttribute("Entfernung", value);
 		node.setAttribute("ui.label", node.getId() + " - Entfernung: " + value);
-		Printer.prompt(this, "Entfernung: " + value);
+		Printer.promptTestOut(this, "Entfernung: " + value);
 
 	}
 
@@ -271,7 +270,7 @@ public class Dijkstra extends Algorithmus {
 	 *            Wert des OK-Flags
 	 */
 	private void setOKFlag(Node node, boolean value) {
-		Printer.prompt(this, "Setzt OK: ture bei: " + node.toString());
+		Printer.promptTestOut(this, "Setzt OK: ture bei: " + node.toString());
 		node.setAttribute("OK", value);
 	}
 
@@ -337,10 +336,10 @@ public class Dijkstra extends Algorithmus {
 	 *            Zielknoten des Algorithmus
 	 */
 	private void initializeDijkstra(Node source, Node target) {
-		Printer.prompt(this, "Initialisiere Dijkstra");
+		Printer.promptTestOut(this, "Initialisiere Dijkstra");
 
-		Printer.prompt(this, "Setzte Startknoten: " + source.toString());
-		Printer.prompt(this, "Setzte Zielknoten: " + target.toString());
+		Printer.promptTestOut(this, "Setzte Startknoten: " + source.toString());
+		Printer.promptTestOut(this, "Setzte Zielknoten: " + target.toString());
 		this.source = source;
 		this.target = target;
 
@@ -439,7 +438,7 @@ public class Dijkstra extends Algorithmus {
 
 	@Override
 	public String toString() {
-		return "Dijkstra :";
+		return "Dijkstra";
 	}
 
 	/**
@@ -469,5 +468,6 @@ public class Dijkstra extends Algorithmus {
 		return temp;
 
 	}
+
 
 }

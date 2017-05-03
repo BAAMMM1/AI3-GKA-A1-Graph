@@ -26,12 +26,10 @@ public class BreadthFirstSearch extends Algorithmus {
 	}
 
 	/**
-	 * Diese Mehtode startet einen Durchlauf des Algoritmus
+	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
 	@Override
-	public Graph start(Node source, Node target) {
-		Printer.prompt(this, "-------------------------------------");
-		Printer.prompt(this, "Starte BreadthFirstSearch-Algorithmus");
+	protected Graph procedure(Node source, Node target) {
 
 		this.initializeBFS(source, target);
 
@@ -39,8 +37,6 @@ public class BreadthFirstSearch extends Algorithmus {
 
 		this.computeShortestWay();
 		
-		Printer.prompt(this, "Beende BreadthFirstSearch-Algorithmus");
-
 		return graph;
 
 	}
@@ -53,7 +49,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 * Außerdem werden den Nachbarn ihr Lambda-Wert hinzugefügt. 
 	 */
 	private void computeLambdas() {
-		Printer.prompt(this, "Berechne Lambda-Werte der Knoten");
+		Printer.promptTestOut(this, "Berechne Lambda-Werte der Knoten");
 
 		this.queue.add(source);
 		this.setLambdaToNode(source, LAMBDA_START);
@@ -62,13 +58,13 @@ public class BreadthFirstSearch extends Algorithmus {
 		while (!this.queue.isEmpty()) {
 			Node nextNode = queue.get(0);
 			this.queue.remove(0);
-			Printer.prompt(this, "Pull from Stack: " + nextNode.toString());
+			Printer.promptTestOut(this, "Pull from Stack: " + nextNode.toString());
 
 			/*
 			 * Wenn der Zielknoten ereicht ist, beendet den Durchlauf
 			 */
 			if (nextNode == target) {
-				Printer.prompt(this, "Zielknoten ereicht");
+				Printer.promptTestOut(this, "Zielknoten ereicht");
 				break;
 			} else {
 				/*
@@ -84,7 +80,7 @@ public class BreadthFirstSearch extends Algorithmus {
 				}
 
 			}
-			Printer.prompt(this, "Stack: " + this.queue.toString());
+			Printer.promptTestOut(this, "Stack: " + this.queue.toString());
 		}
 	}
 
@@ -117,7 +113,7 @@ public class BreadthFirstSearch extends Algorithmus {
 			}
 		}
 
-		Printer.prompt(this, "Ermittelter kürzester Weg: " + path.toString());
+		Printer.promptTestOut(this, "Ermittelter kürzester Weg: " + path.toString());
 
 	}
 
@@ -145,11 +141,11 @@ public class BreadthFirstSearch extends Algorithmus {
 	 *            Zielknoten des Algorithmus
 	 */
 	private void initializeBFS(Node source, Node target) {
-		Printer.prompt(this, "Initialisiere BreadthFirstSearch-Algorithmus");
+		Printer.promptTestOut(this, "Initialisiere BreadthFirstSearch-Algorithmus");
 		this.source = source;
 		this.target = target;
-		Printer.prompt(this, "Setzte Startknoten: " + source.toString());
-		Printer.prompt(this, "Setzte Zielknoten: " + target.toString());
+		Printer.promptTestOut(this, "Setzte Startknoten: " + source.toString());
+		Printer.promptTestOut(this, "Setzte Zielknoten: " + target.toString());
 
 		/*
 		 * Die Warteschlange, wechle die Knoten enthält, die der Algorihtmus als
@@ -187,7 +183,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	private void setLambdaToNode(Node node, int lambda) {
 		node.setAttribute("BFS", lambda);
 		node.setAttribute("ui.label", "l(" + node.getAttribute("ui.label") + ") = " + lambda);
-		Printer.prompt(this, "Knoten: " + node.toString() + " Lambda-Wert: " + node.getAttribute("BFS"));
+		Printer.promptTestOut(this, "Knoten: " + node.toString() + " Lambda-Wert: " + node.getAttribute("BFS"));
 		//TODO Einfärbung der Knoten
 	}
 
@@ -197,7 +193,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 * @return Alle Nachbarn des Koten die noch nicht besucht wurden
 	 */
 	private List<Node> notVisitedNeighbuorsOfNode(Node node) {
-		Printer.prompt(this, "Suche Nachbarn von: " + node.toString());
+		Printer.promptTestOut(this, "Suche Nachbarn von: " + node.toString());
 		List<Node> neighbours = new ArrayList<Node>();
 	
 		/*
@@ -223,7 +219,7 @@ public class BreadthFirstSearch extends Algorithmus {
 				neighbours.add(nextNode);
 			}
 		}
-		Printer.prompt(this, "Nachbarn ermittelt: " + neighbours.toString());
+		Printer.promptTestOut(this, "Nachbarn ermittelt: " + neighbours.toString());
 		
 		return neighbours;
 	}
