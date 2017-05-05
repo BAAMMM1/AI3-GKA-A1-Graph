@@ -1,5 +1,7 @@
 package mvc.model.algorithmen;
 
+import java.util.List;
+
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
@@ -15,9 +17,10 @@ import utility.Printer;
  * Handlungsvorschriftt kümmern müssen.
  * 
  * @author chris
+ * @param <T>
  *
  */
-public abstract class Algorithmus {
+public abstract class Algorithmus<T> {
 
 	private Graph graph;
 	private Node source;
@@ -37,13 +40,14 @@ public abstract class Algorithmus {
 	 * Diese Methode berechnet die interne Handlungsvorschrift aus und führt
 	 * somit den Algorithmus aus.
 	 * 
+	 * @param graph
 	 * @param source
 	 *            Startknoten
 	 * @param target
 	 *            Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	public Graph compute(Graph graph, Node source, Node target) {
+	public List<T> compute(Graph graph, Node source, Node target) {
 		Printer.prompt(this, "-------------------------------------"); // ohne
 																		// this
 		Printer.prompt(this, "compute algorithmus");
@@ -63,7 +67,7 @@ public abstract class Algorithmus {
 	 *            Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	protected abstract Graph procedure();
+	protected abstract List<T> procedure();
 
 	/**
 	 * Initialisiert den Algorithmus auf einen Graphen, einen Startknoten sowie

@@ -28,6 +28,8 @@ public class Model {
 		this.fileHandler = new GraphFileExtensionHandler();
 		this.graph = fileHandler.loadGraph("db/examples/graph03.graph");
 		this.graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
+		this.bfs = new BreadthFirstSearch();
+		this.dijksta = new Dijkstra();
 	}
 
 	public FileExtension getFileHandler() {

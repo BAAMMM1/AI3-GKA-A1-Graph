@@ -13,7 +13,7 @@ import utility.Printer;
 /**
  * Diese Klasse stellt den Dijkstra-Algorithmus dar
  */
-public class Dijkstra extends Algorithmus {
+public class Dijkstra extends Algorithmus<Node> {
 
 	private List<Node> path;
 
@@ -24,7 +24,7 @@ public class Dijkstra extends Algorithmus {
 	 * Diese Mehtode stellt die Handlungsvorschrift des Dijkstra-Algorithmus da
 	 */
 	@Override
-	protected Graph procedure() {
+	protected List<Node> procedure() {
 		System.clearProperty("org.graphstream.ui.renderer");
 
 		this.initDijkstra();
@@ -40,7 +40,7 @@ public class Dijkstra extends Algorithmus {
 		 */
 		this.computeShortestPath();
 
-		return this.getGraph();
+		return this.path;
 
 	}
 
@@ -137,14 +137,6 @@ public class Dijkstra extends Algorithmus {
 
 	}
 
-	/**
-	 * Gibt den ermittelten kürzesten Weg zurück
-	 * 
-	 * @return kürzesten Weg
-	 */
-	public List<Node> getShortestPath() {
-		return path;
-	}
 
 	/**
 	 * Gibt einen String zurück, der den kürzesten Weg mit einschließlich seinen
@@ -455,5 +447,6 @@ public class Dijkstra extends Algorithmus {
 		return temp;
 
 	}
+
 
 }

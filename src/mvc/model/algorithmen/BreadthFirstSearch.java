@@ -10,7 +10,7 @@ import org.graphstream.graph.Node;
 
 import utility.Printer;
 
-public class BreadthFirstSearch extends Algorithmus {
+public class BreadthFirstSearch extends Algorithmus<Node> {
 
 	private List<Node> queue;
 	private List<Node> path;
@@ -23,7 +23,7 @@ public class BreadthFirstSearch extends Algorithmus {
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
 	@Override
-	protected Graph procedure() {
+	protected List<Node> procedure() {
 
 		this.initBFS();
 
@@ -31,7 +31,7 @@ public class BreadthFirstSearch extends Algorithmus {
 
 		this.computeShortestWay();
 		
-		return this.getGraph();
+		return this.path;
 
 	}
 
@@ -212,24 +212,11 @@ public class BreadthFirstSearch extends Algorithmus {
 		return neighbours;
 	}
 
-	/**
-	 * Diese Mehtode gibt den kürzesten Weg zurück
-	 * @return Liste der Knoten die den kürzesten Weg darstellen
-	 */
-	public List<Node> getShortestPath() {
-		// TODO Ermittlung aller Lösungswege des getShortestPath()
-		if (path.size() != 0) {
-			return this.path;
-		} else {
-			return null;
-		}
-	}
 
 	@Override
 	public String toString() {
 		return "BreadthFirstSearch";
 	}
-	
-	
+
 
 }

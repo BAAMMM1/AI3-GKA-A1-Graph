@@ -1,18 +1,18 @@
 package mvc.model.algorithmen;
 
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
+import java.util.List;
 
-import utility.Printer;
+import org.graphstream.graph.Edge;
 
-public class Kruskal extends Algorithmus {
+public class Kruskal extends Algorithmus<Edge> {
 	
 
 	@Override
-	protected Graph procedure() {
+	protected List<Edge> procedure() {
 		this.initKruskal();
 		
-		return this.getGraph();
+		
+		return null;
 	}
 	
 	private void initKruskal(){

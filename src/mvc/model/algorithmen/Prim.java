@@ -1,16 +1,15 @@
 package mvc.model.algorithmen;
 
+import java.util.List;
+
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
-import utility.Printer;
-
-public class Prim extends Algorithmus {
+public class Prim extends Algorithmus<Edge> {
 
 
 	@Override
-	protected Graph procedure() {
+	protected List<Edge> procedure() {
 		this.initPrim();
 
 		while (this.graphTHasNotAllNodes()) {
@@ -20,7 +19,7 @@ public class Prim extends Algorithmus {
 
 		}
 
-		return this.getGraph();
+		return null;
 	}
 
 	private void initPrim() {		
