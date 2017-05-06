@@ -98,7 +98,7 @@ public class Controller {
 
 		//model.setGraph(model.getBfs().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 		
-		List<Node> result = model.getBfs().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+		List<Node> result = model.getBfs().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
 		/*
 		 * TODO Auslager in eine Mehtode 
 		 * Weg vorhanden prüfung?
@@ -140,7 +140,7 @@ public class Controller {
 			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
 			//model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
-			List<Node> result = this.model.getDijksta().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+			List<Node> result = this.model.getDijksta().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
 			
 			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + this.model.getDijksta().getShortestPathWithCoast());		
 			
@@ -156,7 +156,7 @@ public class Controller {
 				
 					//model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
-					List<Node> result = this.model.getDijksta().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+					List<Node> result = this.model.getDijksta().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
 					
 					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + this.model.getDijksta().getShortestPathWithCoast());		
 					

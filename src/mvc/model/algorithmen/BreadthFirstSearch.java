@@ -1,19 +1,17 @@
 package mvc.model.algorithmen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
 import utility.Printer;
 
 public class BreadthFirstSearch extends Algorithmus<Node> {
 
-	private List<Node> queue;
-	private List<Node> path;
 	private static final int NOT_VISITED = -1;
 	private static final int LAMBDA_START = 0;
 
@@ -23,15 +21,14 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
 	@Override
-	protected List<Node> procedure() {
+	protected void procedure() {
 
 		this.initBFS();
 
-		this.computeLambdas();
+		this.calculateLambdas();
 
-		this.computeShortestWay();
+		this.calculateShortestWay();
 		
-		return this.path;
 
 	}
 
@@ -42,16 +39,22 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * Für den gepullten Knoten werden alle noch nicht besuchten Nachbarn ermittelt und dem Stack hinzugefügt.
 	 * Außerdem werden den Nachbarn ihr Lambda-Wert hinzugefügt. 
 	 */
-	private void computeLambdas() {
+	private void calculateLambdas() {
 		Printer.promptTestOut(this, "Berechne Lambda-Werte der Knoten");
 
-		this.queue.add(this.getSource());
+		/*
+		 * Die Warteschlange, wechle die Knoten enthält, die der Algorihtmus als
+		 * nächstes bearbeitet.
+		 */
+		List<Node> queue = new ArrayList<Node>();
+		
+		queue.add(this.getSource());
 		this.setLambdaToNode(this.getSource(), LAMBDA_START);
 
 
-		while (!this.queue.isEmpty()) {
+		while (!queue.isEmpty()) {
 			Node nextNode = queue.get(0);
-			this.queue.remove(0);
+			queue.remove(0);
 			Printer.promptTestOut(this, "Pull from Stack: " + nextNode.toString());
 
 			/*
@@ -74,7 +77,7 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 				}
 
 			}
-			Printer.promptTestOut(this, "Stack: " + this.queue.toString());
+			Printer.promptTestOut(this, "Stack: " + queue.toString());
 		}
 	}
 
@@ -82,8 +85,7 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * Diese Methode berechnet aus allen gesetzten Lambda-Werten den Weg vom Start zum Ziel indem vom
 	 * Ziel der Weg rückwärts ermittelt wird
 	 */
-	private void computeShortestWay() {
-		List<Node> pathTemp = new ArrayList<Node>();
+	private void calculateShortestWay() {
 
 		int bfslambda = this.getTarget().getAttribute("BFS");
 
@@ -91,23 +93,21 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 		 * Rückwerts ermittlung
 		 */
 		if (bfslambda != -1) {
-			pathTemp.add(this.getTarget());
+			this.getResult().add(this.getTarget());
 			int counter = 0;
 			while (bfslambda > 0) {
-				pathTemp.add(getNextSmallerBFS(pathTemp.get(counter)));
+				this.getResult().add(getNextSmallerBFS(this.getResult().get(counter)));
 				counter++;
-				bfslambda = pathTemp.get(counter).getAttribute("BFS");
+				bfslambda = this.getResult().get(counter).getAttribute("BFS");
 			}
 
 			/*
 			 * Drehen der Liste
 			 */
-			for (int i = pathTemp.size() - 1; i >= 0; i--) {
-				path.add(pathTemp.get(i));
-			}
+			Collections.reverse(this.getResult());
 		}
 
-		Printer.promptTestOut(this, "Ermittelter kürzester Weg: " + path.toString());
+		Printer.promptTestOut(this, "Ermittelter kürzester Weg: " + this.getResult().toString());
 
 	}
 
@@ -134,13 +134,7 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * @param target
 	 *            Zielknoten des Algorithmus
 	 */
-	private void initBFS() {
-		/*
-		 * Die Warteschlange, wechle die Knoten enthält, die der Algorihtmus als
-		 * nächstes bearbeitet.
-		 */
-		queue = new ArrayList<Node>();
-		
+	private void initBFS() {		
 		/*
 		 * Alles Knoten werden als noch nicht besucht initialisiert.
 		 */
@@ -158,7 +152,7 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 			node.setAttribute("ui.label", node.getId());
 		}
 		
-		path = new ArrayList<Node>();
+		//path = new ArrayList<Node>();
 
 	}
 

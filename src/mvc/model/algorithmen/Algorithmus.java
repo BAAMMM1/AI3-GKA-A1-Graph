@@ -1,5 +1,6 @@
 package mvc.model.algorithmen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.graphstream.graph.Graph;
@@ -25,6 +26,7 @@ public abstract class Algorithmus<T> {
 	private Graph graph;
 	private Node source;
 	private Node target;
+	private List<T> result;
 
 	// TODO command pattern für die Auswahl der Befehle?
 
@@ -47,14 +49,16 @@ public abstract class Algorithmus<T> {
 	 *            Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	public List<T> compute(Graph graph, Node source, Node target) {
+	public List<T> calculate(Graph graph, Node source, Node target) {
 		Printer.prompt(this, "-------------------------------------"); // ohne
 																		// this
 		Printer.prompt(this, "compute algorithmus");
 
 		this.initAlgorithmus(graph, source, target);
+		
+		this.procedure();
 
-		return this.procedure();
+		return this.result;
 	}
 
 	/**
@@ -67,7 +71,7 @@ public abstract class Algorithmus<T> {
 	 *            Zielknoten
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
-	protected abstract List<T> procedure();
+	protected abstract void procedure();
 
 	/**
 	 * Initialisiert den Algorithmus auf einen Graphen, einen Startknoten sowie
@@ -85,6 +89,7 @@ public abstract class Algorithmus<T> {
 		this.graph = graph;
 		this.source = source;
 		this.target = target;
+		this.result = new ArrayList<T>();
 	}
 
 	protected Graph getGraph() {
@@ -98,5 +103,12 @@ public abstract class Algorithmus<T> {
 	protected Node getTarget() {
 		return target;
 	}
+	
+	protected List<T> getResult() {
+		return this.result;
+	}
+	
+	// TODO Abstracte Mehtode die in den jeweiligen Algorithmen-Klassen prüft ob der Graph für sie geeignet ist.
+	// Beispiel, beim Bruskal-Algorithmus muss der Graph .... haben
 
 }

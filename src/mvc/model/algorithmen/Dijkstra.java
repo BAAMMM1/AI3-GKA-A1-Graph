@@ -15,8 +15,6 @@ import utility.Printer;
  */
 public class Dijkstra extends Algorithmus<Node> {
 
-	private List<Node> path;
-
 	private static final int INFINITY = 999;
 
 
@@ -24,30 +22,29 @@ public class Dijkstra extends Algorithmus<Node> {
 	 * Diese Mehtode stellt die Handlungsvorschrift des Dijkstra-Algorithmus da
 	 */
 	@Override
-	protected List<Node> procedure() {
+	protected void procedure() {
 		System.clearProperty("org.graphstream.ui.renderer");
 
 		this.initDijkstra();
 
 		do {
 
-			this.computeEntfernungCoats();
+			this.calculateEntfernungCoats();
 
 		} while (this.thereIsAfalseNodes());
 
 		/*
 		 * Ermittlung des günstigsten Weg
 		 */
-		this.computeShortestPath();
+		this.calculateShortestPath();
 
-		return this.path;
 
 	}
 
 	/**
 	 * Berechnet und setzt alle Entfernungskosten der Knoten vom Startknoten
 	 */
-	private void computeEntfernungCoats() {
+	private void calculateEntfernungCoats() {
 		/*
 		 * nextNode = Der Knoten mit OK = false aus der FalseList mit dem
 		 * kleinsten Wert von Entfernung
@@ -70,7 +67,7 @@ public class Dijkstra extends Algorithmus<Node> {
 		for (int i = 0; i < validTargetNodes.size(); i++) {
 			int entfernungNachbarn = validTargetNodes.get(i).getAttribute("Entfernung");
 
-			int wegKosten = this.computeCostBetweenTwoNodes(nextNode, validTargetNodes.get(i));
+			int wegKosten = this.calculateCostBetweenTwoNodes(nextNode, validTargetNodes.get(i));
 
 			if (entfernungNachbarn > (entfernungNextNode + wegKosten)) {
 
@@ -84,16 +81,16 @@ public class Dijkstra extends Algorithmus<Node> {
 	 * Ermittelt aus den gesetzten Entfernungen der Knoten zum Startknoten den
 	 * kürzesten Weg
 	 */
-	private void computeShortestPath() {
+	private void calculateShortestPath() {
 		Printer.promptTestOut(this, "Berechne kürzesten Weg");
 		boolean run = true;
 		String nextNode = this.getTarget().getAttribute("Vorg");
-		path = new ArrayList<Node>();
+
 		if (nextNode == null) {
 			run = false;
 		} else {
 			List<Node> temp = new ArrayList<Node>(this.getGraph().getNodeSet());
-			path.add(this.getTarget());
+			this.getResult().add(this.getTarget());
 		}
 
 		/*
@@ -105,7 +102,7 @@ public class Dijkstra extends Algorithmus<Node> {
 
 				if (this.getGraph().getNode(nextNode).getAttribute("Vorg") != null) {
 					String nextNodeVorgänger = this.getGraph().getNode(nextNode).getAttribute("Vorg");
-					path.add(this.getGraph().getNode(nextNode));
+					this.getResult().add(this.getGraph().getNode(nextNode));
 					nextNode = this.getGraph().getNode(nextNode).getAttribute("Vorg");
 				} else {
 					run = false;
@@ -116,7 +113,7 @@ public class Dijkstra extends Algorithmus<Node> {
 				/*
 				 * Wenn der Vorgänger das Ziel ist, dann beende
 				 */
-				path.add(this.getGraph().getNode(nextNode));
+				this.getResult().add(this.getGraph().getNode(nextNode));
 				run = false;
 			}
 
@@ -125,14 +122,15 @@ public class Dijkstra extends Algorithmus<Node> {
 		/*
 		 * Dreht die Liste für die Ausgabe um
 		 */
-		if (!path.isEmpty()) {
+		if (!this.getResult().isEmpty()) {
 			List<Node> tempList = new ArrayList<Node>();
-			for (int i = path.size() - 1; i >= 0; i--) {
-				tempList.add(path.get(i));
+			for (int i = this.getResult().size() - 1; i >= 0; i--) {
+				tempList.add(this.getResult().get(i));
 			}
 
-			path = tempList;
-			Printer.promptTestOut(this, path.toString());
+			this.getResult().clear();
+			this.getResult().addAll(tempList);
+			Printer.promptTestOut(this, this.getResult().toString());
 		}
 
 	}
@@ -146,14 +144,14 @@ public class Dijkstra extends Algorithmus<Node> {
 	 */
 	public String getShortestPathWithCoast() {
 		String temp;
-		if (path.size() != 0) {
+		if (this.getResult().size() != 0) {
 			temp = "Kürzester Wege von " + this.getSource().getId().toString() + " nach " + this.getTarget().getId().toString()
 					+ " unter Berücksichtigung der Kantengewichtungen:\n" + "[ ";
-			for (int i = 0; i < path.size(); i++) {
-				if (i == path.size() - 1) {
-					temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung");
+			for (int i = 0; i < this.getResult().size(); i++) {
+				if (i == this.getResult().size() - 1) {
+					temp += this.getResult().get(i).getId().toString() + " " + this.getResult().get(i).getAttribute("Entfernung");
 				} else {
-					temp = temp + path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung")
+					temp += this.getResult().get(i).getId().toString() + " " + this.getResult().get(i).getAttribute("Entfernung")
 							+ " -> ";
 				}
 
@@ -190,7 +188,7 @@ public class Dijkstra extends Algorithmus<Node> {
 	 *            Knoten 2
 	 * @return Gewichtung
 	 */
-	private int computeCostBetweenTwoNodes(Node node1, Node node2) {
+	private int calculateCostBetweenTwoNodes(Node node1, Node node2) {
 		int toReturn = 0;
 		for (Edge edge : this.getGraph().getEachEdge()) {
 			if ((edge.getSourceNode() == node1) && (edge.getTargetNode() == node2)) {

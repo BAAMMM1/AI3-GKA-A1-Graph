@@ -100,23 +100,23 @@ public class JUnitTestDijkstra {
 	public void testDijkstraWeightedDirected() {
 	
 		// Test 1 - 9.2.1.1
-		assertEquals(djk1.compute(graph1, source_01, target_01), shortestPathTest1);		
+		assertEquals(djk1.calculate(graph1, source_01, target_01), shortestPathTest1);		
 		
 		// Test 2 - 9.2.1.2
-		assertEquals(djk2.compute(graph1, source_02, target_02), shortestPathTest2);
+		assertEquals(djk2.calculate(graph1, source_02, target_02), shortestPathTest2);
 		
 		// Test 3 - 9.2.1.3		
-		assertEquals(djk3.compute(graph1, source_03, target_03), shortestPathTest3);
+		assertEquals(djk3.calculate(graph1, source_03, target_03), shortestPathTest3);
 		
 	}
 	
 	@Test
 	public void testDijkstraWeightedUnDirected() {
 		// Test 4 - 9.2.2.1
-		assertEquals(djk4.compute(graph2, source_04, target_04), shortestPathTest4);		
+		assertEquals(djk4.calculate(graph2, source_04, target_04), shortestPathTest4);		
 		
 		// Test 5 - 9.2.2.2
-		assertEquals(djk5.compute(graph2, source_05, target_05), shortestPathTest5);		
+		assertEquals(djk5.calculate(graph2, source_05, target_05), shortestPathTest5);		
 		
 	}
 

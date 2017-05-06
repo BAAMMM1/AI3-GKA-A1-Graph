@@ -9,7 +9,7 @@ public class Prim extends Algorithmus<Edge> {
 
 
 	@Override
-	protected List<Edge> procedure() {
+	protected void procedure() {
 		this.initPrim();
 
 		while (this.graphTHasNotAllNodes()) {
@@ -19,7 +19,6 @@ public class Prim extends Algorithmus<Edge> {
 
 		}
 
-		return null;
 	}
 
 	private void initPrim() {		

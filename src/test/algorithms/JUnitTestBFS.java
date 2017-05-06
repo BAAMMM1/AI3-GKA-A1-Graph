@@ -92,15 +92,15 @@ public class JUnitTestBFS {
 	@Test
 	public void testBFSUnweightedDirected() {
 		// Test 1 - 9.1.1.1
-		assertEquals(bfs1.compute(graph1, source_01, target_01), shortestPathTest1);
+		assertEquals(bfs1.calculate(graph1, source_01, target_01), shortestPathTest1);
 		
 		
 		// Test 2 - 9.1.1.2		
-		assertEquals(bfs2.compute(graph1, source_02, target_02), new ArrayList<Node>());
+		assertEquals(bfs2.calculate(graph1, source_02, target_02), new ArrayList<Node>());
 		
 		// Test 3 - 9.1.1.3
 
-		assertEquals(bfs3.compute(graph1, source_03, target_03), new ArrayList<Node>());
+		assertEquals(bfs3.calculate(graph1, source_03, target_03), new ArrayList<Node>());
 		
 		
 	}
@@ -109,10 +109,10 @@ public class JUnitTestBFS {
 	public void testBFSUnweightedUnDirected() {		
 		
 		// Test 4 - 9.1.2.1		
-		assertEquals(bfs4.compute(graph2, source_04, target_04), shortestPathTest4);		
+		assertEquals(bfs4.calculate(graph2, source_04, target_04), shortestPathTest4);		
 		
 		// Test 5 - 9.1.2.2		
-		assertEquals(bfs5.compute(graph2, source_05, target_05), new ArrayList<Node>());
+		assertEquals(bfs5.calculate(graph2, source_05, target_05), new ArrayList<Node>());
 		
 
 		
