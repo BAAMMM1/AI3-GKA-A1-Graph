@@ -1,4 +1,4 @@
-package mvc.model.algorithmen;
+package mvc.model.algorithmen.shortestPath;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import org.graphstream.graph.Node;
 
 import utility.Printer;
 
-public class BreadthFirstSearch extends Algorithmus<Node> {
+public class BreadthFirstSearch extends ShortestPathAlgorithmus {
 
 	private static final int NOT_VISITED = -1;
 	private static final int LAMBDA_START = 0;
@@ -21,13 +21,13 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
 	@Override
-	protected void procedure() {
+	protected List<Node> procedure() {
 
 		this.initBFS();
 
 		this.calculateLambdas();
 
-		this.calculateShortestWay();
+		return this.calculateShortestWay();
 		
 
 	}
@@ -85,7 +85,8 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 	 * Diese Methode berechnet aus allen gesetzten Lambda-Werten den Weg vom Start zum Ziel indem vom
 	 * Ziel der Weg rückwärts ermittelt wird
 	 */
-	private void calculateShortestWay() {
+	private List<Node> calculateShortestWay() {
+		List<Node> path = new ArrayList<Node>();
 
 		int bfslambda = this.getTarget().getAttribute("BFS");
 
@@ -93,21 +94,22 @@ public class BreadthFirstSearch extends Algorithmus<Node> {
 		 * Rückwerts ermittlung
 		 */
 		if (bfslambda != -1) {
-			this.getResult().add(this.getTarget());
+			path.add(this.getTarget());
 			int counter = 0;
 			while (bfslambda > 0) {
-				this.getResult().add(getNextSmallerBFS(this.getResult().get(counter)));
+				path.add(getNextSmallerBFS(path.get(counter)));
 				counter++;
-				bfslambda = this.getResult().get(counter).getAttribute("BFS");
+				bfslambda = path.get(counter).getAttribute("BFS");
 			}
 
 			/*
 			 * Drehen der Liste
 			 */
-			Collections.reverse(this.getResult());
+			Collections.reverse(path);
 		}
 
-		Printer.promptTestOut(this, "Ermittelter kürzester Weg: " + this.getResult().toString());
+		Printer.promptTestOut(this, "Ermittelter kürzester Weg: " + path.toString());
+		return path;
 
 	}
 

@@ -1,15 +1,13 @@
-package mvc.model.algorithmen;
-
-import java.util.List;
+package mvc.model.algorithmen.minimalSpanningTree;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
-public class Prim extends Algorithmus<Edge> {
+public class Prim extends MinimalSpanningTreeAlgortihmus {
 
 
-	@Override
-	protected void procedure() {
+	protected Graph procedure() {
 		this.initPrim();
 
 		while (this.graphTHasNotAllNodes()) {
@@ -18,6 +16,8 @@ public class Prim extends Algorithmus<Edge> {
 			this.addEdgeAndNodeToT(e, e.getTargetNode());
 
 		}
+		
+		return null;
 
 	}
 

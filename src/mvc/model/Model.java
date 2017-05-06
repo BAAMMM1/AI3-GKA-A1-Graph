@@ -5,8 +5,8 @@ import java.util.List;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmen.BreadthFirstSearch;
-import mvc.model.algorithmen.Dijkstra;
+import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
+import mvc.model.algorithmen.shortestPath.Dijkstra;
 import mvc.model.fileExtensionSystem.FileExtension;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 

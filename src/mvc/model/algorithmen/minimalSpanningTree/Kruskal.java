@@ -1,18 +1,18 @@
-package mvc.model.algorithmen;
-
-import java.util.List;
+package mvc.model.algorithmen.minimalSpanningTree;
 
 import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
 
 // TODO zwei Varianten, minimalen Spannbaum und maximalen Spannbaum
 // https://www.youtube.com/watch?v=GJ17vvqY6aE
-public class Kruskal extends Algorithmus<Edge> {
+public class Kruskal extends MinimalSpanningTreeAlgortihmus{
 	
 
-	@Override
-	protected void procedure() {
+
+	protected Graph procedure() {
 		this.initKruskal();
 		
+		return null;
 		
 	}
 	

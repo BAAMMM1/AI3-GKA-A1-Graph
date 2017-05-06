@@ -11,8 +11,8 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import mvc.model.algorithmen.BreadthFirstSearch;
-import mvc.model.algorithmen.Dijkstra;
+import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
+import mvc.model.algorithmen.shortestPath.Dijkstra;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestDijkstra {

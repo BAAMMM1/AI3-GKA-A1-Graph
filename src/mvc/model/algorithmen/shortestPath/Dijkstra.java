@@ -1,4 +1,4 @@
-package mvc.model.algorithmen;
+package mvc.model.algorithmen.shortestPath;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +13,7 @@ import utility.Printer;
 /**
  * Diese Klasse stellt den Dijkstra-Algorithmus dar
  */
-public class Dijkstra extends Algorithmus<Node> {
+public class Dijkstra extends ShortestPathAlgorithmus {
 
 	private static final int INFINITY = 999;
 
@@ -22,7 +22,7 @@ public class Dijkstra extends Algorithmus<Node> {
 	 * Diese Mehtode stellt die Handlungsvorschrift des Dijkstra-Algorithmus da
 	 */
 	@Override
-	protected void procedure() {
+	protected List<Node> procedure() {
 		System.clearProperty("org.graphstream.ui.renderer");
 
 		this.initDijkstra();
@@ -36,7 +36,7 @@ public class Dijkstra extends Algorithmus<Node> {
 		/*
 		 * Ermittlung des günstigsten Weg
 		 */
-		this.calculateShortestPath();
+		return this.calculateShortestPath();
 
 
 	}
@@ -81,8 +81,9 @@ public class Dijkstra extends Algorithmus<Node> {
 	 * Ermittelt aus den gesetzten Entfernungen der Knoten zum Startknoten den
 	 * kürzesten Weg
 	 */
-	private void calculateShortestPath() {
+	private List<Node> calculateShortestPath() {
 		Printer.promptTestOut(this, "Berechne kürzesten Weg");
+		List<Node> path = new ArrayList<Node>();
 		boolean run = true;
 		String nextNode = this.getTarget().getAttribute("Vorg");
 
@@ -90,7 +91,7 @@ public class Dijkstra extends Algorithmus<Node> {
 			run = false;
 		} else {
 			List<Node> temp = new ArrayList<Node>(this.getGraph().getNodeSet());
-			this.getResult().add(this.getTarget());
+			path.add(this.getTarget());
 		}
 
 		/*
@@ -102,7 +103,7 @@ public class Dijkstra extends Algorithmus<Node> {
 
 				if (this.getGraph().getNode(nextNode).getAttribute("Vorg") != null) {
 					String nextNodeVorgänger = this.getGraph().getNode(nextNode).getAttribute("Vorg");
-					this.getResult().add(this.getGraph().getNode(nextNode));
+					path.add(this.getGraph().getNode(nextNode));
 					nextNode = this.getGraph().getNode(nextNode).getAttribute("Vorg");
 				} else {
 					run = false;
@@ -113,7 +114,7 @@ public class Dijkstra extends Algorithmus<Node> {
 				/*
 				 * Wenn der Vorgänger das Ziel ist, dann beende
 				 */
-				this.getResult().add(this.getGraph().getNode(nextNode));
+				path.add(this.getGraph().getNode(nextNode));
 				run = false;
 			}
 
@@ -122,17 +123,18 @@ public class Dijkstra extends Algorithmus<Node> {
 		/*
 		 * Dreht die Liste für die Ausgabe um
 		 */
-		if (!this.getResult().isEmpty()) {
+		if (!path.isEmpty()) {
 			List<Node> tempList = new ArrayList<Node>();
-			for (int i = this.getResult().size() - 1; i >= 0; i--) {
-				tempList.add(this.getResult().get(i));
+			for (int i = path.size() - 1; i >= 0; i--) {
+				tempList.add(path.get(i));
 			}
 
-			this.getResult().clear();
-			this.getResult().addAll(tempList);
-			Printer.promptTestOut(this, this.getResult().toString());
+			path.clear();
+			path.addAll(tempList);
+			Printer.promptTestOut(this, path.toString());
 		}
-
+		
+		return path;
 	}
 
 
@@ -144,14 +146,15 @@ public class Dijkstra extends Algorithmus<Node> {
 	 */
 	public String getShortestPathWithCoast() {
 		String temp;
-		if (this.getResult().size() != 0) {
+		List<Node> path = this.calculateShortestPath();
+		if (path.size() != 0) {
 			temp = "Kürzester Wege von " + this.getSource().getId().toString() + " nach " + this.getTarget().getId().toString()
 					+ " unter Berücksichtigung der Kantengewichtungen:\n" + "[ ";
-			for (int i = 0; i < this.getResult().size(); i++) {
-				if (i == this.getResult().size() - 1) {
-					temp += this.getResult().get(i).getId().toString() + " " + this.getResult().get(i).getAttribute("Entfernung");
+			for (int i = 0; i < path.size(); i++) {
+				if (i == path.size() - 1) {
+					temp += path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung");
 				} else {
-					temp += this.getResult().get(i).getId().toString() + " " + this.getResult().get(i).getAttribute("Entfernung")
+					temp += path.get(i).getId().toString() + " " + path.get(i).getAttribute("Entfernung")
 							+ " -> ";
 				}
 
