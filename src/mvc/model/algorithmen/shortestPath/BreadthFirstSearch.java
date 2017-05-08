@@ -10,7 +10,7 @@ import org.graphstream.graph.Node;
 
 import utility.Printer;
 
-public class BreadthFirstSearch extends ShortestPathAlgorithmus {
+public class BreadthFirstSearch extends ShortestPath {
 
 	private static final int NOT_VISITED = -1;
 	private static final int LAMBDA_START = 0;
@@ -213,6 +213,6 @@ public class BreadthFirstSearch extends ShortestPathAlgorithmus {
 	public String toString() {
 		return "BreadthFirstSearch";
 	}
-
+	
 
 }

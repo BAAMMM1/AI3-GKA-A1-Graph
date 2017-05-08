@@ -4,7 +4,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
-public class Prim extends MinimalSpanningTreeAlgortihmus {
+public class Prim extends MinimalSpanningTree {
 
 
 	protected Graph procedure() {

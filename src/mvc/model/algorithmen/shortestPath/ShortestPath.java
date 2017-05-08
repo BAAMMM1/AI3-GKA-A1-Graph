@@ -21,7 +21,7 @@ import utility.Printer;
  * @param <T>
  *
  */
-public abstract class ShortestPathAlgorithmus extends Algorithmus{
+public abstract class ShortestPath extends Algorithmus{
 
 	
 	private Node source;

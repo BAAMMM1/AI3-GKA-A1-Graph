@@ -20,6 +20,8 @@ import javax.swing.border.LineBorder;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class View {
 	
@@ -35,6 +37,8 @@ public class View {
 	private JButton btnSave;
 	private JButton btnLoadGraph;
 	private JButton btnAutolayout;
+	private JButton btnKruskal;
+	private JButton btnPrim;
 	private JPanel panelConsole;
 	private JPanel panelBFS;
 	private JPanel panelDijkstra;
@@ -118,44 +122,78 @@ public class View {
 		labelConsole = new JLabel("Console:");
 		scrollPaneConsole = new JScrollPane();
 		gl_panelConsole = new GroupLayout(panelConsole);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		groupLayout = new GroupLayout(frameMain.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(panelOptions, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(panelBFS, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(panelDijkstra, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(panelDijkstra, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panelConsole, GroupLayout.PREFERRED_SIZE, 370, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
-						.addComponent(panelAusgabe, GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE))
+						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 864, Short.MAX_VALUE)
+						.addComponent(panelAusgabe, GroupLayout.DEFAULT_SIZE, 864, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+							.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(panelAusgabe, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(panelOptions, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panelDijkstra, 0, 134, Short.MAX_VALUE)
+								.addComponent(panelDijkstra, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
 								.addComponent(panelBFS, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(panelConsole, GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panelConsole, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
 							.addGap(10))))
 		);
+		
+		btnKruskal = new JButton("Kruskal - Anzeigen");
+		btnKruskal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		
+		btnPrim = new JButton("Prim - Anzeigen");
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnKruskal)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnPrim)
+					.addContainerGap(174, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnKruskal)
+						.addComponent(btnPrim))
+					.addContainerGap(39, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 		gl_panelBFS = new GroupLayout(panelBFS);
 		labelBFSTarget = new JLabel("Source:");		
 		labelBFSSource = new JLabel("Target:");
@@ -688,11 +726,14 @@ public class View {
 	}
 
 
-	
+	public JButton getBtnKruskal() {
+		return btnKruskal;
+	}
 
-	
-	
-	
-	
 
+	public JButton getBtnPrim() {
+		return btnPrim;
+	}
+	
+	
 }

@@ -13,7 +13,7 @@ import utility.Printer;
 /**
  * Diese Klasse stellt den Dijkstra-Algorithmus dar
  */
-public class Dijkstra extends ShortestPathAlgorithmus {
+public class Dijkstra extends ShortestPath {
 
 	private static final int INFINITY = 999;
 

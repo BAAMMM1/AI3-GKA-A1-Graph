@@ -5,18 +5,25 @@ import org.graphstream.graph.Graph;
 import mvc.model.algorithmen.Algorithmus;
 import utility.Printer;
 
-public abstract class MinimalSpanningTreeAlgortihmus extends Algorithmus{
+public abstract class MinimalSpanningTree extends Algorithmus{
 	
 	
 	
-	public Graph calculate(Graph graph) {
+	public Graph calculate(Graph graph) {		
 		Printer.prompt(this, "-------------------------------------");
 																		
-		Printer.prompt(this, "compute minimal spanning tree algorithmus");		
+		Printer.prompt(this, "compute minimal spanning tree algorithmus");	
+		
+		this.initAlgorithmus(graph);
 
 		return this.procedure();
 	}
 	
+	private void initAlgorithmus(Graph graph) {
+		this.setGraph(graph);
+		
+	}
+
 	protected abstract Graph procedure();
 
 }

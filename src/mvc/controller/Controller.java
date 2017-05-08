@@ -50,6 +50,8 @@ public class Controller {
 		this.view.getBtnDijkstra().addActionListener(e -> this.btnDijkstraAction());
 		this.view.getBtnBFS().addActionListener(e -> this.btnBFSAction());
 		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigenAction());
+		this.view.getBtnKruskal().addActionListener(e -> this.btnKruskal());
+		this.view.getBtnPrim().addActionListener(e -> this.btnPrim());
 			
 		// TODO Fehlerhafter load
 		
@@ -61,6 +63,16 @@ public class Controller {
 
 	}
 	
+	private Object btnPrim() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void btnKruskal() {
+		this.model.setGraph(this.model.getKruskal().calculate(this.model.getGraph()));
+		this.setGraphToPanel();
+	}
+
 	private void btnGraphAnzeigenAction(){
 		List<String> fromTextArex = new ArrayList<String>();
 		
