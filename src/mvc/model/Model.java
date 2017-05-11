@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmen.minimalSpanningTree.Kruskal;
 import mvc.model.algorithmen.minimalSpanningTree.Kruskal2;
 import mvc.model.algorithmen.minimalSpanningTree.Prim;
 import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
 import mvc.model.algorithmen.shortestPath.Dijkstra;
 import mvc.model.fileExtensionSystem.FileExtension;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import mvc.model.generator.GraphGenerator;
 
 public class Model {
 	
@@ -19,8 +19,9 @@ public class Model {
 	private List<String> graphAsText;
 	private BreadthFirstSearch bfs;
 	private Dijkstra dijksta;
-	private Kruskal kruskal;
+	private Kruskal2 kruskal;
 	private Prim prim;
+	private GraphGenerator generator;
 	
 	
 	public Model(){
@@ -34,8 +35,9 @@ public class Model {
 		this.graphAsText = fileHandler.loadFile("db/kruskal/circle01.graph");
 		this.bfs = new BreadthFirstSearch();
 		this.dijksta = new Dijkstra();
-		this.kruskal = new Kruskal();
+		this.kruskal = new Kruskal2();
 		this.prim = new Prim();
+		this.generator = new GraphGenerator();
 	}
 
 	public FileExtension getFileHandler() {
@@ -78,13 +80,19 @@ public class Model {
 		this.graphAsText = graphAsText;
 	}
 
-	public Kruskal getKruskal() {
+	public Kruskal2 getKruskal() {
 		return kruskal;
 	}
 
 	public Prim getPrim() {
 		return prim;
+	}
+
+	public GraphGenerator getGenerator() {
+		return generator;
 	}	
+	
+	
 	
 
 }

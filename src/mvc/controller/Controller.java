@@ -52,6 +52,7 @@ public class Controller {
 		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigenAction());
 		this.view.getBtnKruskal().addActionListener(e -> this.btnKruskal());
 		this.view.getBtnPrim().addActionListener(e -> this.btnPrim());
+		this.view.getBtnRandomGraph().addActionListener(e -> this.btnRandom());
 			
 		// TODO Fehlerhafter load
 		
@@ -63,6 +64,14 @@ public class Controller {
 
 	}
 	
+	private void btnRandom() {
+		int nodeSize = Integer.valueOf(this.view.getTextField_randomNodes().getText());
+		int edgeSize = Integer.valueOf(this.view.getTextField_randomEdges().getText());
+		int maxWeight = 100;
+		this.model.setGraph(this.model.getGenerator().generateRandomSimpleGraph(nodeSize, edgeSize, maxWeight));
+		this.setGraphToPanel();
+	}
+
 	private void btnPrim() {
 		this.model.setGraph(this.model.getPrim().calculate(this.model.getGraph()));
 		this.setGraphToPanel();
@@ -111,6 +120,7 @@ public class Controller {
 		//model.setGraph(model.getBfs().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 		
 		List<Node> result = model.getBfs().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+
 		/*
 		 * TODO Auslager in eine Mehtode 
 		 * Weg vorhanden prüfung?

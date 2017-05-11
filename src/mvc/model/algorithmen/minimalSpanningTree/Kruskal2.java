@@ -17,9 +17,8 @@ public class Kruskal2 extends MinimalSpanningTree{
 	private LinkedList<Edge> sortedEdges;
 	private List<Edge> resultF;
 	private Graph minimalSpanningTree;
-	private List<Node> nodes;
 	private BreadthFirstSearch bfs;
-	private Node start;
+
 
 	//TODO DieseVersion NUR AUF UNGERICHTETE!, also aus einem directed muss ein undirected werden
 	// TEST gegen die standard implementierung
@@ -33,8 +32,7 @@ public class Kruskal2 extends MinimalSpanningTree{
 
 		for(int i = 0; i < this.sortedEdges.size(); i++){
 			Edge nextEdge = this.sortedEdges.get(i);
-			
-			
+						
 		
 			if(!this.isCircle(nextEdge)){
 			this.resultF.add(nextEdge);	
@@ -43,13 +41,9 @@ public class Kruskal2 extends MinimalSpanningTree{
 			this.minimalSpanningTree.getEdge(nextEdge.getId().toString()).setAttribute("ui.label", nextEdge.getAttribute("ui.label").toString());
 			
 			}
-			
-			
+					
 	
-		}
-
-		
-		
+		}		
 		
 		Printer.promptTestOut(this, this.minimalSpanningTree.getEdgeSet().toString());
 		Printer.promptTestOut(this, this.resultF.toString());
