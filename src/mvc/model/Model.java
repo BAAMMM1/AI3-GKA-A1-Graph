@@ -5,6 +5,7 @@ import java.util.List;
 import org.graphstream.graph.Graph;
 
 import mvc.model.algorithmen.minimalSpanningTree.Kruskal;
+import mvc.model.algorithmen.minimalSpanningTree.Kruskal2;
 import mvc.model.algorithmen.minimalSpanningTree.Prim;
 import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
 import mvc.model.algorithmen.shortestPath.Dijkstra;

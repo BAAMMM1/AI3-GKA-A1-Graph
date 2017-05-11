@@ -63,9 +63,9 @@ public class Controller {
 
 	}
 	
-	private Object btnPrim() {
-		// TODO Auto-generated method stub
-		return null;
+	private void btnPrim() {
+		this.model.setGraph(this.model.getPrim().calculate(this.model.getGraph()));
+		this.setGraphToPanel();
 	}
 
 	private void btnKruskal() {

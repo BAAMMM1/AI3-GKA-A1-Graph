@@ -14,6 +14,7 @@ public class BreadthFirstSearch extends ShortestPath {
 
 	private static final int NOT_VISITED = -1;
 	private static final int LAMBDA_START = 0;
+	private boolean directed = false;
 
 
 	// TODO Graph graph, Node source, Node target kann weg
@@ -22,6 +23,7 @@ public class BreadthFirstSearch extends ShortestPath {
 	 */
 	@Override
 	protected List<Node> procedure() {
+		Printer.promptTestOut(this, "BFS on: " + this.getGraph().toString());
 
 		this.initBFS();
 
@@ -89,7 +91,7 @@ public class BreadthFirstSearch extends ShortestPath {
 		List<Node> path = new ArrayList<Node>();
 
 		int bfslambda = this.getTarget().getAttribute("BFS");
-
+		System.out.println("*************>: " + bfslambda);
 		/*
 		 * Rückwerts ermittlung
 		 */
@@ -113,17 +115,43 @@ public class BreadthFirstSearch extends ShortestPath {
 
 	}
 
+	// TODO testen gegen die Standardimplementierung
 	private Node getNextSmallerBFS(Node node) {
-		Iterator<Node> nodeIterator = node.getNeighborNodeIterator();
-		int nodeBFS = node.getAttribute("BFS");
-		while (nodeIterator.hasNext()) {
-			Node nachbar = nodeIterator.next();
-			int nachbarBFS = nachbar.getAttribute("BFS");
-			if (nachbarBFS == nodeBFS - 1) {
+		
+		/*
+		 * Bei directed graph werden auf dem R�ckweg auf die Kanten genommen, die in den Knoten zeige, bzw nicht rausgehen aus ihm.
+		 * deshlab hier unterscheiden ob rein oder raus geht;		
+		*/
+		
+		if(!this.directed){
+			
+			Iterator<Node> nodeIterator = node.getNeighborNodeIterator();			
+			int nodeBFS = node.getAttribute("BFS");
+			while (nodeIterator.hasNext()) {
+				Node nachbar = nodeIterator.next();
+				int nachbarBFS = nachbar.getAttribute("BFS");
+				if (nachbarBFS == nodeBFS - 1) {
 
-						return nachbar;				
+							return nachbar;				
+				}
+			}
+			
+			
+		} else {
+			Iterator<Edge> iterator = node.getEnteringEdgeIterator();
+			int nodeBFS = node.getAttribute("BFS");
+			while (iterator.hasNext()) {
+				Node nachbar = iterator.next().getSourceNode();
+				int nachbarBFS = nachbar.getAttribute("BFS");
+
+				if (nachbarBFS == nodeBFS - 1) {
+							return nachbar;				
+				}
 			}
 		}
+		
+		
+		
 		return null;
 	}
 
@@ -153,6 +181,11 @@ public class BreadthFirstSearch extends ShortestPath {
 			// vorhanden ist.
 			node.setAttribute("ui.label", node.getId());
 		}
+		
+		if(!this.getGraph().getEdgeSet().isEmpty()){
+			this.directed = this.getGraph().getEdgeSet().iterator().next().isDirected();
+		}
+		
 		
 		//path = new ArrayList<Node>();
 
@@ -185,23 +218,24 @@ public class BreadthFirstSearch extends ShortestPath {
 		 * wenn das Ziel der Kante noch nicht besuch wurde, setzte es auf die Nachbarn-List
 		 */
 		for(Edge edge: node.getEachLeavingEdge()){
-			Edge nextEdge = edge;
+			System.out.println("LeavingEdge: " + edge.toString());
 			Node nextNode;
 
 			/*
 			 * Für ungerichtete Kanten muss hier getauscht werden,
 			 *  ansonsten kann er nur in die gerichtete Richtung durch laufen
 			 */
-			if (node != nextEdge.getNode1()) {				
-				nextNode = nextEdge.getNode1();
+			if (node != edge.getNode1()) {				
+				nextNode = edge.getNode1();
 			} else {
-				nextNode = nextEdge.getNode0();
+				nextNode = edge.getNode0();
 			}			
-
+			
 			int nextNodeBFS = nextNode.getAttribute("BFS");
 			if (nextNodeBFS == -1) {
 				neighbours.add(nextNode);
 			}
+			
 		}
 		Printer.promptTestOut(this, "Nachbarn ermittelt: " + neighbours.toString());
 		
