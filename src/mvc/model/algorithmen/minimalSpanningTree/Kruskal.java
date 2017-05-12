@@ -13,6 +13,7 @@ import utility.Printer;
 
 public class Kruskal extends MinimalSpanningTree {
 
+	// TODO getKantengewichtsSumme
 	private LinkedList<Edge> sortedEdges;
 	private List<Edge> resultF;
 	private Graph minimalSpanningTree;
