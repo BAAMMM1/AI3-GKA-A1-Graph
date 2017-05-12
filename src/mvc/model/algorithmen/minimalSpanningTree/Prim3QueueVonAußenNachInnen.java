@@ -14,7 +14,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 import utility.Printer;
 
-public class Prim extends MinimalSpanningTree {
+public class Prim3QueueVonAußenNachInnen extends MinimalSpanningTree {
 
 	private Graph minimalSpanningTree;
 	private List<Node> nodesNotInGraphT;
