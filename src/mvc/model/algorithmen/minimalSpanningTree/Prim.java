@@ -24,42 +24,93 @@ public class Prim extends MinimalSpanningTree {
 
 	protected Graph procedure() {
 		long timeStart = System.currentTimeMillis();
+
 		this.initPrim();
 
-		Node start = this.getRandomStartNode();
-		System.out.println("Startknoten: " + start.toString());
-		this.addNodeToTree(start);
-		this.setNodeWeight(start);
+		while (this.treeHasNotAllNodes()) {
+			Node nextNode;
 
-		while (this.graphTHasNotAllNodes()) {
-			Node nextNode = this.getNextNodeFromQueue();
-			System.out.println("nextNode: " + nextNode.toString());
+			if (nodesInGraphT.isEmpty()) {
+				nextNode = this.getRandomStartNode();
+				this.addNodeToTree(nextNode);
+			} else {
+				nextNode = this.queue.poll();
+				this.addNodeAndEdgeToTree(nextNode);
+			}
 
-			this.addNodeAndEdgeToTree(nextNode);
-			this.setNodeWeight(nextNode);
-
+			this.updateNodePriority(nextNode);
 		}
 
 		long timeEnd = System.currentTimeMillis();
+
 		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
-		System.out.println(this.getEdgeWeightes());
+		Printer.prompt(this, "edge-weight sum: " + this.getEdgeWeightes());
+
 		return this.tree;
 	}
 
-	private Node getNextNodeFromQueue() {
+	/**
+	 * Diese Mehtode initialisiert den Prim-Algorithmus. Zunächst befindet sich
+	 * in dem minimalen Spannbaum keine Knoten. Diese müssen nach einander aus
+	 * der PriorityQueue hinzugefügt werden. Die PriorityQueue enthält zum Start
+	 * alle Knoten mit der Priorität OMEGA.
+	 */
+	private void initPrim() {
+		this.tree = new MultiGraph("Prim");
+		this.nodesInGraphT = new LinkedList<Node>();
+		this.result = new LinkedList<Edge>();
+		this.nodesNotInGraphT = new LinkedList<Node>();
+		this.nodesNotInGraphT.addAll(this.getGraph().getNodeSet());
 
-		// Wird die abfrage hier noch gebraucht?
-		// Es sind ja Keine doppelten mehr in der Queue, da sie ja removed
-		// werden
+		this.queue = new PriorityQueue<Node>(nodesNotInGraphT.size(), (e1,
+				e2) -> ((Integer) e1.getAttribute("primWeight")).compareTo((Integer) e2.getAttribute("primWeight")));
 
-		Node nextNode;
-		do {
-			nextNode = this.queue.poll();
-		} while (this.nodesInGraphT.contains(nextNode));
+		for (Node node : nodesNotInGraphT) {
+			node.addAttribute("primWeight", OMEGA);
+		}
 
-		return nextNode;
+		this.queue.addAll(nodesNotInGraphT);
 	}
 
+	/**
+	 * Diese Methode ermittelt ob sich alle Knoten im minimalen Spannbaum
+	 * befinden.
+	 * 
+	 * @return true falls der minimale Spannbaum komplett ist
+	 */
+	private boolean treeHasNotAllNodes() {
+		return !(this.tree.getNodeSet().size() == this.getGraph().getNodeSet().size());
+	}
+
+	/**
+	 * Gibt einen zufällig ausgewählten Knoten aus der Menge an Knoten, welche
+	 * sich nicht in dem minimalen Spannbaum befinden.
+	 * 
+	 * @return Zufalls Knoten
+	 */
+	private Node getRandomStartNode() {
+		Random random = new Random();
+		Node randomStart = this.nodesNotInGraphT.get(random.nextInt(this.nodesNotInGraphT.size()));
+		return randomStart;
+	}
+
+	/**
+	 * Fügt einen übergebenen Knoten dem minimalen Spannbaum hinzu.
+	 * @param node
+	 */
+	private void addNodeToTree(Node node) {
+		Printer.promptTestOut(this, "add node to tree: " + node.toString());
+		this.nodesInGraphT.add(node);
+		this.nodesNotInGraphT.remove(node);
+
+		this.tree.addNode(node.getId());
+		this.tree.getNode(node.getId()).setAttribute("ui.label", node.getAttribute("ui.label").toString());
+	}
+
+	/**
+	 * 
+	 * @param nextNode
+	 */
 	private void addNodeAndEdgeToTree(Node nextNode) {
 		this.addNodeToTree(nextNode);
 		Edge edge = nextNode.getAttribute("primEdge");
@@ -71,17 +122,18 @@ public class Prim extends MinimalSpanningTree {
 		this.tree.addEdge(edge.getId(), source, target);
 		this.tree.getEdge(edge.getId()).addAttribute("weight", (Integer) edge.getAttribute("weight"));
 		this.tree.getEdge(edge.getId()).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
-		System.out.println("Add Edge: " + edge.toString());
+		Printer.promptTestOut(this, "Add Edge: " + edge.toString());
 
 	}
 
-	private void setNodeWeight(Node node) {
-		System.out.println("Sehe Kanten von Knoten: " + node.toString() + " an");
+	private void updateNodePriority(Node node) {
+		Printer.promptTestOut(this, "update priorityQueue from node: " + node.toString());
 
 		for (Edge edge : node.getEachEdge()) {
 
 			if (!result.contains(edge)) {
-				System.out.println("Sehe Kanten " + edge.toString() + " an");
+				Printer.promptTestOut(this, "look at edge: " + edge.toString());
+
 				Node nodeForQueue;
 				Node source = edge.getSourceNode();
 				Node target = edge.getTargetNode();
@@ -103,7 +155,7 @@ public class Prim extends MinimalSpanningTree {
 					if ((Integer) nodeForQueue.getAttribute("primWeight") > (Integer) edge.getAttribute("weight")) {
 						nodeForQueue.setAttribute("primWeight", (Integer) edge.getAttribute("weight"));
 						nodeForQueue.setAttribute("primEdge", edge);
-						System.out.println("Add to Queue Node: " + nodeForQueue.toString() + " primWeight: "
+						Printer.promptTestOut(this, "update node: " + nodeForQueue.toString() + " primWeight: "
 								+ nodeForQueue.getAttribute("primWeight"));
 
 						// Remove, falls der Node bereits in der Queue war, weil
@@ -112,11 +164,13 @@ public class Prim extends MinimalSpanningTree {
 						this.queue.remove(nodeForQueue);
 						this.queue.add(nodeForQueue);
 						/*
-						 * Wenn ein Element in die Queue gelegt wird, wird sie anhand des Comperator einsortiert,
-						 * ändert sich der Wert im Element durch den es einsortiert wrude, muss es entfernt werde
-						 * und wieder neue hinzugefügt werden.
+						 * Wenn ein Element in die Queue gelegt wird, wird sie
+						 * anhand des Comperator einsortiert, ändert sich der
+						 * Wert im Element durch den es einsortiert wrude, muss
+						 * es entfernt werde und wieder neue hinzugefügt werden.
 						 * 
-						 * Element können in der Queuer doppelt mit unterschiedlichen Prioritäten sein
+						 * Element können in der Queuer doppelt mit
+						 * unterschiedlichen Prioritäten sein
 						 */
 
 					}
@@ -125,55 +179,18 @@ public class Prim extends MinimalSpanningTree {
 			}
 
 		}
-
-		System.out.println(this.queue.toString());
-
-	}
-
-	@Override
-	public String toString() {
-		return "Prima";
-	}
-
-	private void initPrim() {
-		this.tree = new MultiGraph("Prim");
-		this.nodesInGraphT = new LinkedList<Node>();
-		this.result = new LinkedList<Edge>();
-		this.nodesNotInGraphT = new LinkedList<Node>();
-		this.nodesNotInGraphT.addAll(this.getGraph().getNodeSet());
-
-		this.queue = new PriorityQueue<Node>(nodesNotInGraphT.size(), (e1,
-				e2) -> ((Integer) e1.getAttribute("primWeight")).compareTo((Integer) e2.getAttribute("primWeight")));
-
-		for (Node node : nodesNotInGraphT) {
-			node.addAttribute("primWeight", OMEGA);
-		}
-	}
-
-	private void addNodeToTree(Node node) {
-		System.out.println("Add Node to tree: " + node.toString());
-		this.nodesInGraphT.add(node);
-		this.nodesNotInGraphT.remove(node);
-
-		this.tree.addNode(node.getId());
-		this.tree.getNode(node.getId()).setAttribute("ui.label", node.getAttribute("ui.label").toString());
-
-	}
-
-	private Node getRandomStartNode() {
-		Random random = new Random();
-		Node randomStart = this.nodesNotInGraphT.get(random.nextInt(this.nodesNotInGraphT.size()));
-		return randomStart;
-	}
-
-	private boolean graphTHasNotAllNodes() {
-		return !(this.tree.getNodeSet().size() == this.getGraph().getNodeSet().size());
+		Printer.promptTestOut(this, "PriorityQueue: " + this.queue.toString());
 	}
 
 	public int getEdgeWeightes() {
 		return this.result.stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
 				(e1, e2) -> e1.intValue() + e2.intValue());
 
+	}
+
+	@Override
+	public String toString() {
+		return "Prim";
 	}
 
 }
