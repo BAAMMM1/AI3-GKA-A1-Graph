@@ -57,50 +57,43 @@ public class KruskalComplex extends MinimalSpanningTree {
 		minimalSpanningTree.removeEdge(edge.getId());
 	}
 
-	// TODO Auslagern in die Superclass
-	// Nur für ungerichtete?
 	boolean isCyclicUtil(int i, boolean visited[], int parent) {
-		// Mark the current node as visited
-		visited[i] = true;
-		Node node;
-		LinkedList<Node> temp = new LinkedList<Node>();
-		// Recur for all the vertices adjacent to this vertex
-		// Iterator<Integer> it = adj[v].iterator();
-		Iterator<Node> it = nodes.get(i).getNeighborNodeIterator();
-		// Printer.prompt(this, "Schaue Nachbarn von: " + nodes.get(i) + " an");
-		while (it.hasNext()) {
 
+		// StartKnoten des DFS Tree wird auf VISITED gesetzt
+		visited[i] = true;
+
+		// Nimm alle benachtbarten Knoten des DFS STARTKNOTEN
+		// Und Iteriere über sie
+		Iterator<Node> it = nodes.get(i).getNeighborNodeIterator();
+		Node node;
+		while (it.hasNext()) {
 			node = it.next();
 
-			// If an adjacent is not visited, then recur for that
-			// adjacent
+			// Wenn ein Nachbar noch nicht besucht wurde, dann starte einen DFS
+			// Tree Durchlauf für diesen Nachbarn
 			if (!visited[nodes.indexOf(node)]) {
 				if (isCyclicUtil(nodes.indexOf(node), visited, i)) {
-					temp.add(node);
 					return true;
-				} else {
 				}
 
-				// TODO Hier irgendwo die Mengen an Kreise in einem Graph
-				// bestimmen?!
-
-				// If an adjacent is visited and not parent of current
-				// vertex, then there is a cycle.
+				// Wenn der Nachbar bereits besucht ist und nicht der Vorgänger
+				// von diesem Knoten, dann ist ein Kreis			
 			} else if (nodes.indexOf(node) != parent) {
+				// Dieser Nachbar ist breits besucht und nicht mein Voränger
 				return true;
 			}
-
 		}
-
-		// Printer.prompt(this, "return false");
 		return false;
 	}
 
+	// Diese Mehtode, setzt zunächst alle Knoten auf noch nicht besucht.
 	// Returns true if the graph contains a cycle, else false.
 	boolean combiningContainsACyclic(Graph graph) {
 		this.nodes = new LinkedList<Node>(graph.getNodeSet());
 		// Mark all the vertices as not visited and not part of
 		// recursion stack
+
+		// Setzte VISITED Flag für alle Knoten
 		boolean visited[] = new boolean[nodes.size()];
 		for (int index = 0; index < nodes.size(); index++) {
 			visited[index] = false;
@@ -108,10 +101,18 @@ public class KruskalComplex extends MinimalSpanningTree {
 
 		// Call the recursive helper function to detect cycle in
 		// different DFS trees
+		// Laufe über alle Knoten
 		for (int i = 0; i < nodes.size(); i++) {
 
+			// Nur wenn der Knoten noch nicht beuscht wurde, öffne die
+			// Hilfsfunktion -> Starte DFS Search
 			if (!visited[i]) { // Don't recur for u if already visited
+				// Rufe Hilfsfunktion mit Knotenposition, und dem
+				// visteted-Verzeichnis
+				// Startet eine Tiefensuche von dem aktuellen Knoten aus
 				if (isCyclicUtil(i, visited, -1)) {
+					// Wenn es einen Kreis in dem DFS Tree gibt, dann sende true
+					// zurück
 					return true;
 				}
 			}
@@ -122,7 +123,6 @@ public class KruskalComplex extends MinimalSpanningTree {
 	private void initKruskal() {
 		this.minimalSpanningTree = new MultiGraph("Kruskal");
 		this.resultF = new LinkedList<Edge>();
-
 
 		/*
 		 * Der Minimale Spanning Tree eines Graphen besitzt alle Knoten des
@@ -140,19 +140,18 @@ public class KruskalComplex extends MinimalSpanningTree {
 		this.sortedEdges = new LinkedList<Edge>(this.getGraph().getEdgeSet());
 		this.sortedEdges.sort((e1, e2) -> ((Integer) e1.getAttribute("weight")).compareTo(e2.getAttribute("weight")));
 
-		
 	}
-	
+
 	public double getEdgeWeightes() {
 		return (double) this.resultF.stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
 				(e1, e2) -> e1.intValue() + e2.intValue());
 	}
-	
-	public int getKnotenAnzahl(){
+
+	public int getKnotenAnzahl() {
 		return this.minimalSpanningTree.getNodeSet().size();
 	}
-	
-	public int getKantenAnzahl(){
+
+	public int getKantenAnzahl() {
 		return this.minimalSpanningTree.getEdgeSet().size();
 	}
 

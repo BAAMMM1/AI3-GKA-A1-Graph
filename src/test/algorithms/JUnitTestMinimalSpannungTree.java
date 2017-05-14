@@ -131,6 +131,7 @@ public class JUnitTestMinimalSpannungTree {
 	public void primSimpleTest() {
 		assertEquals(this.prim_random100_200.getEdgeWeightes(), 3256.0, 0);
 		/*
+		 * Kreisfreiheit
 		 * Wenn der Testdurchgelaufen ist muss ein Spannbaum entstanden sein.
 		 * Spannbaumtest => Kreisfreiheit
 		 */
@@ -146,6 +147,7 @@ public class JUnitTestMinimalSpannungTree {
 	public void kruskalSimpleTest() {
 		assertEquals(this.kruskal_random100_200.getEdgeWeightes(), 3256.0, 0);
 		/*
+		 * Kreisfreiheit
 		 * Wenn der Testdurchgelaufen ist muss ein Spannbaum entstanden sein.
 		 * Spannbaumtest => Kreisfreiheit
 		 */
