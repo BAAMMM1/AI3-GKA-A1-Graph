@@ -20,6 +20,8 @@ import javax.swing.border.LineBorder;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class View {
 	
@@ -35,6 +37,8 @@ public class View {
 	private JButton btnSave;
 	private JButton btnLoadGraph;
 	private JButton btnAutolayout;
+	private JButton btnKruskal;
+	private JButton btnPrim;
 	private JPanel panelConsole;
 	private JPanel panelBFS;
 	private JPanel panelDijkstra;
@@ -60,13 +64,15 @@ public class View {
 	private JLabel labelBFSSource;
 	private JLabel labelOptions ;
 	private GroupLayout gl_panelOptions;
+	private JButton btnRandomGraph;
+	private JTextField textField_randomEdges;
+	private JTextField textField_randomNodes;
 	
 	private Graph graph;
 	private Viewer viewer;
 	private org.graphstream.ui.view.View view;
 	private boolean autolayout = true;
 	private List<String> graphAsText;
-
 
 	public View() {
 		// Look and Fell in Controller? Oder View?
@@ -110,6 +116,48 @@ public class View {
 		labelDijkstraSource = new JLabel("Source:");		
 		labelDijkstraTarget = new JLabel("Target:");
 		gl_panelDijkstra = new GroupLayout(panelDijkstra);
+		btnRandomGraph = new JButton("RandomGraph");
+		textField_randomEdges = new JTextField();
+		textField_randomNodes = new JTextField();
+		
+		
+		gl_panelDijkstra.setHorizontalGroup(
+			gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelDijkstra.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
+						.addComponent(labelDijkstra)
+						.addGroup(Alignment.TRAILING, gl_panelDijkstra.createSequentialGroup()
+							.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnDijkstra, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+								.addGroup(Alignment.LEADING, gl_panelDijkstra.createSequentialGroup()
+									.addComponent(labelDijkstraTarget)
+									.addPreferredGap(ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+									.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_panelDijkstra.createSequentialGroup()
+									.addComponent(labelDijkstraSource)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)))
+							.addGap(42)))
+					.addContainerGap())
+		);
+		gl_panelDijkstra.setVerticalGroup(
+			gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelDijkstra.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(labelDijkstra)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDijkstraSource))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(labelDijkstraTarget))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnDijkstra)
+					.addContainerGap(18, Short.MAX_VALUE))
+		);
 		labelBFS = new JLabel("Breadth-first search");		
 		textFieldSource = new JTextField();
 		textFieldTarget = new JTextField();
@@ -118,7 +166,95 @@ public class View {
 		labelConsole = new JLabel("Console:");
 		scrollPaneConsole = new JScrollPane();
 		gl_panelConsole = new GroupLayout(panelConsole);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		groupLayout = new GroupLayout(frameMain.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(panelBFS, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(panelDijkstra, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE))
+							.addComponent(panelOptions, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+						.addComponent(panelConsole, GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(panelAusgabe, GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE)
+						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 859, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(panelAusgabe, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(panelOptions, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(panelDijkstra, 0, 0, Short.MAX_VALUE)
+								.addComponent(panelBFS, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(panelConsole, GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
+							.addGap(10))))
+		);
+		
+		btnKruskal = new JButton("Kruskal - Anzeigen");
+		btnKruskal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		
+		btnPrim = new JButton("Prim - Anzeigen");		
+		
+		textField_randomEdges.setColumns(10);		
+		textField_randomNodes.setColumns(10);
+		
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnPrim, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+						.addComponent(btnKruskal, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
+					.addGap(18)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(textField_randomNodes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(9)
+							.addComponent(textField_randomEdges, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnRandomGraph, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnKruskal)
+						.addComponent(textField_randomEdges, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_randomNodes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnPrim)
+						.addComponent(btnRandomGraph))
+					.addContainerGap(13, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 		gl_panelBFS = new GroupLayout(panelBFS);
 		labelBFSTarget = new JLabel("Source:");		
 		labelBFSSource = new JLabel("Target:");
@@ -152,48 +288,7 @@ public class View {
 		textField.setColumns(10);	
 		textField_1.setColumns(10);
 		textFieldSource.setColumns(10);		
-		textFieldTarget.setColumns(10);	
-		
-		
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(panelOptions, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(panelBFS, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(panelDijkstra, GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
-						.addComponent(panelConsole, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
-						.addComponent(panelAusgabe, GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panelAusgabe, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(panelOptions, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panelDijkstra, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
-								.addComponent(panelBFS, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panelConsole, GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
-							.addGap(10))))
-		);
+		textFieldTarget.setColumns(10);
 
 		gl_panelAusgabe.setHorizontalGroup(
 			gl_panelAusgabe.createParallelGroup(Alignment.LEADING)
@@ -213,41 +308,6 @@ public class View {
 					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(scrollPaneAusgabe, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
-		);
-		
-		gl_panelDijkstra.setHorizontalGroup(
-			gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelDijkstra.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
-						.addComponent(labelDijkstra)
-						.addGroup(Alignment.TRAILING, gl_panelDijkstra.createSequentialGroup()
-							.addComponent(labelDijkstraSource)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(Alignment.TRAILING, gl_panelDijkstra.createSequentialGroup()
-							.addComponent(labelDijkstraTarget)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(btnDijkstra, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_panelDijkstra.setVerticalGroup(
-			gl_panelDijkstra.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelDijkstra.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(labelDijkstra)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDijkstraSource))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_panelDijkstra.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(labelDijkstraTarget))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnDijkstra)
-					.addContainerGap(12, Short.MAX_VALUE))
 		);
 
 		gl_panelBFS.setHorizontalGroup(
@@ -692,11 +752,29 @@ public class View {
 	}
 
 
-	
+	public JButton getBtnKruskal() {
+		return btnKruskal;
+	}
 
-	
-	
-	
-	
 
+	public JButton getBtnPrim() {
+		return btnPrim;
+	}
+
+
+	public JButton getBtnRandomGraph() {
+		return btnRandomGraph;
+	}
+
+
+	public JTextField getTextField_randomEdges() {
+		return textField_randomEdges;
+	}
+
+
+	public JTextField getTextField_randomNodes() {
+		return textField_randomNodes;
+	}
+	
+	
 }

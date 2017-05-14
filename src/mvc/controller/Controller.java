@@ -1,17 +1,16 @@
 package mvc.controller;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
 
+import org.graphstream.graph.Node;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
-import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
-import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
-import mvc.model.exception.GraphUncorrectSourceOrTarget;
 import mvc.view.View;
 
 public class Controller {
@@ -25,7 +24,6 @@ public class Controller {
 	/*
 	 * --------------------------------------------
 	 */
-	private List<String> graphAsText;
 	private boolean autolayout = true;
 	/*
 	 * --------------------------------------------
@@ -45,13 +43,16 @@ public class Controller {
 		
 	}
 	
-	public void initController(){
+	private void initController(){
 		this.view.getBtnLoadGraph().addActionListener(e -> this.btnLoadAction());
 		this.view.getBtnSave().addActionListener(e -> this.btnSaveAction());
 		this.view.getBtnAutolayout().addActionListener(e -> this.btnAutoLayoutAction());
 		this.view.getBtnDijkstra().addActionListener(e -> this.btnDijkstraAction());
 		this.view.getBtnBFS().addActionListener(e -> this.btnBFSAction());
 		this.view.getBtnGraphanzeige().addActionListener(e -> this.btnGraphAnzeigenAction());
+		this.view.getBtnKruskal().addActionListener(e -> this.btnKruskal());
+		this.view.getBtnPrim().addActionListener(e -> this.btnPrim());
+		this.view.getBtnRandomGraph().addActionListener(e -> this.btnRandom());
 			
 		// TODO Fehlerhafter load
 		
@@ -63,6 +64,24 @@ public class Controller {
 
 	}
 	
+	private void btnRandom() {
+		int nodeSize = Integer.valueOf(this.view.getTextField_randomNodes().getText());
+		int edgeSize = Integer.valueOf(this.view.getTextField_randomEdges().getText());
+		int maxWeight = 100;
+		this.model.setGraph(this.model.getGenerator().generateRandomSimpleGraph(nodeSize, edgeSize, maxWeight));
+		this.setGraphToPanel();
+	}
+
+	private void btnPrim() {
+		this.model.setGraph(this.model.getPrim().calculate(this.model.getGraph()));
+		this.setGraphToPanel();
+	}
+
+	private void btnKruskal() {
+		this.model.setGraph(this.model.getKruskal().calculate(this.model.getGraph()));
+		this.setGraphToPanel();
+	}
+
 	private void btnGraphAnzeigenAction(){
 		List<String> fromTextArex = new ArrayList<String>();
 		
@@ -97,18 +116,19 @@ public class Controller {
 		BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
 		bfs.shortestPath(source, target);
 		*/
-		model.setBfs(new BreadthFirstSearch(model.getGraph()));
 
-		model.setGraph(model.getBfs().start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
-			
+		//model.setGraph(model.getBfs().compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
+		
+		List<Node> result = model.getBfs().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+
 		/*
 		 * TODO Auslager in eine Mehtode 
 		 * Weg vorhanden prüfung?
 		 */
-		if(model.getBfs().getShortestPath() == null){
+		if(result == null){
 			this.setTextFieldAusgabe("BreadthFirstSearch:\nKein Weg vorhanden");
 		} else {
-			this.setTextFieldAusgabe("BreadthFirstSearch:\nVon source: " + source + " zu target: " + target + ": "+ model.getBfs().getShortestPath().toString());
+			this.setTextFieldAusgabe("BreadthFirstSearch:\nVon source: " + source + " zu target: " + target + ": "+ result.toString());
 		}		
 		
 		this.setGraphToPanel();
@@ -131,21 +151,20 @@ public class Controller {
 		String source = view.getTextField().getText();
 		String target = view.getTextField_1().getText();	
 		
-		model.setDijksta(new Dijkstra(model.getGraph()));
-		Dijkstra djk = model.getDijksta();
-		
 		if(this.sourceTargetValid(source, target)){
 		
 		if(!model.getGraph().getEdge(0).isDirected()){
 			
-			if(djk.isGraphCorrectWeighted()){
+			if(this.model.getDijksta().isGraphCorrectWeighted(this.model.getGraph())){
 				
 			this.setTextFieldAusgabe("Dijkstra:\nGraph ungerichtet.");		
 	
 			model.setGraph(model.getDijksta().converteUndirectedToDirected(model.getGraph()));			
-			model.setGraph(djk.start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+			//model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 			
-			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
+			List<Node> result = this.model.getDijksta().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+			
+			this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + this.model.getDijksta().getShortestPathWithCoast());		
 			
 			this.setGraphToPanel();
 			System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
@@ -155,11 +174,13 @@ public class Controller {
 			
 		} else {
 			
-			if(djk.isGraphCorrectWeighted()){
+			if(this.model.getDijksta().isGraphCorrectWeighted(this.model.getGraph())){
 				
-					model.setGraph(djk.start(model.getGraph().getNode(source), model.getGraph().getNode(target)));
+					//model.setGraph(djk.compute(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target)));
 					
-					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + djk.getShortestPathWithCoast());		
+					List<Node> result = this.model.getDijksta().calculate(model.getGraph(), model.getGraph().getNode(source), model.getGraph().getNode(target));
+					
+					this.setTextFieldAusgabe("Dijkstra-Algorithmus:\n" + this.model.getDijksta().getShortestPathWithCoast());		
 					
 					this.setGraphToPanel();
 				
@@ -189,6 +210,7 @@ public class Controller {
 	private void btnSaveAction(){
 		// JFileChooser-Objekt erstellen
         JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         // Dialog zum Oeffnen von Dateien anzeigen
         int rueckgabeWert = chooser.showSaveDialog(null);
         
@@ -208,7 +230,8 @@ public class Controller {
 	
 	private void btnLoadAction(){
 		 // JFileChooser-Objekt erstellen
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser();       
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
         // Dialog zum Oeffnen von Dateien anzeigen		        
         int rueckgabeWert = chooser.showOpenDialog(null);
         
@@ -241,7 +264,7 @@ public class Controller {
 	 * -----------------------------------------------------
 	 */
 	
-	public void setGrapgBuilderTextArea(){
+	private void setGrapgBuilderTextArea(){
 		String textAreaString = "";
 		for(int i = 0; i<= model.getGraphAsText().size()-1; i++ ){
 			textAreaString = textAreaString + model.getGraphAsText().get(i).toString() + "\n";
@@ -249,19 +272,19 @@ public class Controller {
 		view.getTextAreaConsole().setText(textAreaString);
 	}
 	
-	public void setGraphToPanel(){
+	private void setGraphToPanel(){
 		
 		this.initGraph();
 		viewer = new Viewer(model.getGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);         
  	    viewer_view = viewer.addDefaultView(false);
- 	    viewer.enableAutoLayout(); 	    
+ 	    viewer.enableAutoLayout();
  	    view.getPanelGraphStream().removeAll();
  	    view.getPanelGraphStream().add((Component) viewer_view);
  	    view.getPanelGraphStream().revalidate(); 
  	    view.getPanelGraphStream().repaint(); 	   
 	}
 	
-	public void initGraph(){
+	private void initGraph(){
 		// background
 		//graph.addAttribute("ui.stylesheet", "graph { fill-color: red; }");
 		
@@ -295,7 +318,7 @@ public class Controller {
 	 */
 	
 	
-	public void setTextFieldAusgabe(String text){
+	private void setTextFieldAusgabe(String text){
 		view.getTextArea_1().setText(text);
 	}
 		

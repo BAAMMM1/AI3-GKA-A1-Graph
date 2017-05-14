@@ -2,13 +2,15 @@ package mvc.model;
 
 import java.util.List;
 
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmusSystem.Dijkstra.Dijkstra;
-import mvc.model.algorithmusSystem.breadthFirstSearch.BreadthFirstSearch;
+import mvc.model.algorithmen.minimalSpanningTree.Kruskal2;
+import mvc.model.algorithmen.minimalSpanningTree.Prim;
+import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
+import mvc.model.algorithmen.shortestPath.Dijkstra;
 import mvc.model.fileExtensionSystem.FileExtension;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import mvc.model.generator.GraphGenerator;
 
 public class Model {
 	
@@ -17,6 +19,9 @@ public class Model {
 	private List<String> graphAsText;
 	private BreadthFirstSearch bfs;
 	private Dijkstra dijksta;
+	private Kruskal2 kruskal;
+	private Prim prim;
+	private GraphGenerator generator;
 	
 	
 	public Model(){
@@ -26,8 +31,13 @@ public class Model {
 	
 	public void initializeModel(){
 		this.fileHandler = new GraphFileExtensionHandler();
-		this.graph = fileHandler.loadGraph("db/examples/graph03.graph");
-		this.graphAsText = fileHandler.loadFile("db/examples/graph03.graph");
+		this.graph = fileHandler.loadGraph("db/kruskal/circle01.graph");
+		this.graphAsText = fileHandler.loadFile("db/kruskal/circle01.graph");
+		this.bfs = new BreadthFirstSearch();
+		this.dijksta = new Dijkstra();
+		this.kruskal = new Kruskal2();
+		this.prim = new Prim();
+		this.generator = new GraphGenerator();
 	}
 
 	public FileExtension getFileHandler() {
@@ -69,8 +79,19 @@ public class Model {
 	public void setGraphAsText(List<String> graphAsText) {
 		this.graphAsText = graphAsText;
 	}
+
+	public Kruskal2 getKruskal() {
+		return kruskal;
+	}
+
+	public Prim getPrim() {
+		return prim;
+	}
+
+	public GraphGenerator getGenerator() {
+		return generator;
+	}	
 	
-		
 	
 	
 
