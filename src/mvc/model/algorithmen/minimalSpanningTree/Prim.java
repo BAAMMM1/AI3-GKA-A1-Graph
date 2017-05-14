@@ -12,6 +12,16 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 import utility.Printer;
 
+/**
+ * Diese Klasse stellt den Prim-Algorithmus dar. In der Priority Queue sind alle
+ * Knoten gespeichert, die noch nicht zum minimalen Spannbaum gehoeren. Alle
+ * Knoten haben einen primWeight-Wert, der dem der leichtesten Kante entspricht -
+ * und eine Kante primEdge, die diesem Wert zugeordnet ist - durch die der
+ * Knoten mit dem minimalen Spannbaum verbunden werden kann. Existiert keine
+ * solche Kante, wird dem Knoten der Wert OMEGA zugewiesen. Die Warteschlange
+ * liefert nun immer einen Knoten mit dem kleinsten Wert zurück, bis sich alle
+ * Knoten im minimalen Spannbaum befinden.
+ */
 public class Prim extends MinimalSpanningTree {
 
 	private Graph tree;
@@ -22,23 +32,26 @@ public class Prim extends MinimalSpanningTree {
 
 	private static final Integer OMEGA = Integer.MAX_VALUE;
 
+	/**
+	 * Diese Mehtode stellt die Handlungsvorschrift Prim-Algorithmus um.
+	 * 
+	 * @return Gibt den minimalen Spannbaum zurück
+	 */
 	protected Graph procedure() {
 		long timeStart = System.currentTimeMillis();
 
 		this.initPrim();
+		Node nextNode = this.getRandomStartNode();
+		this.addNodeToTree(nextNode);
 
 		while (this.treeHasNotAllNodes()) {
-			Node nextNode;
-
-			if (nodesInGraphT.isEmpty()) {
-				nextNode = this.getRandomStartNode();
-				this.addNodeToTree(nextNode);
-			} else {
-				nextNode = this.queue.poll();
-				this.addNodeAndEdgeToTree(nextNode);
-			}
-
+			/*
+			 * Prioritäten-Updated der Knoten, nur bei Knoten die jetzt ereichbar sind.
+			 */
 			this.updateNodePriority(nextNode);
+			nextNode = this.queue.poll();
+			this.addNodeToTree(nextNode);
+			this.addEdgeToTree(nextNode.getAttribute("primEdge"));
 		}
 
 		long timeEnd = System.currentTimeMillis();
@@ -70,6 +83,7 @@ public class Prim extends MinimalSpanningTree {
 		}
 
 		this.queue.addAll(nodesNotInGraphT);
+		Printer.prompt(this, "priorityQueue: " + queue.toString());
 	}
 
 	/**
@@ -86,7 +100,7 @@ public class Prim extends MinimalSpanningTree {
 	 * Gibt einen zufällig ausgewählten Knoten aus der Menge an Knoten, welche
 	 * sich nicht in dem minimalen Spannbaum befinden.
 	 * 
-	 * @return Zufalls Knoten
+	 * @return Zufallsknoten
 	 */
 	private Node getRandomStartNode() {
 		Random random = new Random();
@@ -96,7 +110,9 @@ public class Prim extends MinimalSpanningTree {
 
 	/**
 	 * Fügt einen übergebenen Knoten dem minimalen Spannbaum hinzu.
+	 * 
 	 * @param node
+	 *            Knoten der hinzugefügt werden soll
 	 */
 	private void addNodeToTree(Node node) {
 		Printer.promptTestOut(this, "add node to tree: " + node.toString());
@@ -108,14 +124,14 @@ public class Prim extends MinimalSpanningTree {
 	}
 
 	/**
+	 * Fügt dem minimalen Spannbaum eine Kante hinzu
 	 * 
 	 * @param nextNode
+	 *            Kante die hinzugefügt werden soll
 	 */
-	private void addNodeAndEdgeToTree(Node nextNode) {
-		this.addNodeToTree(nextNode);
-		Edge edge = nextNode.getAttribute("primEdge");
-		this.result.add(edge);
+	private void addEdgeToTree(Edge edge) {
 
+		this.result.add(edge);
 		Node source = this.tree.getNode(edge.getSourceNode().getId());
 		Node target = this.tree.getNode(edge.getTargetNode().getId());
 
@@ -126,11 +142,26 @@ public class Prim extends MinimalSpanningTree {
 
 	}
 
+	/**
+	 * Diese Methode updatet die PriorityQueue und die Priotitäten der Nodes,
+	 * welches sich in der PriorityQueue befinden. Dafür wird ein Knoten des
+	 * minimalen Spannbaums übergeben. Jeder weiterer Knoten der außerhalb des
+	 * minimalen Spannbaums liegt und von den übergebenen Knoten über eine Kante
+	 * ereichbar ist, erhält als Priorität die Kosten der Kante die dafür
+	 * genutzt werden muss. Befindet sich der Knoten bereist in der
+	 * PriorityQueue wird seine Priorität geupdated, wenn sie kleiner als die
+	 * breist eingetragene Priorität ist.
+	 * 
+	 * @param node
+	 */
 	private void updateNodePriority(Node node) {
 		Printer.promptTestOut(this, "update priorityQueue from node: " + node.toString());
 
 		for (Edge edge : node.getEachEdge()) {
-
+			/*
+			 * Es muss jede Kante angeschaut werden, außer die Kante, die
+			 * bereits im Spannbaum ist.
+			 */
 			if (!result.contains(edge)) {
 				Printer.promptTestOut(this, "look at edge: " + edge.toString());
 
@@ -138,50 +169,72 @@ public class Prim extends MinimalSpanningTree {
 				Node source = edge.getSourceNode();
 				Node target = edge.getTargetNode();
 
-				if (this.nodesNotInGraphT.contains(source)) {
+				/*
+				 * Es geht darum die Priorität eines Knoten zu setzten. Diese
+				 * Priorität hängt ab von dem Kantengewicht Da jede Kante ein
+				 * Source und ein Target hat und da wir nicht die Priorität des
+				 * Knoten den wir uns gerade anschauen ermitteln wollen, sondern
+				 * den er verbindet, müssen wir diesen ermitteln
+				 */
+				if (source != node) {
 					nodeForQueue = source;
 				} else {
 					nodeForQueue = target;
 				}
 
+				/*
+				 * Die Warteschlang beinhaltet alle Knoten die noch nicht zum
+				 * spannbaum hinzugefügt wurde, deshalb muss die Priorität eines
+				 * Knoten, welcher bereist im Spannbaum sich befindet, nicht neu
+				 * gesetzt werden. Außerdem darf der Knoten nicht im Spannbaum
+				 * schon sein, damit kein Kreis entsteht, da der Knoten von dem
+				 * wir aus die Prioritäten aktualisieren bereits im Spannbaum
+				 * ist.
+				 */
 				if (!this.nodesInGraphT.contains(nodeForQueue)) {
-					// Da jede kannte neu angeschaut wird von den Nodes, kann es
-					// sein das eine Node neue
-					// gesetzt werden könnte, da muss geprüft werden, das dieser
-					// primWeight nicht über
-					// dem eigentlichen Wert liegt
-					// Es kamm vor, das der primWeight, und damit auch die
-					// primEdge überschrieben wurde
+
+					/*
+					 * PrimWeightUpdated eines Knoten: Da jede Kante von der
+					 * Node neu angeschaut wird, kann es sein, dass eine
+					 * Node-Priorität neue gesetzt werden könnte, deshalb muss
+					 * geprüft werden, ob s dieser primWeight nicht über des
+					 * bereits eingetragenden Wert liegt
+					 */
 					if ((Integer) nodeForQueue.getAttribute("primWeight") > (Integer) edge.getAttribute("weight")) {
 						nodeForQueue.setAttribute("primWeight", (Integer) edge.getAttribute("weight"));
 						nodeForQueue.setAttribute("primEdge", edge);
 						Printer.promptTestOut(this, "update node: " + nodeForQueue.toString() + " primWeight: "
 								+ nodeForQueue.getAttribute("primWeight"));
 
-						// Remove, falls der Node bereits in der Queue war, weil
-						// er schon einmal einen Wert hatte, muss
-						// diese Nod in der Queue neu angeordnet werden
+						/*
+						 * Remove, falls der Node bereits in der Queue war, weil
+						 * er schon einmal einen Wert hatte, muss diese Nod in
+						 * der Queue mit der kleinern Priorität neu angeordnet
+						 * werden
+						 */
 						this.queue.remove(nodeForQueue);
 						this.queue.add(nodeForQueue);
 						/*
 						 * Wenn ein Element in die Queue gelegt wird, wird sie
 						 * anhand des Comperator einsortiert, ändert sich der
 						 * Wert im Element durch den es einsortiert wrude, muss
-						 * es entfernt werde und wieder neue hinzugefügt werden.
-						 * 
-						 * Element können in der Queuer doppelt mit
-						 * unterschiedlichen Prioritäten sein
+						 * es entfernt werden und wieder neue hinzugefügt
+						 * werden. Da * Element in der Queuer doppelt mit
+						 * unterschiedlichen Prioritäten sein können.
 						 */
-
 					}
 				}
-
 			}
-
 		}
 		Printer.promptTestOut(this, "PriorityQueue: " + this.queue.toString());
 	}
 
+	/**
+	 * Summiert alle Kantengewichtungen des berechneten minimalen Spannbaums
+	 * auf.
+	 * 
+	 * @return Kantengewichtssumme des ermittelten minimalen Spannbuams
+	 */
 	public int getEdgeWeightes() {
 		return this.result.stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
 				(e1, e2) -> e1.intValue() + e2.intValue());
