@@ -10,13 +10,14 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
+import mvc.model.exceptions.IllegalNotConnectedGraph;
 import utility.Printer;
 
 /**
  * Diese Klasse stellt den Prim-Algorithmus dar. In der Priority Queue sind alle
  * Knoten gespeichert, die noch nicht zum minimalen Spannbaum gehoeren. Alle
- * Knoten haben einen primWeight-Wert, der dem der leichtesten Kante entspricht -
- * und eine Kante primEdge, die diesem Wert zugeordnet ist - durch die der
+ * Knoten haben einen primWeight-Wert, der dem der leichtesten Kante entspricht
+ * - und eine Kante primEdge, die diesem Wert zugeordnet ist - durch die der
  * Knoten mit dem minimalen Spannbaum verbunden werden kann. Existiert keine
  * solche Kante, wird dem Knoten der Wert OMEGA zugewiesen. Die Warteschlange
  * liefert nun immer einen Knoten mit dem kleinsten Wert zurück, bis sich alle
@@ -25,9 +26,6 @@ import utility.Printer;
 public class Prim extends MinimalSpanningTree {
 
 	private Graph tree;
-	private List<Node> nodesNotInGraphT;
-	private List<Node> nodesInGraphT;
-	private List<Edge> result;
 	private PriorityQueue<Node> queue;
 
 	private static final Integer OMEGA = Integer.MAX_VALUE;
@@ -46,10 +44,11 @@ public class Prim extends MinimalSpanningTree {
 
 		while (this.treeHasNotAllNodes()) {
 			/*
-			 * Prioritäten-Updated der Knoten, nur bei Knoten die jetzt ereichbar sind.
+			 * Prioritäten-Updated der Knoten, nur bei Knoten die jetzt
+			 * ereichbar sind.
 			 */
 			this.updateNodePriority(nextNode);
-			nextNode = this.queue.poll();
+			nextNode = this.getNextNodeFromQueue();
 			this.addNodeToTree(nextNode);
 			this.addEdgeToTree(nextNode.getAttribute("primEdge"));
 		}
@@ -70,19 +69,15 @@ public class Prim extends MinimalSpanningTree {
 	 */
 	private void initPrim() {
 		this.tree = new MultiGraph("Prim");
-		this.nodesInGraphT = new LinkedList<Node>();
-		this.result = new LinkedList<Edge>();
-		this.nodesNotInGraphT = new LinkedList<Node>();
-		this.nodesNotInGraphT.addAll(this.getGraph().getNodeSet());
 
-		this.queue = new PriorityQueue<Node>(nodesNotInGraphT.size(), (e1,
+		this.queue = new PriorityQueue<Node>(this.getGraph().getNodeSet().size(), (e1,
 				e2) -> ((Integer) e1.getAttribute("primWeight")).compareTo((Integer) e2.getAttribute("primWeight")));
 
-		for (Node node : nodesNotInGraphT) {
+		for (Node node : this.getGraph().getNodeSet()) {
 			node.addAttribute("primWeight", OMEGA);
 		}
 
-		this.queue.addAll(nodesNotInGraphT);
+		this.queue.addAll(this.getGraph().getNodeSet());
 		Printer.prompt(this, "priorityQueue: " + queue.toString());
 	}
 
@@ -98,13 +93,17 @@ public class Prim extends MinimalSpanningTree {
 
 	/**
 	 * Gibt einen zufällig ausgewählten Knoten aus der Menge an Knoten, welche
-	 * sich nicht in dem minimalen Spannbaum befinden.
+	 * sich nicht in dem minimalen Spannbaum befinden und löscht diesen von der
+	 * PrioritätenWarteschlange.
 	 * 
 	 * @return Zufallsknoten
 	 */
 	private Node getRandomStartNode() {
+		List<Node> alleNodes = new LinkedList<Node>(this.getGraph().getNodeSet());
 		Random random = new Random();
-		Node randomStart = this.nodesNotInGraphT.get(random.nextInt(this.nodesNotInGraphT.size()));
+		Node randomStart = alleNodes.get(random.nextInt(alleNodes.size()));
+		// Der Start muss aus der Warteschlangefallen
+		this.queue.remove(randomStart);
 		return randomStart;
 	}
 
@@ -116,8 +115,6 @@ public class Prim extends MinimalSpanningTree {
 	 */
 	private void addNodeToTree(Node node) {
 		Printer.promptTestOut(this, "add node to tree: " + node.toString());
-		this.nodesInGraphT.add(node);
-		this.nodesNotInGraphT.remove(node);
 
 		this.tree.addNode(node.getId());
 		this.tree.getNode(node.getId()).setAttribute("ui.label", node.getAttribute("ui.label").toString());
@@ -131,7 +128,6 @@ public class Prim extends MinimalSpanningTree {
 	 */
 	private void addEdgeToTree(Edge edge) {
 
-		this.result.add(edge);
 		Node source = this.tree.getNode(edge.getSourceNode().getId());
 		Node target = this.tree.getNode(edge.getTargetNode().getId());
 
@@ -160,9 +156,9 @@ public class Prim extends MinimalSpanningTree {
 		for (Edge edge : node.getEachEdge()) {
 			/*
 			 * Es muss jede Kante angeschaut werden, außer die Kante, die
-			 * bereits im Spannbaum ist.
+			 * bereits im Spannbaum sind.
 			 */
-			if (!result.contains(edge)) {
+			if (!this.tree.getEdgeSet().contains(edge)) {
 				Printer.promptTestOut(this, "look at edge: " + edge.toString());
 
 				Node nodeForQueue;
@@ -186,12 +182,15 @@ public class Prim extends MinimalSpanningTree {
 				 * Die Warteschlang beinhaltet alle Knoten die noch nicht zum
 				 * spannbaum hinzugefügt wurde, deshalb muss die Priorität eines
 				 * Knoten, welcher bereist im Spannbaum sich befindet, nicht neu
-				 * gesetzt werden. Außerdem darf der Knoten nicht im Spannbaum
-				 * schon sein, damit kein Kreis entsteht, da der Knoten von dem
-				 * wir aus die Prioritäten aktualisieren bereits im Spannbaum
-				 * ist.
+				 * gesetzt werden und nur bei den Knoten, die noch in der
+				 * Warteschlange sind.
+				 * 
+				 * Außerdem darf der Knoten nicht im Spannbaum schon sein und
+				 * hier erneut eine neue Priorität erhalten, damit kein Kreis
+				 * entsteht, da der Knoten von dem wir aus die Prioritäten
+				 * aktualisieren bereits im Spannbaum ist.
 				 */
-				if (!this.nodesInGraphT.contains(nodeForQueue)) {
+				if (this.queue.contains(nodeForQueue)) {
 
 					/*
 					 * PrimWeightUpdated eines Knoten: Da jede Kante von der
@@ -235,10 +234,30 @@ public class Prim extends MinimalSpanningTree {
 	 * 
 	 * @return Kantengewichtssumme des ermittelten minimalen Spannbuams
 	 */
-	public int getEdgeWeightes() {
-		return this.result.stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
+	public double getEdgeWeightes() {
+		return (double) this.tree.getEdgeSet().stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
 				(e1, e2) -> e1.intValue() + e2.intValue());
-
+	}
+	
+	public int getKnotenAnzahl(){
+		return this.tree.getNodeSet().size();
+	}
+	
+	public int getKantenAnzahl(){
+		return this.tree.getEdgeSet().size();
+	}
+	
+	private Node getNextNodeFromQueue(){
+		Node nextNode = this.queue.poll();
+		
+		/*
+		 * Wenn der Ursprungsgraph nicht zusammenhängend war, gibt es hier einen Fehler
+		 */
+		if(nextNode.getAttribute("primWeight") == OMEGA){
+			throw new IllegalNotConnectedGraph("Graph ist nicht zusammenhängend");
+		} else {
+			return nextNode;
+		}
 	}
 
 	@Override
