@@ -31,7 +31,7 @@ public class Prim extends MinimalSpanningTree {
 	private static final Integer OMEGA = Integer.MAX_VALUE;
 
 	/**
-	 * Diese Mehtode stellt die Handlungsvorschrift Prim-Algorithmus um.
+	 * Diese Mehtode stellt die Handlungsvorschrift Prim-Algorithmus da.
 	 * 
 	 * @return Gibt den minimalen Spannbaum zurück
 	 */

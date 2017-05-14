@@ -11,7 +11,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 import utility.Printer;
 
-public class KruskalComplex extends MinimalSpanningTree {
+public class KruskalRekursiv extends MinimalSpanningTree {
 
 	// TODO getKantengewichtsSumme
 	private LinkedList<Edge> sortedEdges;
@@ -39,6 +39,7 @@ public class KruskalComplex extends MinimalSpanningTree {
 
 		long timeEnd = System.currentTimeMillis();
 		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		System.out.println(this.getEdgeWeightes());
 		return minimalSpanningTree;
 
 	}
@@ -57,32 +58,41 @@ public class KruskalComplex extends MinimalSpanningTree {
 		minimalSpanningTree.removeEdge(edge.getId());
 	}
 
-	boolean isCyclicUtil(int i, boolean visited[], int parent) {
-
+	boolean isCyclicUtil(Node node, boolean visited[], Node parent) {
+		Printer.promptErrTestOut(this, "Setzt: " + nodes +" als beuscht");
 		// StartKnoten des DFS Tree wird auf VISITED gesetzt
-		visited[i] = true;
+		node.setAttribute("visitedFlag", true);
+
 
 		// Nimm alle benachtbarten Knoten des DFS STARTKNOTEN
 		// Und Iteriere über sie
-		Iterator<Node> it = nodes.get(i).getNeighborNodeIterator();
-		Node node;
+		Printer.promptErrTestOut(this, "Sehe Nachbarn von Knoten: " + nodes +" an");
+		Iterator<Node> it = node.getNeighborNodeIterator();
+		Node neighbour;
 		while (it.hasNext()) {
-			node = it.next();
+			neighbour = it.next();
+			Printer.promptErrTestOut(this, "Sehe Nachbar: " + neighbour.toString() +" an");
 
 			// Wenn ein Nachbar noch nicht besucht wurde, dann starte einen DFS
 			// Tree Durchlauf für diesen Nachbarn
-			if (!visited[nodes.indexOf(node)]) {
-				if (isCyclicUtil(nodes.indexOf(node), visited, i)) {
+			// Nur die nicht besuchten
+			if (!(boolean)neighbour.getAttribute("visitedFlag")) {
+				Printer.promptErrTestOut(this, "Nachbar: " + neighbour.toString() +" is not visited");
+				
+				if (isCyclicUtil(neighbour, visited, node)) {
+					// Die Hilfsfunktion hat einen Kreisgefunden, weil es einen bereist besuchten Knoten gibtm
+					// der nicht Vorgänger vom übergebenen Knoten ist
 					return true;
 				}
-
-				// Wenn der Nachbar bereits besucht ist und nicht der Vorgänger
-				// von diesem Knoten, dann ist ein Kreis			
-			} else if (nodes.indexOf(node) != parent) {
-				// Dieser Nachbar ist breits besucht und nicht mein Voränger
+				
+				// Prüfe die bereits besuchten Knoten, ob sie der Vorgänger sind
+			} else if (neighbour != parent){
+				// Es gibt einen Nachbar, der bereits besucht ist und nicht der ist Vorgänger
+				// => es gibt einen Kreis
 				return true;
 			}
-		}
+		}		
+		// Es gibt nur einen Nachbar, der bereits besucht ist und ein Vorgänger ist.
 		return false;
 	}
 
@@ -92,6 +102,10 @@ public class KruskalComplex extends MinimalSpanningTree {
 		this.nodes = new LinkedList<Node>(graph.getNodeSet());
 		// Mark all the vertices as not visited and not part of
 		// recursion stack
+		
+		for(Node node : graph.getNodeSet()){
+			node.setAttribute("visitedFlag", false);
+		}
 
 		// Setzte VISITED Flag für alle Knoten
 		boolean visited[] = new boolean[nodes.size()];
@@ -102,11 +116,34 @@ public class KruskalComplex extends MinimalSpanningTree {
 		// Call the recursive helper function to detect cycle in
 		// different DFS trees
 		// Laufe über alle Knoten
+		for(Node node : graph.getNodeSet()){
+			Printer.promptErrTestOut(this, "Sehe Knoten: " + nodes +" an");
+
+			// Nur wenn der Knoten noch nicht beuscht wurde, öffne die
+			// Hilfsfunktion -> Starte DFS Search
+			if(!(boolean)node.getAttribute("visitedFlag")){ // Don't recur for u if already visited
+				Printer.promptErrTestOut(this, "Knoten: " + nodes +" ist noch nicht besucht");
+				// Rufe Hilfsfunktion mit Knotenposition, und dem
+				// visteted-Verzeichnis
+				// Startet eine Tiefensuche von dem aktuellen Knoten aus
+				if (isCyclicUtil(node, visited, null)) {
+					// Wenn es einen Kreis in dem DFS Tree gibt, dann sende true
+					// zurück
+					return true;
+				}
+				
+			}
+		}
+		return false;
+		
+		/*
 		for (int i = 0; i < nodes.size(); i++) {
+			Printer.promptErrTestOut(this, "Sehe Knoten: " + nodes.get(i) +" an");
 
 			// Nur wenn der Knoten noch nicht beuscht wurde, öffne die
 			// Hilfsfunktion -> Starte DFS Search
 			if (!visited[i]) { // Don't recur for u if already visited
+				Printer.promptErrTestOut(this, "Knoten: " + nodes.get(i) +" ist noch nicht besucht");
 				// Rufe Hilfsfunktion mit Knotenposition, und dem
 				// visteted-Verzeichnis
 				// Startet eine Tiefensuche von dem aktuellen Knoten aus
@@ -118,6 +155,7 @@ public class KruskalComplex extends MinimalSpanningTree {
 			}
 		}
 		return false;
+		*/
 	}
 
 	private void initKruskal() {
