@@ -52,6 +52,7 @@ public class Kruskal2 extends MinimalSpanningTree{
 		
 		long timeEnd = System.currentTimeMillis();
 		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		System.out.println(this.getEdgeWeightes());
 		return minimalSpanningTree;
 		
 	}
@@ -96,6 +97,11 @@ public class Kruskal2 extends MinimalSpanningTree{
 		}		
 		
 			
+	}
+	
+	public int getEdgeWeightes(){
+		return this.resultF.stream().map(e1 -> (Integer)e1.getAttribute("weight")).reduce(0, (e1,e2) -> e1.intValue()+e2.intValue());
+		
 	}
 
 

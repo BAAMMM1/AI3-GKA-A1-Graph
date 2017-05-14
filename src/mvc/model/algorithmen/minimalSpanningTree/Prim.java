@@ -1,7 +1,5 @@
 package mvc.model.algorithmen.minimalSpanningTree;
 
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -16,158 +14,150 @@ import utility.Printer;
 
 public class Prim extends MinimalSpanningTree {
 
-	private Graph minimalSpanningTree;
+	private Graph tree;
 	private List<Node> nodesNotInGraphT;
 	private List<Node> nodesInGraphT;
+	private List<Edge> result;
 	private PriorityQueue<Node> queue;
 
-	private static final Integer OMEGA = new Integer(1337);
+	private static final Integer OMEGA = Integer.MAX_VALUE;
 
 	protected Graph procedure() {
 		long timeStart = System.currentTimeMillis();
 		this.initPrim();
 
-		while (this.graphTHasNotAllNodes()) {
-			this.calculateNodeEdges();
-			
-			Node nextNode = this.queue.poll();
-			System.out.println(nextNode.toString());
-			Edge e = nextNode.getAttribute("primEdge");
-			System.out.println(e.toString());
-			//Edge e = this.getEdgeWithMinimalWeightWichlinkToANodeWhoIsNotInGraphT();
+		Node start = this.getRandomStartNode();
+		System.out.println("Startknoten: " + start.toString());
+		this.addNodeToTree(start);
+		this.setNodeWeight(start);
 
-			this.addEdgeAndNodeToT(nextNode, e);
-			
-			
-			
+		while (this.graphTHasNotAllNodes()) {
+			Node nextNode = this.getNextNodeFromQueue();
+			System.out.println("nextNode: " + nextNode.toString());
+
+			this.addNodeAndEdgeToTree(nextNode);
+			this.setNodeWeight(nextNode);
+
 		}
 
 		long timeEnd = System.currentTimeMillis();
 		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		System.out.println(this.getEdgeWeightes());
+		return this.tree;
+	}
 
-		System.out.println(minimalSpanningTree.getNodeSet().size());
-		for(Node node: minimalSpanningTree.getNodeSet()){			
-			System.out.println(node.toString());
-		}
-		
-		for(Edge edge: minimalSpanningTree.getEdgeSet()){
-			System.out.println(edge.toString());
-		}
-		
-		return minimalSpanningTree;
+	private Node getNextNodeFromQueue() {
 
+		// Wird die abfrage hier noch gebraucht?
+		// Es sind ja Keine doppelten mehr in der Queue, da sie ja removed
+		// werden
+
+		Node nextNode;
+		do {
+			nextNode = this.queue.poll();
+		} while (this.nodesInGraphT.contains(nextNode));
+
+		return nextNode;
+	}
+
+	private void addNodeAndEdgeToTree(Node nextNode) {
+		this.addNodeToTree(nextNode);
+		Edge edge = nextNode.getAttribute("primEdge");
+		this.result.add(edge);
+
+		Node source = this.tree.getNode(edge.getSourceNode().getId());
+		Node target = this.tree.getNode(edge.getTargetNode().getId());
+
+		this.tree.addEdge(edge.getId(), source, target);
+		this.tree.getEdge(edge.getId()).addAttribute("weight", (Integer) edge.getAttribute("weight"));
+		this.tree.getEdge(edge.getId()).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
+		System.out.println("Add Edge: " + edge.toString());
+
+	}
+
+	private void setNodeWeight(Node node) {
+		System.out.println("Sehe Kanten von Knoten: " + node.toString() + " an");
+
+		for (Edge edge : node.getEachEdge()) {
+
+			if (!result.contains(edge)) {
+				System.out.println("Sehe Kanten " + edge.toString() + " an");
+				Node nodeForQueue;
+				Node source = edge.getSourceNode();
+				Node target = edge.getTargetNode();
+
+				if (this.nodesNotInGraphT.contains(source)) {
+					nodeForQueue = source;
+				} else {
+					nodeForQueue = target;
+				}
+
+				if (!this.nodesInGraphT.contains(nodeForQueue)) {
+					// Da jede kannte neu angeschaut wird von den Nodes, kann es
+					// sein das eine Node neue
+					// gesetzt werden könnte, da muss geprüft werden, das dieser
+					// primWeight nicht über
+					// dem eigentlichen Wert liegt
+					// Es kamm vor, das der primWeight, und damit auch die
+					// primEdge überschrieben wurde
+					if ((Integer) nodeForQueue.getAttribute("primWeight") > (Integer) edge.getAttribute("weight")) {
+						nodeForQueue.setAttribute("primWeight", (Integer) edge.getAttribute("weight"));
+						nodeForQueue.setAttribute("primEdge", edge);
+						System.out.println("Add to Queue Node: " + nodeForQueue.toString() + " primWeight: "
+								+ nodeForQueue.getAttribute("primWeight"));
+
+						// Remove, falls der Node bereits in der Queue war, weil
+						// er schon einmal einen Wert hatte, muss
+						// diese Nod in der Queue neu angeordnet werden
+						this.queue.remove(nodeForQueue);
+						this.queue.add(nodeForQueue);
+						/*
+						 * Wenn ein Element in die Queue gelegt wird, wird sie anhand des Comperator einsortiert,
+						 * ändert sich der Wert im Element durch den es einsortiert wrude, muss es entfernt werde
+						 * und wieder neue hinzugefügt werden.
+						 * 
+						 * Element können in der Queuer doppelt mit unterschiedlichen Prioritäten sein
+						 */
+
+					}
+				}
+
+			}
+
+		}
+
+		System.out.println(this.queue.toString());
+
+	}
+
+	@Override
+	public String toString() {
+		return "Prima";
 	}
 
 	private void initPrim() {
-		this.minimalSpanningTree = new MultiGraph("Prim");
+		this.tree = new MultiGraph("Prim");
 		this.nodesInGraphT = new LinkedList<Node>();
+		this.result = new LinkedList<Edge>();
 		this.nodesNotInGraphT = new LinkedList<Node>();
-		
 		this.nodesNotInGraphT.addAll(this.getGraph().getNodeSet());
-		
 
-		this.addNodeToResult(this.getRandomStartNode());
-		
-		this.queue = new PriorityQueue<Node>(nodesNotInGraphT.size(), new FuelPriority());
-	
-
-
-	}
-	
-	private void calculateNodeEdges(){
-		
+		this.queue = new PriorityQueue<Node>(nodesNotInGraphT.size(), (e1,
+				e2) -> ((Integer) e1.getAttribute("primWeight")).compareTo((Integer) e2.getAttribute("primWeight")));
 
 		for (Node node : nodesNotInGraphT) {
-			System.out.println("Ermittel Edges for: " + node.toString());
-
-			Edge lowestEdge;
-			Iterator<Edge> it = node.getEdgeIterator();
-			lowestEdge = null;
-
-			while (it.hasNext()) {
-				Edge nextEdge = it.next();
-				
-				if((nodesInGraphT.contains(nextEdge.getSourceNode())) || (nodesInGraphT.contains(nextEdge.getTargetNode()))){
-					if(lowestEdge == null){
-						lowestEdge = nextEdge;
-					} else if ((Integer)nextEdge.getAttribute("weight") < (Integer)lowestEdge.getAttribute("weight")) {
-						lowestEdge = nextEdge;
-					}
-				}				
-			}
-			
-			if(lowestEdge != null){
-				System.out.println("LowestEdge for: " + node.toString() + " = " + lowestEdge.toString());
-				node.addAttribute("primWeight", (Integer)lowestEdge.getAttribute("weight"));
-				node.addAttribute("primEdge", lowestEdge);
-				if(!queue.contains(node)){
-					this.queue.add(node);
-				}
-				
-			} else {
-				System.out.println("No lowestEdge for: " + node.toString());
-				node.addAttribute("primWeight", OMEGA);
-			}
-			System.out.println("Node primWeight: " + node.getAttribute("primWeight"));
+			node.addAttribute("primWeight", OMEGA);
 		}
-		
-		for(int i = 0; i < this.nodesNotInGraphT.size(); i++){
-			System.out.println(nodesNotInGraphT.get(i).toString() + " primWeight: " + nodesNotInGraphT.get(i).getAttribute("primWeight"));
-		}
-
-
-		
 	}
-	
-	
-	
-	
 
-	private void addNodeToResult(Node node) {
-		Printer.promptTestOut(this, "Füge: " + node.toString() + " zum Result hinzu");
+	private void addNodeToTree(Node node) {
+		System.out.println("Add Node to tree: " + node.toString());
 		this.nodesInGraphT.add(node);
 		this.nodesNotInGraphT.remove(node);
 
-		this.minimalSpanningTree.addNode(node.getId());
-		this.minimalSpanningTree.getNode(node.getId()).setAttribute("ui.label",
-				node.getAttribute("ui.label").toString());
+		this.tree.addNode(node.getId());
+		this.tree.getNode(node.getId()).setAttribute("ui.label", node.getAttribute("ui.label").toString());
 
-	}
-
-	private boolean graphTHasNotAllNodes() {
-		return !(this.minimalSpanningTree.getNodeSet().size() == this.getGraph().getNodeSet().size());
-	}
-
-
-
-	private void addEdgeAndNodeToT(Node node, Edge edge) {
-	
-		Node source;
-		Node target;
-		
-		if(edge.getSourceNode() == node){
-			source = node;
-			target = edge.getTargetNode();
-		} else {
-			source = edge.getSourceNode();
-			target = node;
-		}
-		
-		
-		if (!this.nodesInGraphT.contains(source)) {
-			this.addNodeToResult(source);
-		} else {
-			this.addNodeToResult(target);
-		}
-		source = this.minimalSpanningTree.getNode(source.getId());
-		target = this.minimalSpanningTree.getNode(target.getId());
-		
-		this.minimalSpanningTree.addEdge(edge.getId().toString(), source, target);
-		this.minimalSpanningTree.getEdge(edge.getId().toString()).addAttribute("weight",
-				(Integer)edge.getAttribute("weight"));
-		this.minimalSpanningTree.getEdge(edge.getId().toString()).addAttribute("ui.label",
-				edge.getAttribute("ui.label").toString());
-		
 	}
 
 	private Node getRandomStartNode() {
@@ -176,29 +166,14 @@ public class Prim extends MinimalSpanningTree {
 		return randomStart;
 	}
 
-	@Override
-	public String toString() {
-		return "Prima";
+	private boolean graphTHasNotAllNodes() {
+		return !(this.tree.getNodeSet().size() == this.getGraph().getNodeSet().size());
 	}
 
-}
+	public int getEdgeWeightes() {
+		return this.result.stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
+				(e1, e2) -> e1.intValue() + e2.intValue());
 
-class FuelPriority
-implements Comparator<Node>
-{
-
-public int compare(Node o1, Node o2){
-
-	int weight1 = ((Integer)o1.getAttribute("primWeight")).intValue();
-	int weight2 = ((Integer)o2.getAttribute("primWeight")).intValue();
-	
-	if(weight1 < weight2){
-		return -1;
-	} else if ( weight1 == weight2){
-		return 0;
-	} else {
-		return +1;
 	}
 
-}
 }

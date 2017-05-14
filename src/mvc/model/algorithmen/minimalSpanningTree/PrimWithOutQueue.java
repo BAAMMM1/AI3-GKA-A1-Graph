@@ -12,7 +12,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 
 import utility.Printer;
 
-public class Prim2 extends MinimalSpanningTree {
+public class PrimWithOutQueue extends MinimalSpanningTree {
 
 	private Graph minimalSpanningTree;
 	private List<Edge> resultF;
@@ -31,6 +31,7 @@ public class Prim2 extends MinimalSpanningTree {
 		
 		long timeEnd = System.currentTimeMillis();
 		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		System.out.println(this.getEdgeWeightes());
 		
 		return minimalSpanningTree;
 
@@ -91,6 +92,7 @@ public class Prim2 extends MinimalSpanningTree {
 		} else {
 			this.addNodeToResult(target);
 		}		
+		this.resultF.add(edge);
 		this.minimalSpanningTree.addEdge(edge.getId().toString(), source, target);
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).addAttribute("weight", edge.getAttribute("weight").toString());
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
@@ -105,6 +107,11 @@ public class Prim2 extends MinimalSpanningTree {
 	@Override
 	public String toString() {
 		return "Prima";
+	}
+	
+	public int getEdgeWeightes(){
+		return this.resultF.stream().map(e1 -> (Integer)e1.getAttribute("weight")).reduce(0, (e1,e2) -> e1.intValue()+e2.intValue());
+		
 	}
 
 }
