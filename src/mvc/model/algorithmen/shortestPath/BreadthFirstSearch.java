@@ -91,7 +91,6 @@ public class BreadthFirstSearch extends ShortestPath {
 		List<Node> path = new ArrayList<Node>();
 
 		int bfslambda = this.getTarget().getAttribute("BFS");
-		System.out.println("*************>: " + bfslambda);
 		/*
 		 * RÃ¼ckwerts ermittlung
 		 */
@@ -119,7 +118,7 @@ public class BreadthFirstSearch extends ShortestPath {
 	private Node getNextSmallerBFS(Node node) {
 		
 		/*
-		 * Bei directed graph werden auf dem Rückweg auf die Kanten genommen, die in den Knoten zeige, bzw nicht rausgehen aus ihm.
+		 * Bei directed graph werden auf dem Rï¿½ckweg auf die Kanten genommen, die in den Knoten zeige, bzw nicht rausgehen aus ihm.
 		 * deshlab hier unterscheiden ob rein oder raus geht;		
 		*/
 		
@@ -218,7 +217,7 @@ public class BreadthFirstSearch extends ShortestPath {
 		 * wenn das Ziel der Kante noch nicht besuch wurde, setzte es auf die Nachbarn-List
 		 */
 		for(Edge edge: node.getEachLeavingEdge()){
-			System.out.println("LeavingEdge: " + edge.toString());
+			Printer.promptTestOut(this, "LeavingEdge: " + neighbours.toString());
 			Node nextNode;
 
 			/*

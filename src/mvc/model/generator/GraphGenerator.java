@@ -10,6 +10,11 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
+import mvc.controller.Controller;
+import mvc.model.Model;
+import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import mvc.view.View;
+
 /**
  * Die Klasse kann einen einfachen, ungerichteten und gewichteten Graphen
  * erstellen. Dies bedeutet, der Graph besitzt keine Mehrfachkanten und keine
@@ -104,8 +109,8 @@ public class GraphGenerator {
 
 		for (int i = 0; i < this.nodeSize - 1; i++) {
 			/*
-			 * Wählt zufällig einen Knoten aus den bereits vorhandenen Knoten aus
-			 * und setzt einen neuen Knoten mit einer neuen Kanten an diesen
+			 * Wählt zufällig einen Knoten aus den bereits vorhandenen Knoten
+			 * aus und setzt einen neuen Knoten mit einer neuen Kanten an diesen
 			 * Knoten. Dadurch entsteht ein zusammenhängender Graph.
 			 */
 			Node nodeRandomFromList = this.getRandomNodeFromList();
@@ -203,6 +208,20 @@ public class GraphGenerator {
 	 */
 	private int getRandomWeight() {
 		return random.nextInt(this.maxWeight - 1) + 1;
+	}
+
+	public static void main(String[] args) {
+		if(args.length == 3){
+			GraphGenerator generator = new GraphGenerator();
+			GraphFileExtensionHandler fileHandler = new GraphFileExtensionHandler();
+			Graph graph = generator.generateRandomSimpleGraph(Integer.valueOf(args[0]), Integer.valueOf(args[1]),
+					Integer.valueOf(args[2]));
+			fileHandler.saveGraph(graph, "db/random/random_" + args[0] + "_" + args[1] + "_" + args[2]);
+		} else {
+			System.out.println("<nodeSize>, <edgesSize>, <maxWeight>");
+		}
+		
+
 	}
 
 }

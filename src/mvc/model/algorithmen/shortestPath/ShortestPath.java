@@ -49,9 +49,9 @@ public abstract class ShortestPath extends Algorithmus{
 	 * @return Graph auf den der Algorithmus angewandt wurde
 	 */
 	public List<Node> calculate(Graph graph, Node source, Node target) {
-		Printer.prompt(this, "-------------------------------------"); // ohne
+		Printer.promptTestOut(this, "-------------------------------------"); // ohne
 																		// this
-		Printer.prompt(this, "compute shortest path algorithmus");
+		Printer.promptTestOut(this, "compute shortest path algorithmus");
 
 		this.initAlgorithmus(graph, source, target);		
 		

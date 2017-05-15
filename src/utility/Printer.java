@@ -2,7 +2,7 @@ package utility;
 
 public class Printer {
 	
-	private static final boolean testMode = true;
+	private static final boolean testMode = false;
 
 	public static void promptTestOut(Object obj, String string){
 		if(testMode){

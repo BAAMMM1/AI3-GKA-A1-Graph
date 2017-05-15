@@ -1,146 +1,183 @@
 package mvc.model.algorithmen.minimalSpanningTree;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
+import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
+import mvc.model.exceptions.IllegalNotConnectedGraph;
 import utility.Printer;
 
+/**
+ * Diese Klasse stellt den Kruskal-Algorithmus dar. Der Kruskal-Algorithmus
+ * erstellt zunächst einen Spannbaum, der alle Knoten des Ursprungsgraph
+ * enthält. Anschließend werden alle Kanten des Ursprungsgraphen aufsteigend
+ * nach ihrem Kantengewicht in einer Liste sortiert. Im Anschluss werden die
+ * Kanten den Spannbaum nach einander hinzugefügt, so dass kein Kreis im
+ * Spannbaum ensteht.
+ * 
+ * Der Algorithmus ist beendet, wenn jede kante angeguckt wurde
+ *
+ */
 public class Kruskal extends MinimalSpanningTree {
 
-	// TODO getKantengewichtsSumme
 	private LinkedList<Edge> sortedEdges;
-	private List<Edge> resultF;
 	private Graph minimalSpanningTree;
-	private List<Node> nodes;
+	private BreadthFirstSearch bfs;
+	private long runTime;
 
+	/**
+	 * Diese Mehtode stellt die Handlungsvorschrift Kruskal-Algorithmus da.
+	 * 
+	 * @return Gibt den minimalen Spannbaum zurück
+	 */
 	protected Graph procedure() {
 		long timeStart = System.currentTimeMillis();
 		this.initKruskal();
 
 		for (int i = 0; i < this.sortedEdges.size(); i++) {
+
 			Edge nextEdge = this.sortedEdges.get(i);
 
-			this.addEdgeToSpanningTree(nextEdge);
+			if (!this.isCircle(nextEdge)) {
 
-			if (this.combiningContainsACyclic(minimalSpanningTree)) {
-				this.removeEdgeFromSpanningTree(nextEdge);
+				this.addEdgeToSpanningTree(nextEdge);
 			}
-
 		}
 
-		Printer.promptTestOut(this, this.minimalSpanningTree.getEdgeSet().toString());
-		Printer.promptTestOut(this, this.resultF.toString());
-
 		long timeEnd = System.currentTimeMillis();
-		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		runTime = (timeEnd - timeStart);
+
+		Printer.prompt(this, "time needed: " + this.getRunTime());
+		Printer.prompt(this, "edge-weight sum: " + this.getEdgeWeightes());
+
+		this.validResult();
 		return minimalSpanningTree;
 
 	}
 
+	/**
+	 * Diese Mehtode fügt dem Spannbaum eine Kante hinzu
+	 * 
+	 * @param edge
+	 *            Kante die hinzugefügt werden soll
+	 */
 	private void addEdgeToSpanningTree(Edge edge) {
-		this.resultF.add(edge);
-		this.minimalSpanningTree.addEdge(edge.getId(), edge.getNode0().toString(), edge.getNode1().toString());
+		this.minimalSpanningTree.addEdge(edge.getId(), edge.getNode0().toString(), edge.getNode1().toString(),
+				edge.isDirected());
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).setAttribute("weight",
 				(Integer) edge.getAttribute("weight"));
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).setAttribute("ui.label",
 				edge.getAttribute("ui.label").toString());
 	}
 
-	private void removeEdgeFromSpanningTree(Edge edge) {
-		this.resultF.remove(edge);
-		minimalSpanningTree.removeEdge(edge.getId());
+	/**
+	 * Test ob der ermittelte Spannbaum zusammenhängend ist. Ist dies nicht der
+	 * Fall, war der Ursprungsgraph nicht zusammenhängend und es wird eine
+	 * IllegalNotConnectedGraph Exception geworfen.
+	 */
+	private void validResult() {
+		if (minimalSpanningTree.getEdgeSet().size() < minimalSpanningTree.getNodeSet().size() - 1) {
+			throw new IllegalNotConnectedGraph("Graph ist unvollständig");
+		}
 	}
 
-	// TODO Auslagern in die Superclass
-	// Nur für ungerichtete?
-	boolean isCyclicUtil(int i, boolean visited[], int parent) {
-		// Mark the current node as visited
-		visited[i] = true;
-		Node node;
-		LinkedList<Node> temp = new LinkedList<Node>();
-		// Recur for all the vertices adjacent to this vertex
-		// Iterator<Integer> it = adj[v].iterator();
-		Iterator<Node> it = nodes.get(i).getNeighborNodeIterator();
-		// Printer.prompt(this, "Schaue Nachbarn von: " + nodes.get(i) + " an");
-		while (it.hasNext()) {
-
-			node = it.next();
-
-			// If an adjacent is not visited, then recur for that
-			// adjacent
-			if (!visited[nodes.indexOf(node)]) {
-				if (isCyclicUtil(nodes.indexOf(node), visited, i)) {
-					temp.add(node);
-					return true;
-				} else {
-				}
-
-				// TODO Hier irgendwo die Mengen an Kreise in einem Graph
-				// bestimmen?!
-
-				// If an adjacent is visited and not parent of current
-				// vertex, then there is a cycle.
-			} else if (nodes.indexOf(node) != parent) {
-				return true;
-			}
-
-		}
-
-		// Printer.prompt(this, "return false");
-		return false;
-	}
-
-	// Returns true if the graph contains a cycle, else false.
-	boolean combiningContainsACyclic(Graph graph) {
-		this.nodes = new LinkedList<Node>(graph.getNodeSet());
-		// Mark all the vertices as not visited and not part of
-		// recursion stack
-		boolean visited[] = new boolean[nodes.size()];
-		for (int index = 0; index < nodes.size(); index++) {
-			visited[index] = false;
-		}
-
-		// Call the recursive helper function to detect cycle in
-		// different DFS trees
-		for (int i = 0; i < nodes.size(); i++) {
-
-			if (!visited[i]) { // Don't recur for u if already visited
-				if (isCyclicUtil(i, visited, -1)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
+	/**
+	 * Diese Methode initialisiert den Kruskal-Algorithmus. Es wird ein Graph
+	 * erstellt, der zunächst alle Knoten des Ursprungsgraph enthält.
+	 * Anschließend werden die Kanten des Ursprungsgraf in einer Liste
+	 * aufsteigend sortiert.
+	 * 
+	 * Des Weitere gibt es ein BFS für die Breitensuchen nach Kreisen benötigt.
+	 */
 	private void initKruskal() {
-		this.minimalSpanningTree = new MultiGraph("Kruskal");
-		this.resultF = new LinkedList<Edge>();
-
+		this.minimalSpanningTree = new MultiGraph("Kruskal - minimalSpanningTree");
 
 		/*
 		 * Der Minimale Spanning Tree eines Graphen besitzt alle Knoten des
 		 * ausgangsgraphen, aber keine Kreise
 		 */
 		for (Node node : this.getGraph().getEachNode()) {
-			this.minimalSpanningTree.addNode(node.getId());
+			this.minimalSpanningTree.addNode(node.getId().toString());
 			this.minimalSpanningTree.getNode(node.getId()).setAttribute("ui.label",
 					node.getAttribute("ui.label").toString());
 		}
 
-		/*
-		 * Die Kanten aufsteigend nach ihrem Gewicht sortieren
-		 */
 		this.sortedEdges = new LinkedList<Edge>(this.getGraph().getEdgeSet());
 		this.sortedEdges.sort((e1, e2) -> ((Integer) e1.getAttribute("weight")).compareTo(e2.getAttribute("weight")));
 
-		
+		this.bfs = new BreadthFirstSearch();
+
+	}
+
+	/**
+	 * Diese Methode prüft anhand einer übergebenen Kante ob ein Kreis entsteht,
+	 * wenn diese Kante hinzugefügt wird. Dies geschiet, indem eine Breitensuche
+	 * vom Source der Kante zum Target stattfindet. Gibt es in dem Spannbaum
+	 * bereits einen Weg von dem Source zum Target, dann würde ein hinzufügen
+	 * der Kante einen Kreis erzeugen, deshalb gibt die Methode true aus, falls
+	 * die Breitensuche einen Weg ermittelt.
+	 * 
+	 * Falss die Breitensuche keinen Weg ermittelt, gibt es keinen Kreis, wenn
+	 * die Kante zum Spannbaum hinzugefügt wird.
+	 * 
+	 * @param edge
+	 *            Kante die zum Spannbaum hinzugefügt werden soll.
+	 * @return true wenn ein Kreis mit der Kante im Spannbaum ensteht, false
+	 *         fals mit der Kante kein Kreis im Spannbaum ensteht
+	 */
+	private boolean isCircle(Edge edge) {
+		Node source = minimalSpanningTree.getNode(edge.getSourceNode().getId());
+		Node target = this.minimalSpanningTree.getNode(edge.getTargetNode().getId());
+
+		if (((this.bfs.calculate(minimalSpanningTree, source, target).isEmpty()))
+				&& !edge.getSourceNode().equals(edge.getTargetNode())) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	/**
+	 * Summiert alle Kantengewichtungen des berechneten minimalen Spannbaums
+	 * auf.
+	 * 
+	 * @return Kantengewichtssumme des ermittelten minimalen Spannbuams
+	 */
+	public double getEdgeWeightes() {
+		return (double) this.minimalSpanningTree.getEdgeSet().stream().map(e1 -> (Integer) e1.getAttribute("weight"))
+				.reduce(0, (e1, e2) -> e1.intValue() + e2.intValue());
+	}
+
+	/**
+	 * Gibt die Anzahl der Knoten des Spannbaums zurück
+	 * 
+	 * @return Knotenanzahl des Spannbaums
+	 */
+	public int getKnotenAnzahl() {
+		return this.minimalSpanningTree.getNodeSet().size();
+	}
+
+	/**
+	 * Gibt die Anzahl der Kanten des Spannbaums zurück
+	 * 
+	 * @return Kantenanzahl des Spannbaums
+	 */
+	public int getKantenAnzahl() {
+		return this.minimalSpanningTree.getEdgeSet().size();
+	}
+
+	/**
+	 * Gibt die RunTime des Algorithmus in Sekunden zurück
+	 * 
+	 * @return RunTime
+	 */
+	public long getRunTime() {
+		return this.runTime;
 	}
 
 	@Override
