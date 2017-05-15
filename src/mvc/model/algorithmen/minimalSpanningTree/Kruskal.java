@@ -51,7 +51,7 @@ public class Kruskal extends MinimalSpanningTree {
 		long timeEnd = System.currentTimeMillis();
 		runTime = (timeEnd - timeStart);
 
-		Printer.prompt(this, "time needed: " + this.getRunTimeInSek());
+		Printer.prompt(this, "time needed: " + this.getRunTime());
 		Printer.prompt(this, "edge-weight sum: " + this.getEdgeWeightes());
 
 		this.validResult();
@@ -176,8 +176,8 @@ public class Kruskal extends MinimalSpanningTree {
 	 * 
 	 * @return RunTime
 	 */
-	public int getRunTimeInSek() {
-		return (int) (this.runTime / 1000);
+	public long getRunTime() {
+		return this.runTime;
 	}
 
 	@Override

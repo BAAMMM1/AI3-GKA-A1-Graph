@@ -31,7 +31,7 @@ public abstract class MinimalSpanningTree extends Algorithmus{
 			throw new IllegalDirectedGraph("Error: MinimalSpanningTree calculation only for undirected Graph");
 		}
 		
-		// Prüfen auf gewichtete Graphen
+		// Prüfen auf gewichtete Graphen -> Muss gesetzt sein und darf nich kleiner als 1 sein
 		for(Edge edge : graph.getEdgeSet()){
 			if(edge.getAttribute("weight") == null){
 				throw new IllegalWeightedGraph("Jede Kante muss gewichtet sein");
@@ -40,10 +40,6 @@ public abstract class MinimalSpanningTree extends Algorithmus{
 				throw new IllegalWeightedGraph("Gewichtung darf nicht 0 oder negativ sein");
 			}
 		}
-		
-		
-		//TODO prüfen auf zusammenhängigkeit vor der Durchführung
-		
 	}
 	
 	private void initAlgorithmus(Graph graph) {

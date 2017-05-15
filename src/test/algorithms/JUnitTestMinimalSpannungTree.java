@@ -165,11 +165,6 @@ public class JUnitTestMinimalSpannungTree {
 		 * Kruskal müssen das selbe Ergebnis haben
 		 */
 		assertEquals(this.prim_random100_200.getEdgeWeightes(), this.kruskal_random100_200.getEdgeWeightes(), 0);
-
-		// GetLaufzeit ersrwtat kleiner als und größer als
-		// Kruskal bei höhrer Kantenazahl länger als prim -> je mehr kanten dest
-		// schneller ist Prim
-		//
 	}
 
 	/*

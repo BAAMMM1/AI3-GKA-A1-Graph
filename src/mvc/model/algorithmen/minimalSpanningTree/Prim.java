@@ -27,6 +27,7 @@ public class Prim extends MinimalSpanningTree {
 
 	private Graph tree;
 	private PriorityQueue<Node> queue;
+	private long runTime;
 
 	private static final Integer OMEGA = Integer.MAX_VALUE;
 
@@ -54,8 +55,9 @@ public class Prim extends MinimalSpanningTree {
 		}
 
 		long timeEnd = System.currentTimeMillis();
+		runTime = (timeEnd - timeStart);
 
-		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
+		Printer.prompt(this, "time needed: " + this.getRunTime());
 		Printer.prompt(this, "edge-weight sum: " + this.getEdgeWeightes());
 
 		return this.tree;
@@ -78,7 +80,6 @@ public class Prim extends MinimalSpanningTree {
 		}
 
 		this.queue.addAll(this.getGraph().getNodeSet());
-		Printer.prompt(this, "priorityQueue: " + queue.toString());
 	}
 
 	/**
@@ -189,6 +190,8 @@ public class Prim extends MinimalSpanningTree {
 				 * hier erneut eine neue Priorität erhalten, damit kein Kreis
 				 * entsteht, da der Knoten von dem wir aus die Prioritäten
 				 * aktualisieren bereits im Spannbaum ist.
+				 * 
+				 * Nur Wenn der Knoten noch nicht im Spannbaum ist -> Prioritäten updated.
 				 */
 				if (this.queue.contains(nodeForQueue)) {
 
@@ -247,6 +250,10 @@ public class Prim extends MinimalSpanningTree {
 		return this.tree.getEdgeSet().size();
 	}
 	
+	/**
+	 * Diese Mehtode gibt den nächsten Knoten von der Prioritätenwarteschlange zurück.
+	 * @return Knoten mit der höchsten Priorität
+	 */
 	private Node getNextNodeFromQueue(){
 		Node nextNode = this.queue.poll();
 		
@@ -258,6 +265,15 @@ public class Prim extends MinimalSpanningTree {
 		} else {
 			return nextNode;
 		}
+	}
+	
+	/**
+	 * Gibt die RunTime des Algorithmus in Sekunden zurück
+	 * 
+	 * @return RunTime
+	 */
+	public long getRunTime() {
+		return this.runTime;
 	}
 
 	@Override
