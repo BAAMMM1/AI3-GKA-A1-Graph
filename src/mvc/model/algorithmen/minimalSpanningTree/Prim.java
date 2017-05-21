@@ -29,7 +29,7 @@ public class Prim extends MinimalSpanningTree {
 	private PriorityQueue<Node> queue;
 	private long runTime;
 
-	private static final Integer OMEGA = Integer.MAX_VALUE;
+	private static final int OMEGA = Integer.MAX_VALUE;
 
 	/**
 	 * Diese Mehtode stellt die Handlungsvorschrift Prim-Algorithmus da.
@@ -72,8 +72,12 @@ public class Prim extends MinimalSpanningTree {
 	private void initPrim() {
 		this.tree = new MultiGraph("Prim");
 
-		this.queue = new PriorityQueue<Node>(this.getGraph().getNodeSet().size(), (e1,
-				e2) -> ((Integer) e1.getAttribute("primWeight")).compareTo((Integer) e2.getAttribute("primWeight")));
+		/*
+		 * Die PriorityQueue beinhaltet immer das Objekt mit der höchsten
+		 * Proiority, hier wieder gespiegelt durch den kleinsten primWeight-Wert
+		 */
+		this.queue = new PriorityQueue<Node>(this.getGraph().getNodeSet().size(),
+				(e1, e2) -> ((int) e1.getAttribute("primWeight")) - (int) e2.getAttribute("primWeight"));
 
 		for (Node node : this.getGraph().getNodeSet()) {
 			node.addAttribute("primWeight", OMEGA);
@@ -133,7 +137,7 @@ public class Prim extends MinimalSpanningTree {
 		Node target = this.tree.getNode(edge.getTargetNode().getId());
 
 		this.tree.addEdge(edge.getId(), source, target);
-		this.tree.getEdge(edge.getId()).addAttribute("weight", (Integer) edge.getAttribute("weight"));
+		this.tree.getEdge(edge.getId()).addAttribute("weight", (int) edge.getAttribute("weight"));
 		this.tree.getEdge(edge.getId()).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
 		Printer.promptTestOut(this, "Add Edge: " + edge.toString());
 
@@ -191,7 +195,8 @@ public class Prim extends MinimalSpanningTree {
 				 * entsteht, da der Knoten von dem wir aus die Prioritäten
 				 * aktualisieren bereits im Spannbaum ist.
 				 * 
-				 * Nur Wenn der Knoten noch nicht im Spannbaum ist -> Prioritäten updated.
+				 * Nur Wenn der Knoten noch nicht im Spannbaum ist ->
+				 * Prioritäten updated.
 				 */
 				if (this.queue.contains(nodeForQueue)) {
 
@@ -202,8 +207,8 @@ public class Prim extends MinimalSpanningTree {
 					 * geprüft werden, ob s dieser primWeight nicht über des
 					 * bereits eingetragenden Wert liegt
 					 */
-					if ((Integer) nodeForQueue.getAttribute("primWeight") > (Integer) edge.getAttribute("weight")) {
-						nodeForQueue.setAttribute("primWeight", (Integer) edge.getAttribute("weight"));
+					if ((int) nodeForQueue.getAttribute("primWeight") > (int) edge.getAttribute("weight")) {
+						nodeForQueue.setAttribute("primWeight", (int) edge.getAttribute("weight"));
 						nodeForQueue.setAttribute("primEdge", edge);
 						Printer.promptTestOut(this, "update node: " + nodeForQueue.toString() + " primWeight: "
 								+ nodeForQueue.getAttribute("primWeight"));
@@ -238,35 +243,38 @@ public class Prim extends MinimalSpanningTree {
 	 * @return Kantengewichtssumme des ermittelten minimalen Spannbuams
 	 */
 	public double getEdgeWeightes() {
-		return (double) this.tree.getEdgeSet().stream().map(e1 -> (Integer) e1.getAttribute("weight")).reduce(0,
+		return (double) this.tree.getEdgeSet().stream().map(e1 -> (int) e1.getAttribute("weight")).reduce(0,
 				(e1, e2) -> e1.intValue() + e2.intValue());
 	}
-	
-	public int getKnotenAnzahl(){
+
+	public int getKnotenAnzahl() {
 		return this.tree.getNodeSet().size();
 	}
-	
-	public int getKantenAnzahl(){
+
+	public int getKantenAnzahl() {
 		return this.tree.getEdgeSet().size();
 	}
-	
+
 	/**
-	 * Diese Mehtode gibt den nächsten Knoten von der Prioritätenwarteschlange zurück.
+	 * Diese Mehtode gibt den nächsten Knoten von der Prioritätenwarteschlange
+	 * zurück.
+	 * 
 	 * @return Knoten mit der höchsten Priorität
 	 */
-	private Node getNextNodeFromQueue(){
+	private Node getNextNodeFromQueue() {
 		Node nextNode = this.queue.poll();
-		
+
 		/*
-		 * Wenn der Ursprungsgraph nicht zusammenhängend war, gibt es hier einen Fehler
+		 * Wenn der Ursprungsgraph nicht zusammenhängend war, gibt es hier einen
+		 * Fehler
 		 */
-		if(nextNode.getAttribute("primWeight") == OMEGA){
+		if ((int) nextNode.getAttribute("primWeight") == OMEGA) {
 			throw new IllegalNotConnectedGraph("Graph ist nicht zusammenhängend");
 		} else {
 			return nextNode;
 		}
 	}
-	
+
 	/**
 	 * Gibt die RunTime des Algorithmus in Sekunden zurück
 	 * 

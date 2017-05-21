@@ -105,8 +105,9 @@ public class GraphFileConverter extends FileConverter {
 				this.addNodeToGraph(node2, nodes, graph);
 				this.addAttributeToNode(node2, attribute2, graph);
 
+				
 				/*
-				 * Kante hinzufügen, nur wenn zwei Knoten da sind
+				 * Kante hinzufï¿½gen, nur wenn zwei Knoten da sind
 				 */
 				if ((node2 != null)) {
 					if (!(edges.contains(node1 + node2))) {
@@ -119,7 +120,7 @@ public class GraphFileConverter extends FileConverter {
 
 							if (weight != null) {
 								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
-								graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight));
+								graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight).intValue());
 								graph.getEdge(node1 + node2).addAttribute("ui.label",
 										graph.getEdge(node1 + node2).getAttribute("ui.label") + " :: "
 												+ Integer.valueOf(weight));

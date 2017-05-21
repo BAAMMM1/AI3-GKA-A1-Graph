@@ -69,7 +69,7 @@ public class Kruskal extends MinimalSpanningTree {
 		this.minimalSpanningTree.addEdge(edge.getId(), edge.getNode0().toString(), edge.getNode1().toString(),
 				edge.isDirected());
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).setAttribute("weight",
-				(Integer) edge.getAttribute("weight"));
+				(int) edge.getAttribute("weight"));
 		this.minimalSpanningTree.getEdge(edge.getId().toString()).setAttribute("ui.label",
 				edge.getAttribute("ui.label").toString());
 	}
@@ -107,7 +107,7 @@ public class Kruskal extends MinimalSpanningTree {
 		}
 
 		this.sortedEdges = new LinkedList<Edge>(this.getGraph().getEdgeSet());
-		this.sortedEdges.sort((e1, e2) -> ((Integer) e1.getAttribute("weight")).compareTo(e2.getAttribute("weight")));
+		this.sortedEdges.sort((e1, e2) -> ((int) e1.getAttribute("weight")) - (int) (e2.getAttribute("weight")));
 
 		this.bfs = new BreadthFirstSearch();
 
@@ -149,7 +149,7 @@ public class Kruskal extends MinimalSpanningTree {
 	 * @return Kantengewichtssumme des ermittelten minimalen Spannbuams
 	 */
 	public double getEdgeWeightes() {
-		return (double) this.minimalSpanningTree.getEdgeSet().stream().map(e1 -> (Integer) e1.getAttribute("weight"))
+		return (double) this.minimalSpanningTree.getEdgeSet().stream().map(e1 -> (int) e1.getAttribute("weight"))
 				.reduce(0, (e1, e2) -> e1.intValue() + e2.intValue());
 	}
 
