@@ -10,18 +10,20 @@ import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
 import mvc.model.algorithmen.shortestPath.Dijkstra;
 import mvc.model.fileExtensionSystem.FileExtension;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
-import mvc.model.generator.GraphGenerator;
+import mvc.model.fileExtensionSystem.Convertion.GraphModifer;
+import mvc.model.graphGenerator.RandomSimple;
 
 public class Model {
 	
 	private GraphFileExtensionHandler fileHandler;
 	private Graph graph;
 	private List<String> graphAsText;
+	private GraphModifer modifier;
 	private BreadthFirstSearch bfs;
 	private Dijkstra dijksta;
 	private Kruskal kruskal;
 	private Prim prim;
-	private GraphGenerator generator;
+	private RandomSimple generator;
 	
 	
 	public Model(){
@@ -33,11 +35,12 @@ public class Model {
 		this.fileHandler = new GraphFileExtensionHandler();
 		this.graph = fileHandler.loadGraph("db/kruskal/circle01.graph");
 		this.graphAsText = fileHandler.loadFile("db/kruskal/circle01.graph");
+		this.modifier = new GraphModifer();
 		this.bfs = new BreadthFirstSearch();
 		this.dijksta = new Dijkstra();
 		this.kruskal = new Kruskal();
 		this.prim = new Prim();
-		this.generator = new GraphGenerator();
+		this.generator = new RandomSimple();
 	}
 
 	public FileExtension getFileHandler() {
@@ -88,9 +91,15 @@ public class Model {
 		return prim;
 	}
 
-	public GraphGenerator getGenerator() {
+	public RandomSimple getGenerator() {
 		return generator;
+	}
+
+	public GraphModifer getModifier() {
+		return modifier;
 	}	
+	
+	
 	
 	
 	

@@ -133,7 +133,7 @@ public class Kruskal extends MinimalSpanningTree {
 		Node source = minimalSpanningTree.getNode(edge.getSourceNode().getId());
 		Node target = this.minimalSpanningTree.getNode(edge.getTargetNode().getId());
 
-		if (((this.bfs.calculate(minimalSpanningTree, source, target).isEmpty()))
+		if (((this.bfs.calculate(minimalSpanningTree, source.toString(), target.toString()).isEmpty()))
 				&& !edge.getSourceNode().equals(edge.getTargetNode())) {
 			return false;
 		} else {

@@ -1,7 +1,9 @@
 package main;
 
 import mvc.controller.Controller;
+import mvc.controller.Controller;
 import mvc.model.Model;
+import mvc.view.View;
 import mvc.view.View;
 
 public class Main {

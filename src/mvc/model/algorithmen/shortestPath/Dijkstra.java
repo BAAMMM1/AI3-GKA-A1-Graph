@@ -8,10 +8,13 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
+import mvc.model.exceptions.IllegalUndirectedGraph;
+import mvc.model.exceptions.IllegalWeightedGraph;
 import utility.Printer;
 
 /**
- * Diese Klasse stellt den Dijkstra-Algorithmus dar
+ * Diese Klasse stellt den Dijkstra-Algorithmus dar.
+ * Für gerichtete Graphen.
  */
 public class Dijkstra extends ShortestPath {
 
@@ -23,6 +26,8 @@ public class Dijkstra extends ShortestPath {
 	 */
 	@Override
 	protected List<Node> procedure() {
+		this.validArguments(this.getGraph());
+		
 		System.clearProperty("org.graphstream.ui.renderer");
 
 		this.initDijkstra();
@@ -39,6 +44,26 @@ public class Dijkstra extends ShortestPath {
 		return this.calculateShortestPath();
 
 
+	}
+
+	private void validArguments(Graph graph) {
+		/*
+		 * Dijkstra darf nur auf gerichteten Graphen anwendbar
+		 */
+		if(!this.getGraph().getEdge(0).isDirected()){
+			throw new IllegalUndirectedGraph("Dijkstra only for directed graph");
+			
+		/*
+		 * Der Graph muss eine psoitives Gewichtung > 0 haben
+		 */
+		} else if(!this.isGraphCorrectWeighted(graph)){
+			throw new IllegalWeightedGraph("Dijkstra only for weight > 0");
+		}		
+		/* TODO
+		 * Der Graph muss zusammenhängend sein
+		 * Wie prüfen?
+		 */
+		
 	}
 
 	/**
@@ -359,62 +384,7 @@ public class Dijkstra extends ShortestPath {
 		return toReturn;
 	}
 
-	/**
-	 * Konvertiert einen undirected Graph zu einem directed Graph, damit der
-	 * Algorithmus auf ihn ausgeführt werden kann
-	 * 
-	 * @param graph
-	 *            Graph der konvertiert werden soll
-	 * @return Konvertierter Graph mit directed = true
-	 */
-	public Graph converteUndirectedToDirected(Graph graph) {
 
-		List<Edge> edges = new ArrayList();
-		edges.addAll(graph.getEdgeSet());
-
-		for (int i = 0; i < edges.size(); i++) {
-			Edge toLook = edges.get(i);
-			System.out.println(i);
-			System.out.println("Schaue an: " + toLook.toString());
-			boolean needToAdd = true;
-			Node source = toLook.getSourceNode();
-			Node target = toLook.getTargetNode();
-
-			// UI Laber mit der bezeichnung fehlt noch)
-			graph.removeEdge(source.toString() + target.toString());
-			graph.addEdge(source.toString() + target.toString(), source, target, true);
-
-			int weigt = toLook.getAttribute("weight");
-			graph.getEdge(source.toString() + target.toString()).setAttribute("weight", weigt);
-			graph.getEdge(source.toString() + target.toString()).setAttribute("ui.label",
-					toLook.getAttribute("ui.label").toString());
-
-			Edge toLook2 = graph.getEdge(target.toString() + source.toString());
-			if (toLook2 != null) {
-				System.out.println(target.getId().toString() + source.getId().toString());
-				graph.removeEdge(target.getId().toString() + source.getId().toString());
-				graph.addEdge(target.toString() + source.getId().toString(), target, source, true);
-
-				int weigt2 = toLook2.getAttribute("weight");
-				graph.getEdge(target.toString() + source.toString()).setAttribute("weight", weigt2);
-				graph.getEdge(target.toString() + source.toString()).setAttribute("label",
-						toLook2.getAttribute("ui.label").toString());
-
-			} else {
-				graph.addEdge(target.toString() + source.toString(), target, source, true);
-				graph.getEdge(target.toString() + source.toString()).setAttribute("weight", weigt);
-				graph.getEdge(target.toString() + source.toString()).setAttribute("ui.label",
-						toLook.getAttribute("ui.label").toString());
-			}
-
-		}
-
-		for (Edge edge : graph.getEachEdge()) {
-			System.out.println(edge.toString());
-		}
-
-		return graph;
-	}
 
 	@Override
 	public String toString() {
@@ -434,7 +404,7 @@ public class Dijkstra extends ShortestPath {
 			if (edge.getAttribute("weight") != null) {
 
 				int weight = edge.getAttribute("weight");
-				if (weight >= 0) {
+				if (weight >= 1) {
 					temp = temp && true;
 				} else {
 					temp = temp && false;

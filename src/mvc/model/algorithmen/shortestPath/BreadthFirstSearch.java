@@ -9,7 +9,11 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import utility.Printer;
-
+/**
+ * Für gerichtet und ungerichtete Graphen
+ * @author Chris
+ *
+ */
 public class BreadthFirstSearch extends ShortestPath {
 
 	private static final int NOT_VISITED = -1;
