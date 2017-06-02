@@ -184,6 +184,17 @@ public class View {
 		textField.setColumns(10);	
 		textField_1.setColumns(10);
 		
+		JPanel panel_9 = new JPanel();
+		GroupLayout groupLayout = new GroupLayout(frameMain.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 1264, Short.MAX_VALUE)
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addComponent(panel_9, GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
+		);
+		
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Menu", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
@@ -445,80 +456,6 @@ public class View {
 		panel_6.setLayout(gl_panel_6);
 		layeredPane.setLayout(gl_layeredPane);
 		
-		panel_8 = new JPanel();
-		panel_8.setBorder(new TitledBorder(null, "View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GroupLayout groupLayout = new GroupLayout(frameMain.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(8)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 953, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_8, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
-						.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		
-		layerGraph = new JLayeredPane();
-		layerGraph.setForeground(Color.LIGHT_GRAY);
-		layerGraph.setBackground(Color.LIGHT_GRAY);
-		tabbedPane.addTab("Graph", null, layerGraph, null);
-		panelGraphStream = new JPanel();
-		GroupLayout gl_layerGraph = new GroupLayout(layerGraph);
-		gl_layerGraph.setHorizontalGroup(
-			gl_layerGraph.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_layerGraph.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 958, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		gl_layerGraph.setVerticalGroup(
-			gl_layerGraph.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_layerGraph.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
-					.addContainerGap())
-		);
-		panelGraphStream.setLayout(new GridLayout(1, 0, 0, 0));
-		layerGraph.setLayout(gl_layerGraph);
-		scrollPaneAusgabe = new JScrollPane();
-		scrollPaneAusgabe.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneAusgabe.setViewportBorder(null);
-		textAreaResult = new JTextArea();
-		textAreaResult.setBorder(null);
-		
-		scrollPaneAusgabe.setViewportView(textAreaResult);
-		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
-		gl_panel_8.setHorizontalGroup(
-			gl_panel_8.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_8.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panel_8.createParallelGroup(Alignment.TRAILING)
-						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 921, Short.MAX_VALUE)
-						.addComponent(scrollPaneAusgabe, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 921, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		gl_panel_8.setVerticalGroup(
-			gl_panel_8.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_8.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(tabbedPane, GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPaneAusgabe, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
-		panel_8.setLayout(gl_panel_8);
-		
 		layeredPane_1 = new JLayeredPane();
 		tabbedPane_1.addTab("Console", null, layeredPane_1, null);
 		
@@ -597,6 +534,76 @@ public class View {
 					.addContainerGap())
 		);
 		panel.setLayout(gl_panel);
+		
+		panel_8 = new JPanel();
+		panel_8.setBorder(new TitledBorder(null, "View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+		layerGraph = new JLayeredPane();
+		layerGraph.setForeground(Color.LIGHT_GRAY);
+		layerGraph.setBackground(Color.LIGHT_GRAY);
+		tabbedPane.addTab("Graph", null, layerGraph, null);
+		panelGraphStream = new JPanel();
+		panelGraphStream.setLayout(new GridLayout(1, 0, 0, 0));
+		GroupLayout gl_layerGraph = new GroupLayout(layerGraph);
+		gl_layerGraph.setHorizontalGroup(
+			gl_layerGraph.createParallelGroup(Alignment.LEADING)
+				.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 916, GroupLayout.DEFAULT_SIZE)
+		);
+		gl_layerGraph.setVerticalGroup(
+			gl_layerGraph.createParallelGroup(Alignment.LEADING)
+				.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 533, GroupLayout.DEFAULT_SIZE)
+		);
+		layerGraph.setLayout(gl_layerGraph);
+		scrollPaneAusgabe = new JScrollPane();
+		scrollPaneAusgabe.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPaneAusgabe.setViewportBorder(null);
+		textAreaResult = new JTextArea();
+		textAreaResult.setEditable(false);
+		textAreaResult.setBorder(new LineBorder(Color.WHITE, 5));
+		
+		scrollPaneAusgabe.setViewportView(textAreaResult);
+		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
+		gl_panel_8.setHorizontalGroup(
+			gl_panel_8.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_8.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPaneAusgabe, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
+						.addComponent(tabbedPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel_8.setVerticalGroup(
+			gl_panel_8.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_8.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 652, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPaneAusgabe, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
+		);
+		panel_8.setLayout(gl_panel_8);
+		GroupLayout gl_panel_9 = new GroupLayout(panel_9);
+		gl_panel_9.setHorizontalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, 947, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		gl_panel_9.setVerticalGroup(
+			gl_panel_9.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_9.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel_8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		panel_9.setLayout(gl_panel_9);
 		frameMain.getContentPane().setLayout(groupLayout);
 		
 		menuBar = new JMenuBar();
@@ -1201,9 +1208,4 @@ public class View {
 	public JComboBox getComboBoxEuler() {
 		return comboBoxEuler;
 	}
-	
-	
-	
-	
-	
 }

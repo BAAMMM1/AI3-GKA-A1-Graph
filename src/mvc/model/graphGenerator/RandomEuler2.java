@@ -1,15 +1,20 @@
 package mvc.model.graphGenerator;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
-public class RandomEuler extends GraphGenerator {
+import utility.Printer;
+
+public class RandomEuler2 extends GraphGenerator {
 
 	private Graph result;
 	private List<Node> nodes;
@@ -18,8 +23,12 @@ public class RandomEuler extends GraphGenerator {
 	private int nodeSize;
 	private int edgeSize;
 	private int maxWeight;
+	private int maxGrad;
+	private int grades;
+	private int maxGradeCounter = 0;
+	private int value;
 
-	public RandomEuler() {
+	public RandomEuler2() {
 	}
 
 	@Override
@@ -28,10 +37,16 @@ public class RandomEuler extends GraphGenerator {
 		this.validArguments(nodeSize, edgeSize, maxWeight);
 
 		this.initialize(nodeSize, edgeSize, maxWeight);
+		
+		this.addNodesToResult();
+		
+		this.calculateGrade();
+		
+		this.addEdgesToResult();
 
-		this.createMinimalEulerCicrle();
+		//this.createMinimalEulerCicrle();
 
-		this.addEdges2();
+		//this.addEdges2();
 
 		// this.seperateUneven();
 
@@ -40,6 +55,223 @@ public class RandomEuler extends GraphGenerator {
 		// this.addUnevenEdges();
 
 		return result;
+	}
+
+	private void addNodesToResult() {
+
+
+		for(int i = 0; i<nodeSize; i++){
+					
+			
+		}
+		
+	}
+
+	private void addEdgesToResult() {
+		
+		
+		
+	}
+
+	private void calculateGrade() {
+		System.out.println("calculate start");
+		int[] grades = new int[this.nodeSize];
+		
+		for(int i = 0; i < grades.length; i++){
+			grades[i] = 2;
+			this.grades = this.grades - 2;
+		}
+		
+		while(this.grades > 0){
+			//System.out.println("grades: " + this.grades);
+			int random = this.getRandom();
+			//System.out.println("random: " + random);
+			
+			if(grades[random] < this.maxGrad){
+				
+				System.out.println("maxGradeCount: " + maxGradeCounter);
+				System.out.println("maxGrad: " + maxGrad);
+				System.out.println("grades[random]: " + grades[random]);
+				System.out.println("this.maxGrad-2: " + (this.maxGrad-2));
+				if((this.maxGradeCounter == this.value) && grades[random] == this.maxGrad-2){
+					continue;
+				}
+				grades[random] = grades[random] + 2;
+				this.grades = this.grades - 2;
+				
+				if(grades[random] == this.maxGrad){
+					this.maxGradeCounter++;
+				}
+				
+			}
+			
+		}
+		
+		
+		/*
+		int counter2 = 0;
+		while((this.maxGrad*maxGradeCount) >= ((this.edgeSize*2)/2)){
+			
+			if(grades[counter2] == this.maxGrad){
+				
+			}
+			
+			
+		}
+		*/
+		
+		
+		
+		
+		/*
+		System.out.println("calculate end");
+		System.out.println("grades");
+		for(int i = 0; i < grades.length; i++){
+			System.out.print(grades[i] + " ");
+		}
+		
+		System.out.println("");
+		*/
+		System.out.println("grades");
+		Arrays.sort(grades);
+		for(int i = 0; i < grades.length; i++){
+			System.out.print(grades[i] + " ");
+		}
+		
+		System.out.println("");
+		
+		for(int i = 0; i < grades.length; i++){
+			this.result.addNode("Node"+i);
+			this.result.getNode("Node"+i).setAttribute("grad", grades[i]);
+		}
+
+		
+		LinkedList<Node> list = new LinkedList<Node>();
+		list.addAll(result.getNodeSet());
+			
+		Collections.sort(list, new Comparator<Node>(){
+			   @Override
+			   public int compare(Node o1, Node o2){
+			        if((int)o1.getAttribute("grad") < (int)o2.getAttribute("grad")){
+			           return -1; 
+			        }
+			        if((int)o1.getAttribute("grad") > (int)o2.getAttribute("grad")){
+			           return 1; 
+			        }
+			        return 0;
+			   }
+			}); 
+				
+		
+		
+		
+		int counter = 0;
+		while(this.nodeSize-1 > 0){
+			
+			
+			
+			Node nextNode = list.get(counter);
+			int gradOfNextNode = (int)nextNode.getAttribute("grad");
+						
+			if(gradOfNextNode == 0){			
+				continue;
+			}
+			
+			int index = list.size()-1;
+			while(gradOfNextNode > 0){			
+	
+				Node endNode = list.get(index);				
+				this.result.addEdge(nextNode.toString()+endNode.toString(), nextNode, endNode);
+				
+				
+				endNode.setAttribute("grad", (int)endNode.getAttribute("grad")-1);
+				index--;
+				
+				gradOfNextNode--;
+				nextNode.setAttribute("grad", (int)nextNode.getAttribute("grad")-1);
+				
+			}
+			
+			counter++;
+			nodeSize--;
+			
+			Collections.sort(list, new Comparator<Node>(){
+				   @Override
+				   public int compare(Node o1, Node o2){
+				        if((int)o1.getAttribute("grad") < (int)o2.getAttribute("grad")){
+				           return -1; 
+				        }
+				        if((int)o1.getAttribute("grad") > (int)o2.getAttribute("grad")){
+				           return 1; 
+				        }
+				        return 0;
+				   }
+				}); 
+			
+			
+			
+			
+			/*
+			Printer.prompt(this, "nodeSize: " + nodeSize);
+			
+			
+			
+			for(int i2 = 0; i2<grades.length; i2++){
+				System.out.print(grades[i2] + " ");
+			}
+			System.out.println("");
+			
+			
+			int nextNode = grades[counter];
+			Printer.prompt(this, "counter: " + counter);
+			Printer.prompt(this, "nextNode: " + nextNode);
+			if(nextNode == 0){
+				Printer.prompt(this, "nextNode 0");
+				continue;
+			}
+			
+			int index = grades.length-1;
+			while(nextNode > 0){
+				Printer.prompt(this, "nextNode value: " + nextNode);
+				int endNode = grades[index];
+				Node node1 = this.result.getNode(counter);
+				Node node2 = this.result.getNode(index);
+				
+				//this.result.addEdge(node1.toString()+node2.toString(), node1, node2);
+				
+				
+				grades[index] = grades[index] - 1;
+				index--;
+				
+				nextNode--;
+				grades[counter] = grades[counter] - 1;
+				
+			}
+			
+			counter++;
+			Arrays.sort(grades);
+			nodeSize--;
+			
+			*/
+			
+		
+			
+		}
+		
+		/*
+		for(int i2 = 0; i2<grades.length; i2++){
+			System.out.print(grades[i2] + " ");
+		}
+		System.out.println("");
+		*/
+		
+		
+	}
+	
+	private int getRandom(){
+		Random random = new Random();
+		return random.nextInt(nodeSize);
+		
 	}
 
 	private void addSeperated() {
@@ -389,6 +621,10 @@ public class RandomEuler extends GraphGenerator {
 			// } else if (!((edgeSize%2)==0)){
 			// throw new IllegalArgumentException("Kantenanzahl muss gerade
 			// sein");
+			
+			// wird auch beu vollständigen graden geworfen bsp. k5, müsste aber gehen, k6 jedoch nicht
+		//} else if((edgeSize-nodeSize)%2 != 0){
+			//throw new IllegalArgumentException("Kantenanzahl muss nodeSize + vielfaches von 2 sein");
 		}
 
 	}
@@ -401,7 +637,25 @@ public class RandomEuler extends GraphGenerator {
 		this.nodeSize = nodeSize;
 		this.edgeSize = edgeSize;
 		this.maxWeight = maxWeight;
+		this.maxGradeCounter = 0;
+		
+		if(nodeSize%2 != 0){
+			this.maxGrad = nodeSize - 1;
+		} else {
+			this.maxGrad = nodeSize - 2;			
+		}
+		
+		this.value = (this.nodeSize/2)+1;
+			
+		this.grades = edgeSize * 2;
 
 	}
+
+	@Override
+	public String toString() {
+		return String.format("RandomEuler2");
+	}
+	
+	
 
 }

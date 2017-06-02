@@ -142,8 +142,8 @@ public class RandomSimple extends GraphGenerator{
 			 * Mehrfachkanten: Es kann nicht zweimal die identische Kanten
 			 * gesetzt werden oder eine Kante in die Gegenrichtung
 			 */
-			String edgeID01 = node01.getId() + " -> " + node02.getId();
-			String edgeID02 = node02.getId() + " -> " + node01.getId();
+			String edgeID01 = node01.getId()+ node02.getId();
+			String edgeID02 = node02.getId()+ node01.getId();
 
 			if ((result.getEdge((edgeID01)) == null) && (result.getEdge((edgeID02)) == null)) {
 				this.addEdge(result, node01, node02);
@@ -176,7 +176,7 @@ public class RandomSimple extends GraphGenerator{
 	 * Gewicht der Kante.
 	 */
 	private void addEdge(Graph graph, Node node01, Node node02) {
-		String edgeID = node01.getId() + " -> " + node02.getId();
+		String edgeID = node01.getId() + node02.getId();
 
 		graph.addEdge(edgeID, node01, node02);
 		Edge edge = graph.getEdge(edgeID);

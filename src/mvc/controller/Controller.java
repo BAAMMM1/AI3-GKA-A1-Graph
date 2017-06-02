@@ -13,12 +13,14 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout.Alignment;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
 import mvc.model.algorithmen.eulerCircle.EulerCircle;
 import mvc.model.algorithmen.eulerCircle.EulerCircleFactory;
+import mvc.model.algorithmen.eulerCircle.Hierholzer;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTree;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTreeFactory;
 import mvc.model.algorithmen.shortestPath.ShortestPath;
@@ -42,6 +44,11 @@ public class Controller {
 		this.initView();
 		this.initGraphInterface();
 		this.initController();
+
+		/*
+		 * ExceptionsHandler
+		 */
+		Controller.setupGlobalExceptionHandling(classView);
 	}
 
 	private void initView() {
@@ -155,6 +162,9 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * TODO Graph zur Console hinzufügen
+	 */
 	private void menuModifierUndirectedToDirected() {
 		this.model.setGraph(this.model.getModifier().converteUndirectedToDirected(this.model.getGraph()));
 		this.setGraphToPanel();
@@ -172,19 +182,22 @@ public class Controller {
 	}
 
 	private void btnGeneratorAction() {
+
 		GraphGenerator generator = GraphGeneratorFactory
 				.getInstance(this.view.getComboBoxGenerator().getSelectedItem().toString());
 
-		this.model.setGraph(
-				generator.generate(Integer.valueOf(this.view.getNodeSize().getText()).intValue(),
-						Integer.valueOf(this.view.getEdgeSize().getText()).intValue(),
-						Integer.valueOf(this.view.getWeightSize().getText()).intValue()));
+		this.model.setGraph(generator.generate(Integer.valueOf(this.view.getNodeSize().getText()).intValue(),
+				Integer.valueOf(this.view.getEdgeSize().getText()).intValue(),
+				Integer.valueOf(this.view.getWeightSize().getText()).intValue()));
 
+		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
 		this.setGraphToPanel();
 
 	}
 
 	private void btnSTPAction() {
+		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
+
 		ShortestPath sTP = ShortestPathFactory
 				.getInstance(this.view.getComboBoxShortestPath().getSelectedItem().toString());
 		String source = view.getSource().getText();
@@ -193,9 +206,14 @@ public class Controller {
 		List<Node> result = sTP.calculate(model.getGraph(), source, target);
 		this.view.getTextAreaResult().setText("Shortest path: " + result.toString());
 
+		this.model.getLabeler().colorPath(model.getGraph(), result, 255, 10, 0);
+		this.model.getLabeler().setFlagToNodeLabel(this.model.getGraph(), "BFS");
+
 	}
 
 	private void btnMSTAction() {
+		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
+
 		MinimalSpanningTree mst = MinimalSpanningTreeFactory
 				.getInstance(this.view.getComboBoxMST().getSelectedItem().toString());
 		this.model.setGraph(mst.calculate(this.model.getGraph()));
@@ -205,16 +223,32 @@ public class Controller {
 	}
 
 	private void btnEulerAction() {
-		EulerCircle eulerCircle = EulerCircleFactory
-				.getInstance(this.view.getComboBoxEuler().getSelectedItem().toString());
-		
-		this.model.setGraph(eulerCircle.calculate(this.model.getGraph()));
-		
-		this.setGraphToPanel();
+		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
+
+		EulerCircle tour = EulerCircleFactory.getInstance(this.view.getComboBoxEuler().getSelectedItem().toString());
+
+		List<Edge> result = tour.calculate(this.model.getGraph());
+		this.model.getLabeler().colorEdges(this.model.getGraph(), result, 0, 100, 255);
+		this.view.getTextAreaResult().setText("Tour:\n" + result.toString());
+
+		if (tour instanceof Hierholzer) {
+			tour = (Hierholzer) tour;
+			this.model.getLabeler().colorListEdges(this.model.getGraph(), ((Hierholzer) tour).getEulerParts(), 0, 100,
+					100);
+
+			this.view.getTextAreaResult().setText(this.view.getTextAreaResult().getText() + "\nEulerparts:");
+			for (int i = 0; i < ((Hierholzer) tour).getEulerParts().size(); i++) {
+				this.view.getTextAreaResult().setText(this.view.getTextAreaResult().getText() + "\n"
+						+ ((Hierholzer) tour).getEulerParts().get(i).toString());
+
+			}
+		}
 
 	}
 
 	private void btnGraphAnzeigenAction() {
+		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
+
 		List<String> fromTextArex = new ArrayList<String>();
 
 		String text = view.getTextAreaConsole().getText();
@@ -289,5 +323,21 @@ public class Controller {
 	/*
 	 * -----------------------------------------------------
 	 */
+
+	/**
+	 * Diese Mehtode ist dafür zuständig, dass die Exceptions gefangen werden
+	 * und auf der console und in der view geprinted werden.
+	 * 
+	 * @param view
+	 */
+	public static void setupGlobalExceptionHandling(View view) {
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				e.printStackTrace();
+				view.getTextAreaResult().setText(e.toString());
+			}
+		});
+	}
 
 }

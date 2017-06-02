@@ -8,7 +8,7 @@ public class GraphGeneratorFactory {
 			return new RandomSimple();
 			
 		} else if (typ.equals("Euler")){
-			return new RandomEuler	();	
+			return new RandomEuler2();	
 			
 		} else {
 			throw new IllegalArgumentException("generator not found");

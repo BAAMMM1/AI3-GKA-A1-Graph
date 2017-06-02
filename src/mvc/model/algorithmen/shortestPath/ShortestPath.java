@@ -46,7 +46,7 @@ public abstract class ShortestPath extends Algorithm{
 	 *            Startknoten
 	 * @param target
 	 *            Zielknoten
-	 * @return Graph auf den der Algorithmus angewandt wurde
+	 * @return Knotenliste, die den kürzesten Weg darfstellt
 	 */
 	public List<Node> calculate(Graph graph, String source, String target) {		
 		this.validArguments(graph, source, target);
