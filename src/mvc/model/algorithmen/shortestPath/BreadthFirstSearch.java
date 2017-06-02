@@ -9,7 +9,11 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import utility.Printer;
-
+/**
+ * Für gerichtet und ungerichtete Graphen
+ * @author Chris
+ *
+ */
 public class BreadthFirstSearch extends ShortestPath {
 
 	private static final int NOT_VISITED = -1;
@@ -114,6 +118,8 @@ public class BreadthFirstSearch extends ShortestPath {
 
 	}
 
+
+
 	// TODO testen gegen die Standardimplementierung
 	private Node getNextSmallerBFS(Node node) {
 		
@@ -171,22 +177,12 @@ public class BreadthFirstSearch extends ShortestPath {
 			node.setAttribute("BFS", NOT_VISITED);
 		}
 
-		/*
-		 * Label der Nodes zurücksetzten, falls sie bereits von einem anderen
-		 * Algorithmus verändert wurden
-		 */
-		for (Node node : this.getGraph().getEachNode()) {
-			// TODO Hier fehlt noch das Attribute EdgeIdentifier fals es
-			// vorhanden ist.
-			node.setAttribute("ui.label", node.getId());
-		}
 		
 		if(!this.getGraph().getEdgeSet().isEmpty()){
 			this.directed = this.getGraph().getEdgeSet().iterator().next().isDirected();
 		}
 		
 		
-		//path = new ArrayList<Node>();
 
 	}
 
@@ -198,9 +194,7 @@ public class BreadthFirstSearch extends ShortestPath {
 	 */
 	private void setLambdaToNode(Node node, int lambda) {
 		node.setAttribute("BFS", lambda);
-		node.setAttribute("ui.label", "l(" + node.getAttribute("ui.label") + ") = " + lambda);
 		Printer.promptTestOut(this, "Knoten: " + node.toString() + " Lambda-Wert: " + node.getAttribute("BFS"));
-		//TODO Einfärbung der Knoten
 	}
 
 	/**

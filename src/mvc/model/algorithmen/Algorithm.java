@@ -2,7 +2,7 @@ package mvc.model.algorithmen;
 
 import org.graphstream.graph.Graph;
 
-public class Algorithmus {
+public class Algorithm {
 	
 	private Graph graph;
 	

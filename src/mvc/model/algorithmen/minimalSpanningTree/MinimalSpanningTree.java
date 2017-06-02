@@ -3,11 +3,11 @@ package mvc.model.algorithmen.minimalSpanningTree;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmen.Algorithmus;
+import mvc.model.algorithmen.Algorithm;
 import mvc.model.exceptions.IllegalDirectedGraph;
 import mvc.model.exceptions.IllegalWeightedGraph;
 import utility.Printer;
-public abstract class MinimalSpanningTree extends Algorithmus{
+public abstract class MinimalSpanningTree extends Algorithm{
 	
 	
 	

@@ -5,7 +5,7 @@ import java.util.List;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
-import mvc.model.algorithmen.Algorithmus;
+import mvc.model.algorithmen.Algorithm;
 import utility.Printer;
 
 /**
@@ -21,7 +21,7 @@ import utility.Printer;
  * @param <T>
  *
  */
-public abstract class ShortestPath extends Algorithmus{
+public abstract class ShortestPath extends Algorithm{
 
 	
 	private Node source;
@@ -46,9 +46,11 @@ public abstract class ShortestPath extends Algorithmus{
 	 *            Startknoten
 	 * @param target
 	 *            Zielknoten
-	 * @return Graph auf den der Algorithmus angewandt wurde
+	 * @return Knotenliste, die den kürzesten Weg darfstellt
 	 */
-	public List<Node> calculate(Graph graph, Node source, Node target) {
+	public List<Node> calculate(Graph graph, String source, String target) {		
+		this.validArguments(graph, source, target);
+		
 		Printer.promptTestOut(this, "-------------------------------------"); // ohne
 																		// this
 		Printer.promptTestOut(this, "compute shortest path algorithmus");
@@ -57,6 +59,18 @@ public abstract class ShortestPath extends Algorithmus{
 		
 
 		return this.procedure();
+	}
+
+	private void validArguments(Graph graph, String source, String target) {		
+		
+		if ((graph.getNode(source) == null)) {
+			throw new IllegalArgumentException("source uncorrect");
+			
+		} else if ((graph.getNode(target) == null)) {
+			throw new IllegalArgumentException("target uncorrect");
+			
+		} 		
+		
 	}
 
 	/**
@@ -80,13 +94,13 @@ public abstract class ShortestPath extends Algorithmus{
 	 * @param source
 	 * @param target
 	 */
-	private void initAlgorithmus(Graph graph, Node source, Node target) {
+	private void initAlgorithmus(Graph graph, String source, String target) {
 		Printer.promptTestOut(this, "initialize");
 		Printer.promptTestOut(this, "set source: " + source.toString());
 		Printer.promptTestOut(this, "set target: " + target.toString());
 		this.setGraph(graph);
-		this.source = source;
-		this.target = target;
+		this.source = this.getGraph().getNode(source);
+		this.target = this.getGraph().getNode(target);
 	}
 
 

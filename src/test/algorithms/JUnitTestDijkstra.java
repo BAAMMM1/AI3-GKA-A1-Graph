@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import mvc.model.algorithmen.shortestPath.Dijkstra;
+import mvc.model.exceptions.IllegalDirectedGraph;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestDijkstra {
@@ -98,23 +99,23 @@ public class JUnitTestDijkstra {
 	public void testDijkstraWeightedDirected() {
 	
 		// Test 1 - 9.2.1.1
-		assertEquals(djk1.calculate(graph1, source_01, target_01), shortestPathTest1);		
+		assertEquals(djk1.calculate(graph1, source_01.toString(), target_01.toString()), shortestPathTest1);		
 		
 		// Test 2 - 9.2.1.2
-		assertEquals(djk2.calculate(graph1, source_02, target_02), shortestPathTest2);
+		assertEquals(djk2.calculate(graph1, source_02.toString(), target_02.toString()), shortestPathTest2);
 		
 		// Test 3 - 9.2.1.3		
-		assertEquals(djk3.calculate(graph1, source_03, target_03), shortestPathTest3);
+		assertEquals(djk3.calculate(graph1, source_03.toString(), target_03.toString()), shortestPathTest3);
 		
 	}
 	
-	@Test
+	@Test(expected = IllegalArgumentException.class)
 	public void testDijkstraWeightedUnDirected() {
 		// Test 4 - 9.2.2.1
-		assertEquals(djk4.calculate(graph2, source_04, target_04), shortestPathTest4);		
+		assertEquals(djk4.calculate(graph2, source_04.toString(), target_04.toString()), shortestPathTest4);		
 		
 		// Test 5 - 9.2.2.2
-		assertEquals(djk5.calculate(graph2, source_05, target_05), shortestPathTest5);		
+		assertEquals(djk5.calculate(graph2, source_05.toString(), target_05.toString()), shortestPathTest5);		
 		
 	}
 
