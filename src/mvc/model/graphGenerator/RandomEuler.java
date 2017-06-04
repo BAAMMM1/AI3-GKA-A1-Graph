@@ -88,7 +88,7 @@ public class RandomEuler extends GraphGenerator {
 		} else if (edgeSize < nodeSize) {
 			throw new IllegalArgumentException("Kantenanzahl muss <= Knotenanzahl sein");
 			
-		} 
+		}
 
 	}
 

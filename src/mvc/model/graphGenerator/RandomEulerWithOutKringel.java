@@ -99,7 +99,14 @@ public class RandomEulerWithOutKringel extends GraphGenerator {
 		} else if (edgeSize < nodeSize) {
 			throw new IllegalArgumentException("Kantenanzahl muss <= Knotenanzahl sein");
 
-		}
+		} else if (nodeSize < 2) {
+			throw new IllegalArgumentException("Ohne Kringel werden mindestens zwei Knoten benötigt");
+
+		} else if (((edgeSize-nodeSize) %2) != 0) {
+			throw new IllegalArgumentException("Ohne Kringel: Kantenanzahl muss edgeSize-nodeSize %2 == 0");
+			
+		} 
+
 
 	}
 

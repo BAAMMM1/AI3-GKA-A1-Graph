@@ -27,14 +27,13 @@ public class GraphLabeler {
 		 */
 		for (int i = 0; i < path.size(); i++) {
 			path.get(i).addAttribute("ui.style", "fill-color: rgb(" + r + "," + g + "," + b + ");");
-
+			System.out.println(path.get(i).getId().toString());
 			if (i < path.size() - 1) {
-				if (graph.getEdge(path.get(i).toString()) != null) {
-					graph.getEdge(path.get(i).toString()).addAttribute("ui.style",
-							"fill-color: rgb(" + r + "," + g + "," + b + ");");
-
-				} else if (graph.getEdge(path.get(i).toString()) != null) {
-					graph.getEdge(path.get(i).toString()).addAttribute("ui.style",
+				
+				// Die Edges werden vom BSF benötigt, diese hier findet er nicht = path.get(i).getId().toString() node
+				// Die die Edges hier berechnen
+				if (graph.getEdge(path.get(i).getId().toString()) != null) {
+					graph.getEdge(path.get(i).getId().toString()).addAttribute("ui.style",
 							"fill-color: rgb(" + r + "," + g + "," + b + ");");
 
 				}
