@@ -113,6 +113,8 @@ public class Controller {
 	private void populateComboBoxes() {
 		this.view.getComboBoxGenerator().addItem(new String("Simple"));
 		this.view.getComboBoxGenerator().addItem(new String("Euler"));
+		this.view.getComboBoxGenerator().addItem(new String("Euler ohne Kringel"));
+		
 
 		this.view.getComboBoxShortestPath().addItem(new String("BreadthFirstSearch"));
 		this.view.getComboBoxShortestPath().addItem(new String("Dijkstra"));
@@ -183,8 +185,8 @@ public class Controller {
 
 	private void btnGeneratorAction() {
 
-		GraphGenerator generator = GraphGeneratorFactory
-				.getInstance(this.view.getComboBoxGenerator().getSelectedItem().toString());
+		GraphGenerator generator = this.model
+				.getGraphGenerator(this.view.getComboBoxGenerator().getSelectedItem().toString());
 
 		this.model.setGraph(generator.generate(Integer.valueOf(this.view.getNodeSize().getText()).intValue(),
 				Integer.valueOf(this.view.getEdgeSize().getText()).intValue(),
@@ -198,8 +200,8 @@ public class Controller {
 	private void btnSTPAction() {
 		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
 
-		ShortestPath sTP = ShortestPathFactory
-				.getInstance(this.view.getComboBoxShortestPath().getSelectedItem().toString());
+		ShortestPath sTP = this.model.getShortestPath(this.view.getComboBoxShortestPath().getSelectedItem().toString());
+
 		String source = view.getSource().getText();
 		String target = view.getTarget().getText();
 
@@ -214,8 +216,9 @@ public class Controller {
 	private void btnMSTAction() {
 		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
 
-		MinimalSpanningTree mst = MinimalSpanningTreeFactory
-				.getInstance(this.view.getComboBoxMST().getSelectedItem().toString());
+		MinimalSpanningTree mst = this.model
+				.getMinimalSpanningTree(this.view.getComboBoxMST().getSelectedItem().toString());
+
 		this.model.setGraph(mst.calculate(this.model.getGraph()));
 		this.setGraphToPanel();
 
@@ -225,7 +228,7 @@ public class Controller {
 	private void btnEulerAction() {
 		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
 
-		EulerCircle tour = EulerCircleFactory.getInstance(this.view.getComboBoxEuler().getSelectedItem().toString());
+		EulerCircle tour = this.model.getEulerCircle(this.view.getComboBoxEuler().getSelectedItem().toString());
 
 		List<Edge> result = tour.calculate(this.model.getGraph());
 		this.model.getLabeler().colorEdges(this.model.getGraph(), result, 0, 100, 255);

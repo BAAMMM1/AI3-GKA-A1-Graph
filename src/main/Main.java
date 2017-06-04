@@ -12,7 +12,6 @@ public class Main {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		/*
-		 * TODO Stackprint in die Ausgabe in der GUI
 		 * TODO Random create in einem neuem Thread?
 		 */
 		//Test

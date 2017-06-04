@@ -10,13 +10,12 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
-public class RandomEuler extends GraphGenerator {
+public class RandomEulerWithOutKringel extends GraphGenerator {
 
 	private Graph result;
 	private List<Node> unConnected;
 
-
-	public RandomEuler() {
+	public RandomEulerWithOutKringel() {
 	}
 
 	@Override
@@ -25,28 +24,40 @@ public class RandomEuler extends GraphGenerator {
 		this.validArguments(nodeSize, edgeSize, maxWeight);
 
 		this.initialize(nodeSize, edgeSize, maxWeight);
-		
+
 		Node start = this.getRandomNode();
 		this.unConnected.remove(start);
 		System.out.println("start: " + start.toString());
-		
+
 		Node current = start;
 		Node next = null;
 		int counter = 0;
-		
-		
-		while(edgeSize > 1){
-			
-			if(this.unConnected.isEmpty()){
-				next = this.getRandomNode();
+
+		while (edgeSize > 1) {
+
+			if (this.unConnected.isEmpty()) {
+
+				do {
+					System.out.println("do1");
+					next = this.getRandomNode();
+					
+				} while (current == next);
+
+				if (edgeSize == 2) {
+					
+					do {
+						next = this.getRandomNode();
+					} while (current == next || start == next);
+				}
+
 			} else {
 				next = this.unConnected.get(0);
 				this.unConnected.remove(next);
 			}
-			
+
 			System.out.println("current: " + current.toString());
 			System.out.println("next: " + next.toString());
-			
+
 			this.result.addEdge("e" + counter++, current, next);
 			current = next;
 			edgeSize--;
@@ -55,14 +66,14 @@ public class RandomEuler extends GraphGenerator {
 		System.out.println("current: " + current.toString());
 		System.out.println("start: " + start.toString());
 		this.result.addEdge("e" + counter++, current, start);
-		
+
 		/*
 		 * Knotengrade ausgeben
 		 */
 
 		return result;
 	}
-	
+
 	private Node getRandomNode() {
 		Node node = result.getNode("Node" + this.getRandom(result.getNodeSet().size()));
 
@@ -87,15 +98,15 @@ public class RandomEuler extends GraphGenerator {
 			 */
 		} else if (edgeSize < nodeSize) {
 			throw new IllegalArgumentException("Kantenanzahl muss <= Knotenanzahl sein");
-			
-		} 
+
+		}
 
 	}
 
 	private void initialize(int nodeSize, int edgeSize, int maxWeight) {
 		this.result = new MultiGraph("RandomEuler");
-		this.unConnected = new LinkedList<Node>();		
-		
+		this.unConnected = new LinkedList<Node>();
+
 		for (int i = 0; i < nodeSize; i++) {
 			this.result.addNode("Node" + i);
 			this.unConnected.add(this.result.getNode("Node" + i));
