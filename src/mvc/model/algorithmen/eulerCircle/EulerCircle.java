@@ -32,6 +32,7 @@ public abstract class EulerCircle extends Algorithm {
 		Printer.prompt(this, "-------------------------------------");
 
 		Printer.prompt(this, "compute euler circle algorithmus");
+		Printer.prompt(this, "nodeSize: " + graph.getNodeSet().size() + " edgeSize: " + graph.getEdgeSet().size());
 
 		this.initAlgorithmus(graph);
 
@@ -45,6 +46,14 @@ public abstract class EulerCircle extends Algorithm {
 	 * @param graph
 	 */
 	private void validArguments(Graph graph) {
+		
+		/*
+		 * Kantenanzahl muss mindestens Knotenanzahl sein, ansonsten ist kein Eulerkreis möglich
+		 */
+		if(graph.getEdgeSet().size() < graph.getNodeSet().size()){
+			throw new IllegalArgumentException("Kantenanzahl muss mindesten Knotenanzahl sein");
+		}
+		
 		/*
 		 * Alle Knotengrade müssen gerade sein
 		 */
@@ -59,7 +68,7 @@ public abstract class EulerCircle extends Algorithm {
 			 */
 			List<Edge> edges = new LinkedList<Edge>();
 			edges.addAll(nodes.get(i).getEdgeSet());
-
+			
 			if (edges.isEmpty()) {
 				throw new IllegalArgumentException("graph must be related");
 			}
@@ -75,7 +84,9 @@ public abstract class EulerCircle extends Algorithm {
 			if ((grades % 2) != 0) {
 				throw new IllegalArgumentException("all node degree must be even");
 			}
-
+			
+			
+			
 		}
 
 		/*

@@ -9,6 +9,8 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
+import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+
 /**
  * Die Klasse RandomEuler erzuegt einen ungerichteten, zusammenhängdenen Graphen
  * bei dem jeder Knotengrad gerade ist. Die Knotengrade sind zufällig auf die
@@ -172,7 +174,7 @@ public class RandomEuler extends GraphGenerator {
 	
 			System.out.print(degree + " ");
 		}
-		System.out.print("]");
+		System.out.println("]");
 	}
 
 	/**
@@ -223,6 +225,30 @@ public class RandomEuler extends GraphGenerator {
 			return 0;
 		}
 		
+	}
+	
+	/**
+	 * Erstellt randomisierte Graphen für den Testdurchlauf.
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		GraphFileExtensionHandler fileHandler = new GraphFileExtensionHandler();
+		GraphGenerator randomEuler = GraphGeneratorFactory.getInstance("Euler");
+		
+		for (int counter = 0; counter < 50; counter++) {
+			
+			Random random = new Random();
+			int nodeSize = random.nextInt(2500)+1;
+			int edgeSize = random.nextInt(25000) + nodeSize;
+			Graph graph = randomEuler.generate(nodeSize, edgeSize, 0);
+			fileHandler.saveGraph(graph, "db/testCases/eulercircle/randomEulerGraph" + counter);
+			System.out.println("");
+			System.out.println(graph.getNodeSet().size());
+			System.out.println(graph.getEdgeSet().size());
+			
+		}
+		
+
 	}
 
 }

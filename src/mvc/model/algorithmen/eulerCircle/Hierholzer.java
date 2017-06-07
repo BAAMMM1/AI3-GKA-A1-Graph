@@ -45,6 +45,8 @@ public class Hierholzer extends EulerCircle {
 	 */
 	@Override
 	protected List<Edge> procedure() {
+		long timeStart = System.currentTimeMillis();
+		
 		this.initialize();
 
 		/*
@@ -66,6 +68,10 @@ public class Hierholzer extends EulerCircle {
 		 * Ergebnisausgabe
 		 */
 		this.promptResult();
+		
+		long timeEnd = System.currentTimeMillis();
+		
+		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
 
 		return this.eulerCircuitEdges;
 	}

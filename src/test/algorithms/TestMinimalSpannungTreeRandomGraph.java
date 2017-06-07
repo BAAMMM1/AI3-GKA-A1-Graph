@@ -6,7 +6,7 @@ import mvc.model.algorithmen.minimalSpanningTree.Kruskal;
 import mvc.model.algorithmen.minimalSpanningTree.Prim;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
-public class TestRandomGraph {
+public class TestMinimalSpannungTreeRandomGraph {
 	
 	public static void main(String[] args) {
 

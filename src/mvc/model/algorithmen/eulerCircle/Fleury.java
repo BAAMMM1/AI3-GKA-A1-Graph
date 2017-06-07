@@ -65,6 +65,7 @@ public class Fleury extends EulerCircle {
 	 */
 	@Override
 	protected List<Edge> procedure() {
+		long timeStart = System.currentTimeMillis();
 
 		/*
 		 * Setzt einem zufällig gewählten Startknoten und setzt die
@@ -86,6 +87,10 @@ public class Fleury extends EulerCircle {
 		 * Ergebnisausgabe
 		 */
 		Printer.prompt(this, this.eulerCircuit.toString());
+		
+		long timeEnd = System.currentTimeMillis();
+		
+		Printer.prompt(this, "time needed: " + (timeEnd - timeStart));
 
 		return this.eulerCircuit;
 	}
