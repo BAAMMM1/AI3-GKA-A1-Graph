@@ -1,236 +1,252 @@
 package mvc.model.algorithmen.eulerCircle;
 
 import java.util.LinkedList;
-
 import java.util.List;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
-import scala.util.Random;
 import utility.Printer;
 
 /**
- * Der Algorithmus von Hierholzer findet in einem zusammenhängend, ungerichtet
- * Graphen und bei dem jeder Knoten einen gerade Knotengrad besitzt, einen
- * Eulerkreis.
+ * Der Algorithmus von Hierholzer findet in einem zusammenhängenden,
+ * ungerichteten Graphen und bei dem jeder Knoten einen geraden Knotengrad
+ * besitzt, einen Eulerkreis.
  * 
- * (1) Vorgang: Der Algorithmus beginnt bei einem zufällig ausgewählten
+ * (1) Vorgang: Der Algorithmus beginnt bei einem zufälligen ausgewählten
  * Startknoten.
  * 
  * (2) Von dort an fängt er an einen Zyklus in dem Graphen zu durchlaufen, bis
  * er wieder bei dem Startknoten angekommen ist.
  * 
- * Anschließend wird ein Knoten - der noch eine weitere Kante hat, die nicht zum
- * Zyklus gehört - aus der Knotenmenge des Zyklus ermittelt.
+ * (3)Anschließend wird ein Knoten - der noch eine weitere Kante hat, die nicht
+ * zum Zyklus gehört - aus der Knotenmenge des Zyklus ermittelt.
  * 
  * Vom diesem Knoten aus wird ein weiterer Zyklus erstellt. Wenn noch weitere
- * Kanten im Graph vorhanden sind, wieder zu (2).
+ * Kanten im Graph vorhanden sind, wieder zu (3).
  * 
+ * Ansonsten wird der Eulerkreis anhand der Zyklen ermittelt.
  * 
- * 
- * @author Chris
+ * Dies geschiet indem ausgehen vom ersten Zyklus der jeweilige nächste Zyklus
+ * in diesen integriert wird, an die Setlle an der der jeweilige nächste Zyklus
+ * startet.
  *
  */
 public class Hierholzer extends EulerCircle {
 
-	private List<List<Node>> zyklenNodes;
-	private LinkedList<Edge> edges;
-	private LinkedList<List<Edge>> zyklenEdges;
+	private List<List<Node>> cyclesNodes;
+	private List<List<Edge>> cyclesEdges;
+	private List<Edge> eulerCircuitEdges;
+	private List<Node> eulerCircuitNodes;
 
-	private LinkedList<List<Edge>> zyklenEdgesNew;
-
+	/**
+	 * Diese Mehtode stellt die Handlungsvorschrift des Hierholzer-Algorithmus
+	 * da.
+	 */
 	@Override
 	protected List<Edge> procedure() {
 		this.initialize();
 
+		/*
+		 * Berechnung der Zyklen in dem Graphen
+		 */
 		this.calculateEulerParts();
 
-		return this.calculateEulerCircle();
-	}
-
-	private void calculateEulerParts() {
-
-		Node randomStart = this.getGraph().getNode(this.getRandomStart(this.getGraph().getNodeSet().size()));
-		Printer.prompt(this, "random start: " + randomStart.toString());
-
-		Node aktuellerStart = randomStart;
-		Node nextNode = randomStart;
-
-		int aktuelleListe = 0;
-		this.zyklenNodes.add(new LinkedList<Node>());
-
-		while (!this.getGraph().getEdgeSet().isEmpty()) {
-
-			LinkedList<Edge> currentCircle = new LinkedList<Edge>();
-
-			do {
-				this.zyklenNodes.get(aktuelleListe).add(nextNode);
-
-				List<Edge> nodeEdges = new LinkedList<Edge>();
-				nodeEdges.addAll(nextNode.getEdgeSet());
-
-				Edge nextEdge = nodeEdges.get(this.getRandomStart(nodeEdges.size()));
-				currentCircle.add(nextEdge);
-
-				this.getGraph().removeEdge(nextEdge);
-
-				if (nextEdge.getSourceNode() != nextNode) {
-					nextNode = nextEdge.getSourceNode();
-				} else {
-					nextNode = nextEdge.getTargetNode();
-				}
-
-			} while (nextNode != aktuellerStart);
-			/*
-			 * Edge brauch hier nicht extra hinzugefügt werden
-			 */
-			this.zyklenNodes.get(aktuelleListe).add(nextNode);
-			this.zyklenEdgesNew.add(currentCircle);
-
-			// Über alle Knoten in der aktuellen List, finde den mit Grad größer
-			// 0
-			// nimm ihn als aktuellerStart und nextNode;
-			if (!this.getGraph().getEdgeSet().isEmpty()) {
-
-				for (int i = 0; i < this.zyklenNodes.size(); i++) {
-
-					for (int i2 = 0; i2 < this.zyklenNodes.get(i).size(); i2++) {
-
-						if (this.zyklenNodes.get(i).get(i2).getEdgeSet().size() > 0) {
-							aktuellerStart = this.zyklenNodes.get(i).get(i2);
-
-							nextNode = this.zyklenNodes.get(i).get(i2);
-							break;
-						}
-					}
-
-				}
-
-				aktuelleListe++;
-				this.zyklenNodes.add(new LinkedList<Node>());
-
-			}
-
-			/*
-			 * for(Edge edge : aktuellerStart.getEdgeSet()){
-			 * 
-			 * 
-			 * }
-			 */
-
-		}
-
-	}
-
-	private int getRandomStart(int value) {
-		Random random = new Random();
-		return random.nextInt(value);
-	}
-
-	private void initialize() {
-		this.edges = new LinkedList<Edge>();
-		this.edges.addAll(this.getGraph().getEdgeSet());
-		this.zyklenNodes = new LinkedList<List<Node>>();
-		this.zyklenEdges = new LinkedList<List<Edge>>();
-		this.zyklenEdgesNew = new LinkedList<List<Edge>>();
-
-	}
-
-	private List<Edge> calculateEulerCircle() {
-
-		List<Node> resultNodes = new LinkedList<Node>();
-		List<Edge> resultEdges = new LinkedList<Edge>();
-
-		List<Edge> resultEdgesNew = new LinkedList<Edge>();
-
-		// TODO Wird diese if-Anweisung gebraucht?
-		// NodeZyklen zu EulerCircle
-		if (!this.zyklenNodes.isEmpty()) {
-			resultNodes.addAll(this.zyklenNodes.get(0));
-			resultEdgesNew.addAll(this.zyklenEdgesNew.get(0));
-
-			for (int i = 1; i < this.zyklenNodes.size(); i++) {
-
-				int index = resultNodes.indexOf(this.zyklenNodes.get(i).get(0));
-
-				resultNodes.remove(index);
-
-				resultNodes.addAll(index, zyklenNodes.get(i));
-
-				resultEdgesNew.addAll(index, this.zyklenEdgesNew.get(i));
-
-			}
-
-		}
+		/*
+		 * Berechnung des Eulerkreis aus den jeweiligen Zyklen
+		 */
+		this.calculateEulerCircle();
 
 		/*
 		 * Dem Graphen alle Kanten wieder hinzufügen
 		 */
-		for (int i = 0; i < this.edges.size(); i++) {
-			Node source = edges.get(i).getSourceNode();
-			Node target = edges.get(i).getTargetNode();
-			String name = edges.get(i).getId();
+		this.addEdgesBackToGraph(eulerCircuitEdges);
 
-			this.getGraph().addEdge(name, source, target);
+		/*
+		 * Ergebnisausgabe
+		 */
+		this.promptResult();
 
-			if (edges.get(i).getAttribute("weight") != null) {
-				this.getGraph().getEdge(name).setAttribute("weight", (int) edges.get(i).getAttribute("weight"));
-			}
-			if (edges.get(i).getAttribute("ui.label") != null) {
-				this.getGraph().getEdge(name).setAttribute("ui.label",
-						edges.get(i).getAttribute("ui.label").toString());
-			}
+		return this.eulerCircuitEdges;
+	}
 
-		}
+	/**
+	 * Initialisiert den Algortihmus Dafür werden zwei Listen - die den
+	 * Eulerkreis einmal in Kanten und in Knoten notation darstellt - benötigt.
+	 * 
+	 * Ebenso werden zwei Listen die die jeweiligen Zyklen in Nodes und Kanten
+	 * darstellen benötigt.
+	 * 
+	 */
+	private void initialize() {
+		this.eulerCircuitEdges = new LinkedList<Edge>();
+		this.eulerCircuitNodes = new LinkedList<Node>();
 
-		for (int i = 0; i < this.zyklenNodes.size(); i++) {
-			this.zyklenEdges.add(new LinkedList<Edge>());
-
-			for (int i2 = 0; i2 < this.zyklenNodes.get(i).size() - 1; i2++) {
-				Node node1 = zyklenNodes.get(i).get(i2);
-				Node node2 = zyklenNodes.get(i).get(i2 + 1);
-				String name1 = node1.toString() + node2.toString();
-				String name2 = node2.toString() + node1.toString();
-
-				if (this.getGraph().getEdge(name1) != null) {
-					this.zyklenEdges.get(i).add(this.getGraph().getEdge(name1));
-				} else {
-					this.zyklenEdges.get(i).add(this.getGraph().getEdge(name2));
-				}
-
-			}
-
-		}
-
-		for (int i = 0; i < resultNodes.size() - 1; i++) {
-			Node node1 = resultNodes.get(i);
-			Node node2 = resultNodes.get(i + 1);
-			String name1 = node1.toString() + node2.toString();
-			String name2 = node2.toString() + node1.toString();
-
-			if (this.getGraph().getEdge(name1) != null) {
-				resultEdges.add(this.getGraph().getEdge(name1));
-			} else {
-				resultEdges.add(this.getGraph().getEdge(name2));
-			}
-
-		}
-
-		Printer.prompt(this, "Node-Zyklen: \t" + this.zyklenNodes.toString());
-		Printer.prompt(this, "Node-Eulerkreis: \t" + resultNodes.toString());
-		Printer.prompt(this, "Edge-Zyklen: \t" + this.zyklenEdges.toString());
-		Printer.prompt(this, "Edge-Eulerkreis: \t" + resultEdges.toString());
-
-		Printer.prompt(this, "Edge-New: \t" + this.zyklenEdgesNew.toString());
-		Printer.prompt(this, "Edge-Eulerkreis: \t" + resultEdgesNew.toString());
-
-		return resultEdgesNew;
+		this.cyclesNodes = new LinkedList<List<Node>>();
+		this.cyclesEdges = new LinkedList<List<Edge>>();
 
 	}
 
+	/**
+	 * Diese Mehtode ermittelt die jeweiligen Zyklen innerhab des Graphen, indem
+	 * so lange Zyklen berechnet werden bis der Graph keine Kanten mehr besitzt.
+	 */
+	private void calculateEulerParts() {
+
+		/*
+		 * Start und Ende des ersten Zyklus bestimmen
+		 */
+		Node randomStart = this.getRandomNode();
+
+		Node currentCycleStartAndEnd = randomStart;
+		/*
+		 * Aktuelle Position des ersten Zyklus setzten
+		 */
+		Node currentNode = currentCycleStartAndEnd;
+
+		/*
+		 * Solange noch nicht alle Kante angeschaut wurden, ermittle alle Zyklen
+		 */
+		while (!this.getGraph().getEdgeSet().isEmpty()) {
+
+			LinkedList<Node> currentCycleNodes = new LinkedList<Node>();
+			LinkedList<Edge> currentCycleEdges = new LinkedList<Edge>();
+
+			do {
+				/*
+				 * Aktuellen Knoten dem aktuellen Zyklus hinzufügen
+				 */
+				currentCycleNodes.add(currentNode);
+
+				/*
+				 * Alle Kanten des aktuellen Knoten ermittelnt
+				 */
+				List<Edge> currentNodeEdges = new LinkedList<Edge>(currentNode.getEdgeSet());
+
+				/*
+				 * Wenn keine Kante mehr vorhanden ist, dann ist der Graph nicht
+				 * zusammenhängend.
+				 */
+				if (currentNodeEdges.isEmpty()) {
+					throw new IllegalArgumentException("graph must be related");
+				}
+
+				/*
+				 * Ansonsten nehme irgendeine Kante des aktuellen Knoten
+				 */
+				Edge nextEdge = currentNodeEdges.get(this.getRandom(currentNodeEdges.size()));
+
+				/*
+				 * Kante dem aktuellen Kantenzyklus hinzufügen
+				 */
+				currentCycleEdges.add(nextEdge);
+
+				/*
+				 * Kante als gesehen makieren
+				 */
+				this.getGraph().removeEdge(nextEdge);
+
+				/*
+				 * Nächste Knoten ermittelt
+				 */
+				if (nextEdge.getSourceNode() != currentNode) {
+					currentNode = nextEdge.getSourceNode();
+				} else {
+					currentNode = nextEdge.getTargetNode();
+				}
+
+				/*
+				 * Solange bis der Zyklus vollständig ist, indem er am
+				 * Startpunkt wieder angekommen ist
+				 */
+			} while (currentNode != currentCycleStartAndEnd);
+
+			/*
+			 * Letzter Knoten im Zyklus in der Start Edge brauch hier nicht
+			 * extra hinzugefügt werden
+			 */
+			currentCycleNodes.add(currentCycleStartAndEnd);
+
+			/*
+			 * Aktuellen Zyklus zur Zyklusliste hinzufügen
+			 */
+			this.cyclesNodes.add(currentCycleNodes);
+			this.cyclesEdges.add(currentCycleEdges);
+
+			/*
+			 * Identifizieren des nächsten Zyklusstarts, nur möglich wenn es
+			 * noch Knoten mit Kanten gibt. Itteration über alle Knoten in der
+			 * Zyklenliste, finde den mit Grad größer 0 und nimm ihn als
+			 * aktuellerStart und nextNode;
+			 */
+			if (!this.getGraph().getEdgeSet().isEmpty()) {
+
+				for (int i = 0; i < this.cyclesNodes.size(); i++) {
+
+					for (int i2 = 0; i2 < this.cyclesNodes.get(i).size(); i2++) {
+
+						if (this.cyclesNodes.get(i).get(i2).getEdgeSet().size() > 0) {
+							currentCycleStartAndEnd = this.cyclesNodes.get(i).get(i2);
+							currentNode = currentCycleStartAndEnd;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Diese Methode berechnet den Eulerkreis aus allen Zyklen innerhalb des
+	 * Graphen Dies geschiet indem ausgehen vom ersten Zyklus der jeweilige
+	 * nächste Zyklus in diesen integriert wird, an die Setlle an der der
+	 * jeweilige nächste Zyklus startet.
+	 */
+	private void calculateEulerCircle() {
+
+		/*
+		 * Zunächst wird dem Eulerkreis alle Knoten/Kanten des ersten Zyklus
+		 * hinzugefügt
+		 */
+		this.eulerCircuitNodes.addAll(this.cyclesNodes.get(0));
+		eulerCircuitEdges.addAll(this.cyclesEdges.get(0));
+
+		/*
+		 * Anschließent wird jeder weiter Zyklus in den Euklerkreis an die
+		 * Stelle, an der der jeweilige nächste Zyklus startet hinzugefügt.
+		 */
+		for (int i = 1; i < this.cyclesNodes.size(); i++) {
+
+			int index = this.eulerCircuitNodes.indexOf(this.cyclesNodes.get(i).get(0));
+
+			this.eulerCircuitNodes.remove(index);
+			this.eulerCircuitNodes.addAll(index, this.cyclesNodes.get(i));
+
+			this.eulerCircuitEdges.addAll(index, this.cyclesEdges.get(i));
+
+		}
+
+	}
+
+	/**
+	 * Diese Mehtode gibt das Ergebnis des Algorithmus auf der Console aus.
+	 */
+	private void promptResult() {
+		Printer.prompt(this, "Node-Zyklen: \t" + this.cyclesNodes.toString());
+		Printer.prompt(this, "Node-Eulerkreis: \t" + this.eulerCircuitNodes.toString());
+		Printer.prompt(this, "");
+		Printer.prompt(this, "Edge-Zyklen: \t" + this.cyclesEdges.toString());
+		Printer.prompt(this, "Edge-Eulerkreis: \t" + eulerCircuitEdges.toString());
+	}
+
+	/**
+	 * Diese Mehtode gibt die für den jeweiligen Durchlauf des Algortihmus
+	 * berechneten Zyklen zurück.
+	 * 
+	 * @return Liefert alle berechneten Zyklen des Graphen zurück
+	 */
 	public List<List<Edge>> getEulerParts() {
-		return this.zyklenEdgesNew;
+		return this.cyclesEdges;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.graphstream.graph.Node;
 
 import mvc.model.algorithmen.Algorithm;
 import mvc.model.exceptions.IllegalDirectedGraph;
+import scala.util.Random;
 import utility.Printer;
 
 /**
@@ -21,8 +22,7 @@ import utility.Printer;
  * des jeweiligen Algorithmus beinhaltet, ausgeführt. Dies ermöhlicht uns, dass
  * die konkreten Klassen von EulerCircuit-Algorithmus sich nur um ihre jeweilige
  * Handlungsvorschriftt kümmern müssen.
- * 
- *
+ *   
  */
 public abstract class EulerCircle extends Algorithm {
 
@@ -59,6 +59,10 @@ public abstract class EulerCircle extends Algorithm {
 			 */
 			List<Edge> edges = new LinkedList<Edge>();
 			edges.addAll(nodes.get(i).getEdgeSet());
+
+			if (edges.isEmpty()) {
+				throw new IllegalArgumentException("graph must be related");
+			}
 
 			int grades = edges.size();
 
@@ -99,6 +103,64 @@ public abstract class EulerCircle extends Algorithm {
 
 	}
 
+	/**
+	 * Diese Mehtode stellt die Handlungsvorschrift des jeweiligen Algorithmus da.
+	 * @return
+	 */
 	protected abstract List<Edge> procedure();
+
+	/**
+	 * Ermittelt aus dem Graphen einen zufälligen Knoten.
+	 * 
+	 * @return Zufälliger Knoten aus dem Graphen
+	 */
+	protected Node getRandomNode() {
+		return this.getGraph().getNode(this.getRandom(this.getGraph().getNodeSet().size()));
+	}
+
+	/**
+	 * Ermittelt eine zufällig Zahl von (0 - (value - 1))
+	 * 
+	 * @param value
+	 *            exklusives Maximum
+	 * @return Zufällige Zahl
+	 */
+	protected int getRandom(int value) {
+		Random random = new Random();
+		return random.nextInt(value);
+	}
+
+	/**
+	 * Diese Methode fügt dem Graphen alle Kanten des Eulerkreis wieder hinzu.
+	 */
+	protected void addEdgesBackToGraph(List<Edge> edges) {
+		for (int i = 0; i < edges.size(); i++) {
+
+			this.addEdge(edges.get(i));
+		}
+	}
+
+	/**
+	 * Fügt dem Graph eine übergebene Kante hinzu.
+	 * 
+	 * @param edge
+	 *            Kante die dem Graph hinzugefügt werden soll
+	 */
+	protected void addEdge(Edge edge) {
+		Node edgeSource = edge.getSourceNode();
+		Node edgeTarget = edge.getTargetNode();
+		String id = edge.getId();
+
+		this.getGraph().addEdge(id, edgeSource, edgeTarget);
+
+		if (edge.getAttribute("ui.label") != null) {
+			this.getGraph().getEdge(id).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
+		}
+		
+		if (edge.getAttribute("weight") != null) {
+			this.getGraph().getEdge(id).addAttribute("weight", (int) edge.getAttribute("weight"));
+		}
+
+	}
 
 }

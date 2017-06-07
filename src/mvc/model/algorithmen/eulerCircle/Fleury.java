@@ -80,7 +80,7 @@ public class Fleury extends EulerCircle {
 		/*
 		 * Dem Graphen, die gelöschten Kanten wieder hinzufügen
 		 */
-		this.addEdgesBackToGraph();
+		this.addEdgesBackToGraph(this.eulerCircuit);
 
 		/*
 		 * Ergebnisausgabe
@@ -116,6 +116,17 @@ public class Fleury extends EulerCircle {
 
 			List<Edge> currentPositionEdges = new LinkedList<Edge>();
 			currentPositionEdges.addAll(currentPosition.getEdgeSet());
+
+			/*
+			 * Wenn der Graph nicht zusammenhhängend ist, besitzt der Graph noch
+			 * weitere Kanten in einer Knotenmenge, die nicht ereicht werden
+			 * können und die aktuelle Position besitzt keine weiteren Kanten
+			 * mehr
+			 */
+			if (currentPositionEdges.isEmpty()) {
+				// this.addEdgesBackToGraph();
+				throw new IllegalArgumentException("graph must be related");
+			}
 
 			/*
 			 * Wenn der Knoten mehr als eine Kante hat, dann nehme keine Brücke
@@ -200,60 +211,6 @@ public class Fleury extends EulerCircle {
 			return false;
 		}
 
-	}
-
-	/**
-	 * Diese Methode fügt dem Graphen alle Kanten des Eulerkreis wieder hinzu.
-	 */
-	private void addEdgesBackToGraph() {
-		for (int i = 0; i < this.eulerCircuit.size(); i++) {
-
-			this.addEdge(this.eulerCircuit.get(i));
-
-		}
-	}
-
-	/**
-	 * Fügt dem Graph eine übergebene Kante hinzu.
-	 * 
-	 * @param edge
-	 *            Kante die dem Graph hinzugefügt werden soll
-	 */
-	private void addEdge(Edge edge) {
-		Node edgeSource = edge.getSourceNode();
-		Node edgeTarget = edge.getTargetNode();
-		String id = edge.getId();
-
-		this.getGraph().addEdge(id, edgeSource, edgeTarget);
-
-		if (edge.getAttribute("ui.label") != null) {
-			this.getGraph().getEdge(id).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
-		}
-		if (edge.getAttribute("weight") != null) {
-			this.getGraph().getEdge(id).addAttribute("weight", (int) edge.getAttribute("weight"));
-		}
-
-	}
-
-	/**
-	 * Ermittelt aus dem Graphen einen zufälligen Knoten.
-	 * 
-	 * @return Zufälliger Knoten aus dem Graphen
-	 */
-	private Node getRandomNode() {
-		return this.getGraph().getNode(this.getRandom(this.getGraph().getNodeSet().size()));
-	}
-
-	/**
-	 * Ermittelt eine zufällig Zahl von (0 - (value - 1))
-	 * 
-	 * @param value
-	 *            exklusives Maximum
-	 * @return Zufällige Zahl
-	 */
-	private int getRandom(int value) {
-		Random random = new Random();
-		return random.nextInt(value);
 	}
 
 	@Override

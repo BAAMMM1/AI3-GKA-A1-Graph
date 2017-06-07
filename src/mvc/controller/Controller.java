@@ -112,9 +112,7 @@ public class Controller {
 
 	private void populateComboBoxes() {
 		this.view.getComboBoxGenerator().addItem(new String("Simple"));
-		this.view.getComboBoxGenerator().addItem(new String("Euler"));
-		this.view.getComboBoxGenerator().addItem(new String("Euler ohne Kringel"));
-		
+		this.view.getComboBoxGenerator().addItem(new String("Euler"));		
 
 		this.view.getComboBoxShortestPath().addItem(new String("BreadthFirstSearch"));
 		this.view.getComboBoxShortestPath().addItem(new String("Dijkstra"));
