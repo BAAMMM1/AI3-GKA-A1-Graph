@@ -18,7 +18,7 @@ import utility.Printer;
  * 
  * Vorgang: Der Algorithmus beginnt bei einem zufällig ausgewählten Startknoten,
  * der auch den Endknoten darstellt und im ersten Schritt der aktuelle
- * ausgewählte Knoten is.
+ * ausgewählte Knoten ist.
  * 
  * (1)So lange alle Kanten erfasst wurden:
  * 
@@ -30,11 +30,11 @@ import utility.Printer;
  * es keine Möglichkeit mehr zur anderen zusammenhängenden Knotenmenge
  * zugelangen.
  * 
- * Wie wird eine Brücke fstgestellt?
- * 
- * 
- * 
- * 
+ * Eine Brücke wird festgestellt, in dem die Kante aus dem Graph entfernt wird
+ * und anschließend geprüft wird, ob es möglich ist von der aktuellen Position
+ * (ein Knoten) wieder zurück zum StartAndEndknoten zugelangen. Ist dies nicht
+ * möglich ist die Kante eine Brücke. Nach der Prüfung wird dem Graph die Kante
+ * wieder hinzugefügt.
  * 
  * Deshalb darf keine Brücke genommen werden. Dadurch werden alle Knoten im
  * Graph erreicht.
@@ -55,11 +55,14 @@ import utility.Printer;
  */
 public class Fleury extends EulerCircle {
 
-	private LinkedList<Edge> edgePath;
+	private LinkedList<Edge> eulerCircuit;
 	private Node startAndEndNode;
 	private Node currentPosition;
 	private Edge nextEdge;
 
+	/**
+	 * Diese Mehtode stellt die Handlungsvorschrift des Fleury-Algortihmus da.
+	 */
 	@Override
 	protected List<Edge> procedure() {
 
@@ -72,7 +75,7 @@ public class Fleury extends EulerCircle {
 		/*
 		 * Ermittelt den Eulerkreis
 		 */
-		this.calculateEulerCircle();
+		this.calculateEulerCircuit();
 
 		/*
 		 * Dem Graphen, die gelöschten Kanten wieder hinzufügen
@@ -82,41 +85,58 @@ public class Fleury extends EulerCircle {
 		/*
 		 * Ergebnisausgabe
 		 */
-		Printer.prompt(this, this.edgePath.toString());
+		Printer.prompt(this, this.eulerCircuit.toString());
 
-		return this.edgePath;
+		return this.eulerCircuit;
 	}
 
-	private void calculateEulerCircle() {
+	/**
+	 * Diese Methode initialisiert den Algorithmus. Dafür wurd ein zufälliger
+	 * Startknoten ausgewählt, der ebenson der Endknoten ist.
+	 */
+	private void initialize() {
+		this.eulerCircuit = new LinkedList<Edge>();
+		this.startAndEndNode = this.getRandomNode();
+		this.currentPosition = startAndEndNode;
+
+	}
+
+	/**
+	 * Der Graph wird vom zufällig gewählten Startknoten über alle Kanten hinweg
+	 * gelaufenb bis die letzte Kante wieder zum Starknoten führt. Der gelaufene
+	 * Weg - welcher den Eulerkreis darstellt - wird in der im edgePath
+	 * festgehalten.
+	 */
+	private void calculateEulerCircuit() {
 
 		/*
-		 * So lange alle Kanten angeschaut wurden
+		 * So lange alle Kanten noch nicht angeschaut wurden
 		 */
 		while (!this.getGraph().getEdgeSet().isEmpty()) {
 
-			List<Edge> edges = new LinkedList<Edge>();
-			edges.addAll(currentPosition.getEdgeSet());
+			List<Edge> currentPositionEdges = new LinkedList<Edge>();
+			currentPositionEdges.addAll(currentPosition.getEdgeSet());
 
-			if (edges.size() > 1) {
+			/*
+			 * Wenn der Knoten mehr als eine Kante hat, dann nehme keine Brücke
+			 * als nächste Kante
+			 */
+			if (currentPositionEdges.size() > 1) {
 
-				int random = this.getRandom(edges.size());
-				Printer.promptTestOut(this, "" + random);
-
+				Edge randomEdge;
 				/*
 				 * Wähle eine Kante die keine Brücke ist
 				 */
-				while (this.isBridge(edges.get(random), currentPosition.toString(), startAndEndNode.toString())) {
-					random = this.getRandom(edges.size());
-					Printer.promptTestOut(this, "" + random);
-				}
+				do {
+					randomEdge = currentPositionEdges.get(this.getRandom(currentPositionEdges.size()));
+				} while (this.isBridge(randomEdge, currentPosition.toString()));
 
 				/*
 				 * Damit die Kante auch wieder im richten Graphen gefunden wird,
 				 * da sie in isBridge einmal gelöscht und wieder hinzugefügt
 				 * wird, ist die Kante nicht das selbe Objekt
 				 */
-				nextEdge = this.getGraph().getEdge(
-						edges.get(random).getId());
+				nextEdge = this.getGraph().getEdge(randomEdge.getId());
 
 			} else {
 				/*
@@ -125,9 +145,16 @@ public class Fleury extends EulerCircle {
 				nextEdge = currentPosition.getEdge(0);
 			}
 
-			edgePath.add(nextEdge);
+			/*
+			 * Die Kante wird aus dem Graph entfernt, damit sie nicht erneut
+			 * angeschaut wird
+			 */
+			eulerCircuit.add(nextEdge);
 			this.getGraph().removeEdge(nextEdge);
 
+			/*
+			 * Auswahl des nächsten Knoten
+			 */
 			if (nextEdge.getSourceNode() != currentPosition) {
 				currentPosition = nextEdge.getSourceNode();
 			} else {
@@ -138,67 +165,92 @@ public class Fleury extends EulerCircle {
 
 	}
 
-	private void initialize() {
-		this.edgePath = new LinkedList<Edge>();
-		this.startAndEndNode = this.getRandomStartNode();
-		this.currentPosition = startAndEndNode;
-		this.nextEdge = null;
-
-	}
-
-	/*
-	 * Gibt es auch eine effizientere Implementierung?
-	 */
 	/**
 	 * Diese Mehtode stellt fest, ob es sich bei der Kante um eine Schnittkante
-	 * handelt.
+	 * handelt. D.h Es wird geprüft, ob diese Kante zwei Mengen von
+	 * zusammenhängenden Knoten, die ohne diese Kante nicht mehr voneinander
+	 * ereichbar sind, verbindet.
 	 * 
 	 * @param edge
+	 *            Kante die aus eine Brücke geprüft werden soll
 	 * @param position
-	 * @param startNode
-	 * @return
+	 *            Knotenposition des Algorithmus
+	 * @return true - falls Kante eine Brückte ist, false - falls Kante keine
+	 *         Brücke ist
 	 */
-	private boolean isBridge(Edge edge, String position, String startNode) {
+	private boolean isBridge(Edge edge, String position) {
 		ShortestPath bfs = ShortestPathFactory.getInstance("BreadthFirstSearch");
-		Node edgeSource = edge.getSourceNode();
-		Node edgeTarget = edge.getTargetNode();
-		String name = edge.getId();
 
-		// Sicherstellen, dass die Kante des Graphen verwendet wird
-		edge = this.getGraph().getEdge(name);
+		/*
+		 * Sicherstellen, dass die Kante des Graphen verwendet wird. Durchs
+		 * löschen und hinzufügen verändern sich die Edge-Objekte wo mit man
+		 * dann die Kante aus dem Graph herausnehmen muss, welche die ID der
+		 * übergebenen Kante besitzt.
+		 */
+		edge = this.getGraph().getEdge(edge.getId());
 
 		this.getGraph().removeEdge(edge);
 
-		if (bfs.calculate(this.getGraph(), position, startNode).isEmpty()) {
-			this.getGraph().addEdge(name, edgeSource, edgeTarget);
-
-			if (edge.getAttribute("ui.label") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
-			}
-			if (edge.getAttribute("weight") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label", (int) edge.getAttribute("weight"));
-			}
-
+		if (bfs.calculate(this.getGraph(), position, this.startAndEndNode.toString()).isEmpty()) {
+			this.addEdge(edge);
 			return true;
+
 		} else {
-
-			this.getGraph().addEdge(name, edgeSource, edgeTarget);
-			if (edge.getAttribute("ui.label") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
-			}
-			if (edge.getAttribute("weight") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label", (int) edge.getAttribute("weight"));
-			}
-
+			this.addEdge(edge);
 			return false;
 		}
 
 	}
 
-	private Node getRandomStartNode() {
+	/**
+	 * Diese Methode fügt dem Graphen alle Kanten des Eulerkreis wieder hinzu.
+	 */
+	private void addEdgesBackToGraph() {
+		for (int i = 0; i < this.eulerCircuit.size(); i++) {
+
+			this.addEdge(this.eulerCircuit.get(i));
+
+		}
+	}
+
+	/**
+	 * Fügt dem Graph eine übergebene Kante hinzu.
+	 * 
+	 * @param edge
+	 *            Kante die dem Graph hinzugefügt werden soll
+	 */
+	private void addEdge(Edge edge) {
+		Node edgeSource = edge.getSourceNode();
+		Node edgeTarget = edge.getTargetNode();
+		String id = edge.getId();
+
+		this.getGraph().addEdge(id, edgeSource, edgeTarget);
+
+		if (edge.getAttribute("ui.label") != null) {
+			this.getGraph().getEdge(id).addAttribute("ui.label", edge.getAttribute("ui.label").toString());
+		}
+		if (edge.getAttribute("weight") != null) {
+			this.getGraph().getEdge(id).addAttribute("weight", (int) edge.getAttribute("weight"));
+		}
+
+	}
+
+	/**
+	 * Ermittelt aus dem Graphen einen zufälligen Knoten.
+	 * 
+	 * @return Zufälliger Knoten aus dem Graphen
+	 */
+	private Node getRandomNode() {
 		return this.getGraph().getNode(this.getRandom(this.getGraph().getNodeSet().size()));
 	}
 
+	/**
+	 * Ermittelt eine zufällig Zahl von (0 - (value - 1))
+	 * 
+	 * @param value
+	 *            exklusives Maximum
+	 * @return Zufällige Zahl
+	 */
 	private int getRandom(int value) {
 		Random random = new Random();
 		return random.nextInt(value);
@@ -207,23 +259,5 @@ public class Fleury extends EulerCircle {
 	@Override
 	public String toString() {
 		return String.format("Fleury");
-	}
-
-	private void addEdgesBackToGraph() {
-		for (int i = 0; i < this.edgePath.size(); i++) {
-			String name = edgePath.get(i).getId();
-			Node source = edgePath.get(i).getSourceNode();
-			Node target = edgePath.get(i).getTargetNode();
-			this.getGraph().addEdge(name, source, target);
-
-			if (edgePath.get(i).getAttribute("ui.label") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label",
-						edgePath.get(i).getAttribute("ui.label").toString());
-			}
-			if (edgePath.get(i).getAttribute("weight") != null) {
-				this.getGraph().getEdge(name).addAttribute("ui.label", (int) edgePath.get(i).getAttribute("weight"));
-			}
-
-		}
 	}
 }

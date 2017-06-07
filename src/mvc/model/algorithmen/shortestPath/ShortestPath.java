@@ -9,21 +9,19 @@ import mvc.model.algorithmen.Algorithm;
 import utility.Printer;
 
 /**
- * Diese Klasse definiert den grundlegenden Aufbau eines Algorithmus. Ein
- * Alogirthmus kann mit compute() ausgeführt werden. Dort wird er zunächst
- * inizialisiert mit einem Graphen, einen Startknoten und einen Zielknoten.
- * Anschließen wird die jeweilige Handlungsvorschrift, die die Einzelschritten
- * des jeweiligen Algorithmus beinhaltet, ausgeführt. Dies ermöhlicht uns, dass
- * die konkreten Klassen von Algorithmus sich nur um ihre jeweilige
+ * Diese Klasse definiert den grundlegenden Aufbau eines
+ * Traversierung-Algorithmus. Ein Traversierung-Alogirthmus kann mit calculate()
+ * ausgeführt werden. Dort wird er zunächst die übergabe Parameter
+ * aufzulässigkeit geprüft. Anschließenden wird der Algorithmus mit einem
+ * Graphen, einen Startknoten und einen Zielknoten inizialisiert. Anschließend
+ * wird die jeweilige Handlungsvorschrift, die die Einzelschritten des
+ * jeweiligen Algorithmus beinhaltet, ausgeführt. Dies ermöhlicht uns, dass die
+ * konkreten Klassen von Algorithmus sich nur um ihre jeweilige
  * Handlungsvorschriftt kümmern müssen.
  * 
- * @author chris
- * @param <T>
- *
  */
-public abstract class ShortestPath extends Algorithm{
+public abstract class ShortestPath extends Algorithm {
 
-	
 	private Node source;
 	private Node target;
 
@@ -48,29 +46,34 @@ public abstract class ShortestPath extends Algorithm{
 	 *            Zielknoten
 	 * @return Knotenliste, die den kürzesten Weg darfstellt
 	 */
-	public List<Node> calculate(Graph graph, String source, String target) {		
+	public List<Node> calculate(Graph graph, String source, String target) {
 		this.validArguments(graph, source, target);
-		
+
 		Printer.promptTestOut(this, "-------------------------------------"); // ohne
-																		// this
+		// this
 		Printer.promptTestOut(this, "compute shortest path algorithmus");
 
-		this.initAlgorithmus(graph, source, target);		
-		
+		this.initAlgorithmus(graph, source, target);
 
 		return this.procedure();
 	}
 
-	private void validArguments(Graph graph, String source, String target) {		
-		
+	/**
+	 * Prüft die übergebenen Parameter
+	 * @param graph Übergebener Graph
+	 * @param source Startknoten
+	 * @param target Zielknoten
+	 */
+	private void validArguments(Graph graph, String source, String target) {
+
 		if ((graph.getNode(source) == null)) {
 			throw new IllegalArgumentException("source uncorrect");
-			
+
 		} else if ((graph.getNode(target) == null)) {
 			throw new IllegalArgumentException("target uncorrect");
-			
-		} 		
-		
+
+		}
+
 	}
 
 	/**
@@ -103,8 +106,6 @@ public abstract class ShortestPath extends Algorithm{
 		this.target = this.getGraph().getNode(target);
 	}
 
-
-
 	protected Node getSource() {
 		return source;
 	}
@@ -113,8 +114,8 @@ public abstract class ShortestPath extends Algorithm{
 		return target;
 	}
 
-	
-	// TODO Abstracte Mehtode die in den jeweiligen Algorithmen-Klassen prüft ob der Graph für sie geeignet ist.
+	// TODO Abstracte Mehtode die in den jeweiligen Algorithmen-Klassen prüft ob
+	// der Graph für sie geeignet ist.
 	// Beispiel, beim Bruskal-Algorithmus muss der Graph .... haben
 
 }

@@ -11,6 +11,19 @@ import mvc.model.algorithmen.Algorithm;
 import mvc.model.exceptions.IllegalDirectedGraph;
 import utility.Printer;
 
+/**
+ * Diese Klasse definiert den grundlegenden Aufbau eines
+ * EulerCircuit-Algorithmus. Ein EulerCircuit-Alogirthmus kann mit calculate()
+ * ausgeführt werden und gibt als Rückgabewert den Eulerkreis als Kantenabfolge
+ * an. Dort wird zunächst der übergebene Graph auf zulässigkeit geprüft.
+ * 
+ * Anschließen wird die jeweilige Handlungsvorschrift, die die Einzelschritten
+ * des jeweiligen Algorithmus beinhaltet, ausgeführt. Dies ermöhlicht uns, dass
+ * die konkreten Klassen von EulerCircuit-Algorithmus sich nur um ihre jeweilige
+ * Handlungsvorschriftt kümmern müssen.
+ * 
+ *
+ */
 public abstract class EulerCircle extends Algorithm {
 
 	public List<Edge> calculate(Graph graph) {
@@ -25,6 +38,12 @@ public abstract class EulerCircle extends Algorithm {
 		return this.procedure();
 	}
 
+	/**
+	 * Prüft ob alle Knoten einen geraden Knotengrad haben und der Graph
+	 * ungerichtet ist.
+	 * 
+	 * @param graph
+	 */
 	private void validArguments(Graph graph) {
 		/*
 		 * Alle Knotengrade müssen gerade sein
@@ -53,8 +72,6 @@ public abstract class EulerCircle extends Algorithm {
 				throw new IllegalArgumentException("all node degree must be even");
 			}
 
-			// TODO Kringel hier
-
 		}
 
 		/*
@@ -70,6 +87,13 @@ public abstract class EulerCircle extends Algorithm {
 
 	}
 
+	/**
+	 * Initialisiert den Algorithmus auf einen Graph
+	 * 
+	 * @param graph
+	 *            Übergebener Graph auf den der Algorithmus angewendet werden
+	 *            soll.
+	 */
 	private void initAlgorithmus(Graph graph) {
 		this.setGraph(graph);
 
