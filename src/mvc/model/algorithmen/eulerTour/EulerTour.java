@@ -1,4 +1,4 @@
-package mvc.model.algorithmen.eulerCircle;
+package mvc.model.algorithmen.eulerTour;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,24 +14,24 @@ import utility.Printer;
 
 /**
  * Diese Klasse definiert den grundlegenden Aufbau eines
- * EulerCircuit-Algorithmus. Ein EulerCircuit-Alogirthmus kann mit calculate()
+ * EulerTour-Algorithmus. Ein EulerTour-Alogirthmus kann mit calculate()
  * ausgeführt werden und gibt als Rückgabewert den Eulerkreis als Kantenabfolge
  * an. Dort wird zunächst der übergebene Graph auf zulässigkeit geprüft.
  * 
  * Anschließen wird die jeweilige Handlungsvorschrift, die die Einzelschritten
  * des jeweiligen Algorithmus beinhaltet, ausgeführt. Dies ermöhlicht uns, dass
- * die konkreten Klassen von EulerCircuit-Algorithmus sich nur um ihre jeweilige
+ * die konkreten Klassen von EulerTour-Algorithmus sich nur um ihre jeweilige
  * Handlungsvorschriftt kümmern müssen.
  *   
  */
-public abstract class EulerCircle extends Algorithm {
+public abstract class EulerTour extends Algorithm {
 
 	public List<Edge> calculate(Graph graph) {
 		this.validArguments(graph);
 
 		Printer.prompt(this, "-------------------------------------");
 
-		Printer.prompt(this, "compute euler circle algorithmus");
+		Printer.prompt(this, "compute eulertour algorithmus");
 		Printer.prompt(this, "nodeSize: " + graph.getNodeSet().size() + " edgeSize: " + graph.getEdgeSet().size());
 
 		this.initAlgorithmus(graph);
@@ -69,6 +69,9 @@ public abstract class EulerCircle extends Algorithm {
 			List<Edge> edges = new LinkedList<Edge>();
 			edges.addAll(nodes.get(i).getEdgeSet());
 			
+			/*
+			 * Der Graph muss zusammenhängend sein
+			 */
 			if (edges.isEmpty()) {
 				throw new IllegalArgumentException("graph must be related");
 			}
@@ -81,6 +84,9 @@ public abstract class EulerCircle extends Algorithm {
 				}
 			}
 
+			/*
+			 * Nach dem alle Kanten und Loops eines Knoten gezählt wurden, muss der Grad gerade sein
+			 */
 			if ((grades % 2) != 0) {
 				throw new IllegalArgumentException("all node degree must be even");
 			}
@@ -89,10 +95,7 @@ public abstract class EulerCircle extends Algorithm {
 			
 		}
 
-		/*
-		 * Der Graph muss zusammenhängend sein
-		 */
-
+		
 		/*
 		 * Der Graph muss ungerichtet sein
 		 */

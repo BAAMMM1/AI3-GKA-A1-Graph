@@ -1,4 +1,4 @@
-package mvc.model.algorithmen.eulerCircle;
+package mvc.model.algorithmen.eulerTour;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,10 +32,11 @@ import utility.Printer;
  * startet.
  *
  */
-public class Hierholzer extends EulerCircle {
+public class Hierholzer extends EulerTour {
 
 	private List<List<Node>> cyclesNodes;
 	private List<List<Edge>> cyclesEdges;
+	
 	private List<Edge> eulerCircuitEdges;
 	private List<Node> eulerCircuitNodes;
 
@@ -168,7 +169,7 @@ public class Hierholzer extends EulerCircle {
 			} while (currentNode != currentCycleStartAndEnd);
 
 			/*
-			 * Letzter Knoten im Zyklus in der Start Edge brauch hier nicht
+			 * Letzter Knoten im Zyklus in der Start Edge braucht hier nicht
 			 * extra hinzugefügt werden
 			 */
 			currentCycleNodes.add(currentCycleStartAndEnd);
@@ -223,6 +224,9 @@ public class Hierholzer extends EulerCircle {
 		 */
 		for (int i = 1; i < this.cyclesNodes.size(); i++) {
 
+			/*
+			 * Start des nächsten Zyklus, index im eulerkreis
+			 */
 			int index = this.eulerCircuitNodes.indexOf(this.cyclesNodes.get(i).get(0));
 
 			this.eulerCircuitNodes.remove(index);

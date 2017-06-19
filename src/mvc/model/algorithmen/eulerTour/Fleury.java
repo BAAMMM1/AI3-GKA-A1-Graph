@@ -1,4 +1,4 @@
-package mvc.model.algorithmen.eulerCircle;
+package mvc.model.algorithmen.eulerTour;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +53,7 @@ import utility.Printer;
  * @author Chris
  *
  */
-public class Fleury extends EulerCircle {
+public class Fleury extends EulerTour {
 
 	private LinkedList<Edge> eulerCircuit;
 	private Node startAndEndNode;

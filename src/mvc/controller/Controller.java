@@ -18,9 +18,9 @@ import org.graphstream.graph.Node;
 import org.graphstream.ui.view.Viewer;
 
 import mvc.model.Model;
-import mvc.model.algorithmen.eulerCircle.EulerCircle;
-import mvc.model.algorithmen.eulerCircle.EulerCircleFactory;
-import mvc.model.algorithmen.eulerCircle.Hierholzer;
+import mvc.model.algorithmen.eulerTour.EulerTour;
+import mvc.model.algorithmen.eulerTour.EulerTourFactory;
+import mvc.model.algorithmen.eulerTour.Hierholzer;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTree;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTreeFactory;
 import mvc.model.algorithmen.shortestPath.ShortestPath;
@@ -226,7 +226,7 @@ public class Controller {
 	private void btnEulerAction() {
 		this.model.getLabeler().setDefaultLabels(this.model.getGraph());
 
-		EulerCircle tour = this.model.getEulerCircle(this.view.getComboBoxEuler().getSelectedItem().toString());
+		EulerTour tour = this.model.getEulerCircle(this.view.getComboBoxEuler().getSelectedItem().toString());
 
 		List<Edge> result = tour.calculate(this.model.getGraph());
 		this.model.getLabeler().colorEdges(this.model.getGraph(), result, 0, 100, 255);

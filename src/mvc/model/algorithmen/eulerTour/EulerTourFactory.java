@@ -1,8 +1,8 @@
-package mvc.model.algorithmen.eulerCircle;
+package mvc.model.algorithmen.eulerTour;
 
-public class EulerCircleFactory {
+public class EulerTourFactory {
 
-	public static EulerCircle getInstance(String typ) {
+	public static EulerTour getInstance(String typ) {
 
 		if (typ.equals("Hierholzer")) {
 			return new Hierholzer();

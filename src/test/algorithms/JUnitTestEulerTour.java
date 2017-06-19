@@ -13,22 +13,22 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import mvc.model.algorithmen.eulerCircle.EulerCircle;
-import mvc.model.algorithmen.eulerCircle.EulerCircleFactory;
+import mvc.model.algorithmen.eulerTour.EulerTour;
+import mvc.model.algorithmen.eulerTour.EulerTourFactory;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
-public class JUnitTestEulerCircle {
+public class JUnitTestEulerTour {
 
 	private GraphFileExtensionHandler fileHandler;
-	private EulerCircle fleury;
-	private EulerCircle hierholzer;
+	private EulerTour fleury;
+	private EulerTour hierholzer;
 
 	@Before
 	public void setUp() throws Exception {
 		this.fileHandler = new GraphFileExtensionHandler();
 
-		this.fleury = EulerCircleFactory.getInstance("Fleury");
-		this.hierholzer = EulerCircleFactory.getInstance("Hierholzer");
+		this.fleury = EulerTourFactory.getInstance("Fleury");
+		this.hierholzer = EulerTourFactory.getInstance("Hierholzer");
 	}
 
 	/*
@@ -109,16 +109,19 @@ public class JUnitTestEulerCircle {
 	
 
 	/*
-	 * Beinhaltet der Kreis alle Kanten? Kantensize - Über ein Set, damit
+	 * Beinhaltet der Kreis alle Kanten? Kantensize - Result Size, dann über ein Set, damit
 	 * Duplikate ausgeschlossen sind.
 	 */
 	@Test
 	public void FleuryEulerCycleComplete() {
 		Graph graph;
 		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		List<Edge> result = this.fleury.calculate(graph);
+		
+		assertEquals(result.size(), graph.getEdgeSet().size());
+		
 		Set<Edge> circle = new HashSet<Edge>();
-		circle.addAll(this.fleury.calculate(graph));
-
+		circle.addAll(result);	
 		assertEquals(circle.size(), graph.getEdgeSet().size());
 	}
 
@@ -126,14 +129,18 @@ public class JUnitTestEulerCircle {
 	public void HierholzerCycleComplete() {
 		Graph graph;
 		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		List<Edge> result = this.hierholzer.calculate(graph);
+		
+		assertEquals(result.size(), graph.getEdgeSet().size());
+		
 		Set<Edge> circle = new HashSet<Edge>();
-		circle.addAll(this.hierholzer.calculate(graph));
+		circle.addAll(result);
 
 		assertEquals(circle.size(), graph.getEdgeSet().size());
 	}
 
 	/*
-	 * Ist der Kreis eine abfolge?
+	 * Ist der Kreis eine abfolge und ist der Start das Ziel?
 	 */
 	@Test
 	public void FleuryEulerCycleIsSequence() {

@@ -15,34 +15,34 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import mvc.model.algorithmen.eulerCircle.EulerCircle;
-import mvc.model.algorithmen.eulerCircle.EulerCircleFactory;
+import mvc.model.algorithmen.eulerTour.EulerTour;
+import mvc.model.algorithmen.eulerTour.EulerTourFactory;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 import mvc.model.graphGenerator.GraphGenerator;
 import mvc.model.graphGenerator.GraphGeneratorFactory;
 
-public class JUnitTestEulerCircleRandomEulerGraph {
+public class JUnitTestEulerTourRandomEulerGraph {
 
-	private EulerCircle fleury;
-	private EulerCircle hierholzer;
+	private EulerTour fleury;
+	private EulerTour hierholzer;
 	private GraphGenerator randomEuler;
 	private LinkedList<Graph> graphs;
 
-
-	private static final int RUNS = 50;
+	private static final int RUNS = 20;
 
 	/*
-	 * Dieser Test läd randomEulerGraphen und prüft ob Fleury und Hierholzer korrekte Kreise ermitteln
+	 * Dieser Test läd randomEulerGraphen und prüft ob Fleury und Hierholzer
+	 * korrekte Kreise ermitteln
 	 */
 	@Before
 	public void setUp() throws Exception {
 		GraphFileExtensionHandler fileHandler = new GraphFileExtensionHandler();
 		this.randomEuler = GraphGeneratorFactory.getInstance("Euler");
 
-		this.fleury = EulerCircleFactory.getInstance("Fleury");
-		this.hierholzer = EulerCircleFactory.getInstance("Hierholzer");
+		this.fleury = EulerTourFactory.getInstance("Fleury");
+		this.hierholzer = EulerTourFactory.getInstance("Hierholzer");
 		this.graphs = new LinkedList<Graph>();
-		
+
 		for (int counter = 0; counter < RUNS; counter++) {
 			Graph graph = fileHandler.loadGraph("db/testCases/eulercircle/randomEulerGraph" + counter + ".graph");
 			this.graphs.add(graph);
@@ -57,15 +57,14 @@ public class JUnitTestEulerCircleRandomEulerGraph {
 	 */
 
 	/*
-	 * Ist der Kreis eine abfolge?
+	 * Laufzeittest und ist der Kreis eine abfolge?
 	 */
 	@Test
 	public void FleuryEulerCycleRandom() {
 
 		for (int counter = 0; counter < RUNS; counter++) {
-			
+
 			Graph graph = this.graphs.get(counter);
-			
 
 			List<Edge> result = this.fleury.calculate(graph);
 
@@ -106,14 +105,16 @@ public class JUnitTestEulerCircleRandomEulerGraph {
 
 		}
 	}
-	
+
+	/*
+	 * Laufzeittest und ist der Kreis eine abfolge?
+	 */
 	@Test
 	public void HierholzerEulerCycleRandom() {
 
 		for (int counter = 0; counter < RUNS; counter++) {
-			
+
 			Graph graph = this.graphs.get(counter);
-			
 
 			List<Edge> result = this.hierholzer.calculate(graph);
 

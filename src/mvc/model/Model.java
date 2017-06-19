@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmen.eulerCircle.EulerCircle;
-import mvc.model.algorithmen.eulerCircle.EulerCircleFactory;
+import mvc.model.algorithmen.eulerTour.EulerTour;
+import mvc.model.algorithmen.eulerTour.EulerTourFactory;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTree;
 import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTreeFactory;
 import mvc.model.algorithmen.shortestPath.ShortestPath;
@@ -78,8 +78,8 @@ public class Model {
 		return MinimalSpanningTreeFactory.getInstance(string);
 	}
 
-	public EulerCircle getEulerCircle(String string) {
-		return EulerCircleFactory.getInstance(string);
+	public EulerTour getEulerCircle(String string) {
+		return EulerTourFactory.getInstance(string);
 	}
 
 	public GraphGenerator getGraphGenerator(String string) {
