@@ -58,6 +58,7 @@ public class GraphFileConverter extends FileConverter {
 		MultiGraph graph = new MultiGraph("Graph");
 		List<String> nodes = new ArrayList<String>();
 		List<String> edges = new ArrayList<String>();
+		int edgeId = 0;
 
 		// Flag gerichtet oder ungerichteter Graph
 		orientation = this.getGraphOrientation(rows.get(0));
@@ -110,29 +111,30 @@ public class GraphFileConverter extends FileConverter {
 				 * Kante hinzuf�gen, nur wenn zwei Knoten da sind
 				 */
 				if ((node2 != null)) {
-					if (!(edges.contains(node1 + node2))) {
-						edges.add(node1 + node2);
+					if (!(edges.contains("e" + edgeId))) {
+						edges.add("e" + edgeId);
 
-						graph.addEdge(node1 + node2, node1, node2, orientation);
+						graph.addEdge("e" + edgeId, node1, node2, orientation);
 
 						if (edge != null) {
 							// Edge als Attribut hinzufügen
 
 							if (weight != null) {
-								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
-								graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight).intValue());
-								graph.getEdge(node1 + node2).addAttribute("ui.label",
-										graph.getEdge(node1 + node2).getAttribute("ui.label") + " :: "
+								graph.getEdge("e" + edgeId).addAttribute("ui.label", edge);
+								graph.getEdge("e" + edgeId).setAttribute("weight", Integer.valueOf(weight).intValue());
+								graph.getEdge("e" + edgeId).addAttribute("ui.label",
+										graph.getEdge("e" + edgeId).getAttribute("ui.label") + " :: "
 												+ Integer.valueOf(weight));
 							} else {
-								graph.getEdge(node1 + node2).addAttribute("ui.label", edge);
+								graph.getEdge("e" + edgeId).addAttribute("ui.label", edge);
 							}
 						} else if (weight != null) {
-							graph.getEdge(node1 + node2).setAttribute("weight", Integer.valueOf(weight));
-							graph.getEdge(node1 + node2).addAttribute("ui.label", Integer.valueOf(weight));
+							graph.getEdge("e" + edgeId).setAttribute("weight", Integer.valueOf(weight));
+							graph.getEdge("e" + edgeId).addAttribute("ui.label", Integer.valueOf(weight));
 						}
 
 					}
+					edgeId++;
 				}
 
 			}

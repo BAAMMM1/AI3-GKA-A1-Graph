@@ -1,406 +1,253 @@
 package mvc.model.graphGenerator;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 
+import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+
+/**
+ * Die Klasse RandomEuler erzuegt einen ungerichteten, zusammenhängdenen Graphen
+ * bei dem jeder Knotengrad gerade ist. Die Knotengrade sind zufällig auf die
+ * jeweiligen Knoten verteilt.
+ * 
+ * Vorgang: Zunächst werden dem Graphen alle Knoten hinzugefügt, welche
+ * ebenfalls in einer unConnected-Liste geführt werden.
+ * 
+ * Anschließen werden die Kanten gesetzt. Es werden zuerst alle unConncted
+ * verbunden und anschließen werden zufällige Knoten ausgewählt. Diese geschiet
+ * solange der RandomEuler keine weiteren Kanten außer einer zuverfügung stehen.
+ * Die letzte Kante wird wieder zurück zum Start gesetzt, damit ein Eulerkreis
+ * ensteht.
+ */
 public class RandomEuler extends GraphGenerator {
 
 	private Graph result;
-	private List<Node> nodes;
-	private List<Node> uneven;
-	private List<Node> unevenB;
-	private int nodeSize;
+	private List<Node> unConnected;
 	private int edgeSize;
 	private int maxWeight;
-
-	public RandomEuler() {
-	}
 
 	@Override
 	protected Graph procedure(int nodeSize, int edgeSize, int maxWeight) {
 
 		this.validArguments(nodeSize, edgeSize, maxWeight);
 
+		/*
+		 * Knotensetzten
+		 */
 		this.initialize(nodeSize, edgeSize, maxWeight);
 
-		this.createMinimalEulerCicrle();
+		/*
+		 * Kanten setzten
+		 */
+		this.setEdges();
 
-		this.addEdges2();
-
-		// this.seperateUneven();
-
-		// this.addSeperated();
-
-		// this.addUnevenEdges();
+		/*
+		 * Knotengrade ausgeben
+		 */
+		this.promptResult();
 
 		return result;
 	}
 
-	private void addSeperated() {
-
-		for (int i = 0; i < this.unevenB.size(); i++) {
-			Node random = this.getRandomUnevenNode();
-			this.result.addEdge(this.unevenB.get(i).toString() + random.toString(), this.unevenB.get(i), random);
-			this.unevenB.remove(this.unevenB.get(i));
-		}
-
-	}
-
-	private void seperateUneven() {
-
-		System.out.println("-> " + this.uneven.toString());
-
-		for (int i = 0; i < this.uneven.size(); i++) {
-			List<Edge> edges = new LinkedList<Edge>(this.uneven.get(i).getEdgeSet());
-
-			for (int i2 = 0; i2 < edges.size(); i2++) {
-				if (this.uneven.contains(edges.get(i2).getNode0())) {
-
-					this.unevenB.add(edges.get(i2).getNode0());
-					this.uneven.remove(edges.get(i2).getNode0());
-
-				}
-
-				if (this.uneven.contains(edges.get(i2).getNode1())) {
-
-					this.unevenB.add(edges.get(i2).getNode1());
-					this.uneven.remove(edges.get(i2).getNode1());
-
-				}
-			}
-
-		}
-
-		System.out.println("-> " + this.uneven.toString());
-		System.out.println("-> " + this.unevenB.toString());
-
-	}
-
-	private void addUnevenEdges() {
-
-		while (this.uneven.size() != 0) {
-			System.out.println("addUnevenEdges: " + this.uneven);
-
-			for (int i = 0; i < this.uneven.size(); i++) {
-				System.out.println(this.uneven.get(i).getEdgeSet().size());
-			}
-
-			Node node1 = this.getRandomUnevenNode();
-			Node node2;
-			do {
-				node2 = this.getRandomUnevenNode();
-			} while (node1 == node2);
-
-			if ((result.getEdge(node1.toString() + node2.toString()) == null)
-					&& (result.getEdge(node2.toString() + node1.toString()) == null)) {
-				this.result.addEdge(node1 + node2.toString(), node1, node2);
-				this.uneven.remove(node1);
-				this.uneven.remove(node2);
-			}
-
-		}
-
-	}
-
-	private void addEdges() {
-		// nodeSize 10, edgeSize 10
-		System.out.println("uneven: " + this.uneven);
-		System.out.println("uneven / 2: " + this.uneven.size() / 2);
-		System.out.println("edgsize: " + edgeSize);
-		while (this.uneven.size() / 2 < edgeSize) {
-
-			Node node1 = this.getRandomNode();
-			Node node2;
-			do {
-				node2 = this.getRandomNode();
-
-			} while (node1 == node2);
-
-			if ((this.result.getEdge(node1.toString() + node2.toString()) == null)
-					&& (this.result.getEdge(node2.toString() + node1.toString()) == null)) {
-
-				this.result.addEdge(node1.toString() + node2.toString(), node1, node2);
-				this.edgeSize--;
-
-				if ((node1.getEdgeSet().size() % 2) != 0) {
-					this.uneven.add(node1);
-
-				} else {
-					if (uneven.contains(node1)) {
-						this.uneven.remove(node1);
-					}
-				}
-
-				if ((node2.getEdgeSet().size() % 2) != 0) {
-					this.uneven.add(node2);
-
-				} else {
-					if (uneven.contains(node2)) {
-						this.uneven.remove(node2);
-					}
-				}
-
-			}
-
-			System.out.println("uneven: " + this.uneven);
-			System.out.println("uneven / 2: " + this.uneven.size() / 2);
-			System.out.println("edgsize: " + edgeSize);
-
-		}
-
-	}
-
-	private void addEdges2() {
-		// nodeSize 10, edgeSize 10
-		System.out.println("uneven: " + this.uneven);
-		System.out.println("uneven: " + this.uneven.size());
-		System.out.println("edgsize: " + edgeSize);
-		while (edgeSize > 0) {
-
-			Node node1;
-			Node node2;
-			do {
-				if (this.uneven.size() > 0) {
-
-					node1 = this.getRandomNode();
-					node2 = this.getRandomNode();
-					
-					if ((this.result.getEdge(this.uneven.get(0).toString() + this.uneven.get(1).toString()) == null)
-							&& (this.result
-									.getEdge(this.uneven.get(1).toString() + this.uneven.get(0).toString()) == null)) {
-						System.out.println("3");
-						System.out.println(this.uneven.get(0).toString() + this.uneven.get(1).toString() == null);
-						node1 = this.uneven.get(0);
-						node2 = this.uneven.get(1);
-					}
-
-				} else {
-					node1 = this.getRandomNode();
-					node2 = this.getRandomNode();
-				}
-				
-				
-				
-				
-
-				System.out.println(node1);
-				System.out.println(node2);
-			} while ((node1 == node2) || (this.result.getEdge(node1.toString() + node2.toString()) != null)
-					|| (this.result.getEdge(node2.toString() + node1.toString()) != null));
-
-
-
-			this.result.addEdge(node1.toString() + node2.toString(), node1, node2);
-			this.edgeSize--;
-
-			if ((node1.getEdgeSet().size() % 2) != 0) {
-				this.uneven.add(node1);
-
-			} else {
-				if (uneven.contains(node1)) {
-					this.uneven.remove(node1);
-
-				}
-			}
-
-			if ((node2.getEdgeSet().size() % 2) != 0) {
-				this.uneven.add(node2);
-
-			} else {
-				if (uneven.contains(node2)) {
-					this.uneven.remove(node2);
-
-				}
-			}
-
-			System.out.println("uneven: " + this.uneven);
-			System.out.println("uneven: " + this.uneven.size());
-			System.out.println("edgsize: " + edgeSize);
-			System.out.println(this.result.getEdgeSet().size());
-
-		}
-
-		/*
-		 * 
-		 * // Such eine Even Kante die Nicht zu uneven 1 und uneven 2 Verbunden
-		 * ist // und verbinde sie boolean run = true; Node uneven1 =
-		 * this.nodes.get(0); Node uneven2 = this.nodes.get(1); while (run) {
-		 * Node even = this.getRandomEvenNode();
-		 * System.out.println(even.toString());
-		 * 
-		 * if((this.result.getEdge(uneven1.toString() + uneven2.toString()) ==
-		 * null) && (this.result.getEdge(uneven2.toString() +
-		 * uneven1.toString()) == null)){ if (
-		 * (this.result.getEdge(uneven1.toString() + even.toString()) == null)
-		 * && (this.result.getEdge(even.toString() + uneven1.toString()) ==
-		 * null) && (this.result.getEdge(uneven2.toString() + even.toString())
-		 * == null) && (this.result.getEdge(even.toString() +
-		 * uneven2.toString()) == null) ) {
-		 * this.result.addEdge(uneven1.toString() + even.toString(), uneven1,
-		 * even); this.result.addEdge(uneven2.toString() + even.toString(),
-		 * uneven2, even); run = false;
-		 * 
-		 * } } else { run = false; }
-		 * 
-		 * 
-		 * 
-		 * 
-		 * }
-		 */
-		System.out.println(this.result.getEdgeSet().size());
-
-		/*
-		 * if(this.result.getEdge(this.uneven.get(0).toString( ) +
-		 * this.uneven.get(1).toString()) != null){
-		 * this.result.removeEdge(this.uneven.get(0).toString( )+
-		 * this.uneven.get(1).toString()); } else {
-		 * this.result.removeEdge(this.uneven.get(1).toString( )+
-		 * this.uneven.get(0).toString()); }
-		 */
-
-	}
-
-	private void addEdges3() {
-		// nodeSize 10, edgeSize 10
-		System.out.println("uneven: " + this.uneven);
-		System.out.println("uneven size: " + this.uneven.size());
-		System.out.println("edgsize: " + edgeSize);
-		while (edgeSize > 2) {
-
-			Node node1 = this.getRandomNode();
-			Node node2;
-			do {
-				if (this.uneven.size() > 0) {
-					node1 = this.getRandomNode();
-					node2 = this.uneven.get(0);
-				} else {
-					node2 = this.getRandomNode();
-				}
-
-			} while (node1 == node2);
-
-			if ((this.result.getEdge(node1.toString() + node2.toString()) == null)
-					&& (this.result.getEdge(node2.toString() + node1.toString()) == null)) {
-
-				this.result.addEdge(node1.toString() + node2.toString(), node1, node2);
-				this.edgeSize--;
-
-				if ((node1.getEdgeSet().size() % 2) != 0) {
-					this.uneven.add(node1);
-
-				} else {
-					if (uneven.contains(node1)) {
-						this.uneven.remove(node1);
-					}
-				}
-
-				if ((node2.getEdgeSet().size() % 2) != 0) {
-					this.uneven.add(node2);
-
-				} else {
-					if (uneven.contains(node2)) {
-						this.uneven.remove(node2);
-					}
-				}
-
-			}
-
-			System.out.println("uneven: " + this.uneven);
-			System.out.println("uneven: " + this.uneven.size());
-			System.out.println("edgsize: " + edgeSize);
-
-		}
-
-	}
-
-	private void createMinimalEulerCicrle() {
-
-		this.addNode("Node0");
-		Node first = result.getNode("Node0");
-		this.nodes.add(first);
-
-		Node nextNode = null;
-		Node prevNode = null;
-		for (int i = 1; i < nodeSize; i++) {
-			this.addNode("Node" + i);
-
-			prevNode = this.result.getNode("Node" + (i - 1));
-			nextNode = result.getNode("Node" + i);
-
-			this.addEdge(prevNode, nextNode);
-
-			this.nodes.add(nextNode);
-		}
-
-		this.addEdge(first, nextNode);
-
-	}
-
-	private void addEdge(Node node1, Node node2) {
-		this.result.addEdge(node1.toString() + node2.toString(), node1, node2);
-		this.edgeSize--;
-	}
-
-	private void addNode(String name) {
-		this.result.addNode(name);
-		this.result.getNode(name).addAttribute("ui.label", name);
-
-	}
-
-	private Node getRandomNode() {
-		Collections.shuffle(this.nodes);
-
-		return this.nodes.get(0);
-	}
-
-	private Node getRandomUnevenNode() {
-		Collections.shuffle(this.uneven);
-
-		return this.uneven.get(0);
-	}
-
+	/**
+	 * Überprüft die übergebenen Parameter. Für einen Eulerkreis wird mindestens
+	 * edgeSize == nodeSize benötigt.
+	 * 
+	 * @param nodeSize
+	 * @param edgeSize
+	 * @param maxWeight
+	 */
 	private void validArguments(int nodeSize, int edgeSize, int maxWeight) {
 		/*
-		 * Erst ein Graph ab Knotenanzhal == oder größer kann einen Kreis
-		 * bilden.
+		 * Es wird mindestens ein Knoten benötigt
 		 */
-		if (nodeSize < 3) {
-			throw new IllegalArgumentException("Knotenanzahl muss >= 3 sein");
-
-			/*
-			 * Graph darf maximal vollständig sein.
-			 */
-		} else if (edgeSize > (((nodeSize - 1) * nodeSize) / 2)) {
-			throw new IllegalArgumentException("Maximale Kantenanzahl = ((nodeSize-1)*nodeSize)/2)");
-
+		if (nodeSize < 0) {
+			throw new IllegalArgumentException("Knotenanzahl muss > 0 sein");
+	
 			/*
 			 * Damit mindestens ein Kreis in einem zusammenhängenden Graphen
 			 * enstehen kann, muss die edgSize mindestens der nodeSize sein.
 			 */
 		} else if (edgeSize < nodeSize) {
-			throw new IllegalArgumentException("Kantenanzahl muss minimal Knotenanzahl sein, damit ein Kreis entsteht");
-
-			// } else if (!((edgeSize%2)==0)){
-			// throw new IllegalArgumentException("Kantenanzahl muss gerade
-			// sein");
+			throw new IllegalArgumentException("Kantenanzahl muss >= Knotenanzahl sein");
+	
 		}
+	
+	}
+
+	/**
+	 * Initialisiert den RandomEuler. Dem Graphen werden alle Knoten
+	 * hinzugefügt, welche ebenfalls in einer unConnected Liste geführt werden.
+	 * 
+	 * @param nodeSize
+	 *            Knotenanzahl den der randomisierte Graph haben soll.
+	 * @param edgeSize
+	 *            Kantenazahl den der randomisierte Graph haben soll.
+	 * @param maxWeight
+	 *            Maximalesgewicht den der randomisierte Graph haben soll.
+	 */
+	private void initialize(int nodeSize, int edgeSize, int maxWeight) {
+		this.edgeSize = edgeSize;
+		this.result = new MultiGraph("RandomEuler");
+		this.unConnected = new LinkedList<Node>();
+		this.maxWeight = maxWeight;
+	
+		for (int i = 0; i < nodeSize; i++) {
+			this.result.addNode("Node" + i);
+			this.unConnected.add(this.result.getNode("Node" + i));
+		}
+	
+	}
+
+	/**
+	 * Diese Methode setzt die Kanten zwischen den Knoten. Zunächst werden alle
+	 * unConnected mit einander Verbunden, anschließen werden zufällige Knoten
+	 * ausgewählt und Kanten gesetzt. Die geschiet bis nur noch eine Kante
+	 * vorhanden ist. Diese Kante wird zurück zum Startpunkt gesetzt. Dadurch
+	 * enthält jeder Knoten bei jedem Durchgang eine Kante hinein und eine Kante
+	 * hinaus. Somit ensteht ein Eulerkreis.
+	 */
+	private void setEdges() {
+
+		/*
+		 * Zufälliger Start wird gewählt
+		 */
+		Node start = this.getRandomNode();
+		this.unConnected.remove(start);
+
+		Node current = start;
+		Node next;
+
+		/*
+		 * Setzte Kante solange nur noch eine übrig ist,
+		 */
+		int id = 0;
+		while (this.edgeSize > 1) {
+
+			/*
+			 * Falls es noch Knoten gibt, die noch nicht mit dem restlichen
+			 * Graphen verbunden sind, wird einer dieser Knoten ausgewählt.
+			 * Ansonsten wird ein zufälliger Knoten gewählt.
+			 */
+			if (this.unConnected.isEmpty()) {
+				next = this.getRandomNode();
+			} else {
+				next = this.unConnected.get(0);
+				this.unConnected.remove(next);
+			}
+
+			
+			this.addEdge(id++, current, next);
+			current = next;
+			this.edgeSize--;
+		}
+
+		/*
+		 * Letzte Kante muss zurück zum Start gehen
+		 */
+		this.addEdge(id++, current, start);
+		
 
 	}
 
-	private void initialize(int nodeSize, int edgeSize, int maxWeight) {
-		this.result = new MultiGraph("RandomEuler");
-		this.nodes = new LinkedList<Node>();
-		this.uneven = new LinkedList<Node>();
-		this.unevenB = new LinkedList<Node>();
-		this.nodeSize = nodeSize;
-		this.edgeSize = edgeSize;
-		this.maxWeight = maxWeight;
+	/**
+	 * Gibt die jeweiligen Knotengrade jedes Knoten aus
+	 */
+	private void promptResult() {
+		System.out.print("[ ");
+		for (int i = 0; i < this.result.getNodeSet().size(); i++) {
+			int degree = 0;
+	
+			for (Edge edge : this.result.getNode(i).getEdgeSet()) {
+				if (edge.isLoop()) {
+					degree += 2;
+				} else {
+					degree++;
+				}
+			}
+	
+			System.out.print(degree + " ");
+		}
+		System.out.println("]");
+	}
+
+	/**
+	 * Ermittelt aus dem Graphen einen zufälligen Knoten.
+	 * 
+	 * @return Zufälliger Knoten aus dem Graphen
+	 */
+	private Node getRandomNode() {
+		return result.getNode(this.getRandom(result.getNodeSet().size()));
+	}
+
+	/**
+	 * Ermittelt eine zufällig Zahl von (0 - (value - 1))
+	 * 
+	 * @param value
+	 *            exklusives Maximum
+	 * @return Zufällige Zahl
+	 */
+	private int getRandom(int value) {
+		Random random = new Random();
+		return random.nextInt(value);
+	}
+	
+	/**
+	 * Fügt dem Graph eine Kante hinzu
+	 * @param counter Id der Kante
+	 * @param source Source der Kante
+	 * @param target Target der Kante
+	 */
+	private void addEdge(int counter, Node source, Node target) {
+		this.result.addEdge("e" + counter, source, target);
+		
+		Edge edge = this.result.getEdge("e" + (counter));
+		edge.setAttribute("weight", (Integer) getRandomWeight());
+		edge.setAttribute("ui.label", edge.getAttribute("weight").toString());
+	}
+
+	/**
+	 * Ermittelt eine Gewicht von 1 bis maximales Gewicht.
+	 * 
+	 * @return Zufällige Gewichtung
+	 */
+	private int getRandomWeight() {
+		Random random = new Random();
+		if(this.maxWeight > 0){
+			return random.nextInt(this.maxWeight) + 1;
+		} else {
+			return 0;
+		}
+		
+	}
+	
+	/**
+	 * Erstellt randomisierte Graphen für den Testdurchlauf.
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		GraphFileExtensionHandler fileHandler = new GraphFileExtensionHandler();
+		GraphGenerator randomEuler = GraphGeneratorFactory.getInstance("Euler");
+		
+		for (int counter = 0; counter < 50; counter++) {
+			
+			Random random = new Random();
+			int nodeSize = random.nextInt(2500)+1;
+			int edgeSize = random.nextInt(25000) + nodeSize;
+			Graph graph = randomEuler.generate(nodeSize, edgeSize, 0);
+			fileHandler.saveGraph(graph, "db/testCases/eulercircle/randomEulerGraph" + counter);
+			System.out.println("");
+			System.out.println(graph.getNodeSet().size());
+			System.out.println(graph.getEdgeSet().size());
+			
+		}
+		
 
 	}
 

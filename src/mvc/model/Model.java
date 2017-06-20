@@ -4,46 +4,38 @@ import java.util.List;
 
 import org.graphstream.graph.Graph;
 
-import mvc.model.algorithmen.minimalSpanningTree.Kruskal;
-import mvc.model.algorithmen.minimalSpanningTree.Prim;
-import mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
-import mvc.model.algorithmen.shortestPath.Dijkstra;
+import mvc.model.algorithmen.eulerTour.EulerTour;
+import mvc.model.algorithmen.eulerTour.EulerTourFactory;
+import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTree;
+import mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTreeFactory;
+import mvc.model.algorithmen.shortestPath.ShortestPath;
+import mvc.model.algorithmen.shortestPath.ShortestPathFactory;
 import mvc.model.fileExtensionSystem.FileExtension;
 import mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
-import mvc.model.graphGenerator.RandomSimple;
+import mvc.model.graphGenerator.GraphGenerator;
+import mvc.model.graphGenerator.GraphGeneratorFactory;
 import mvc.model.utility.GraphLabeler;
 import mvc.model.utility.GraphModifer;
 
 public class Model {
-	
+
 	private GraphFileExtensionHandler fileHandler;
 	private Graph graph;
 	private List<String> graphAsText;
 	private GraphModifer modifier;
 	private GraphLabeler labeler;
-	private BreadthFirstSearch bfs;
-	private Dijkstra dijksta;
-	private Kruskal kruskal;
-	private Prim prim;
-	private RandomSimple generator;
-	
-	
-	public Model(){
-		this.initializeModel();		
-		
+
+	public Model() {
+		this.initializeModel();
+
 	}
-	
-	public void initializeModel(){
+
+	public void initializeModel() {
 		this.fileHandler = new GraphFileExtensionHandler();
 		this.graph = fileHandler.loadGraph("db/fleury/fleury01.graph");
 		this.graphAsText = fileHandler.loadFile("db/fleury/fleury01.graph");
 		this.modifier = new GraphModifer();
 		this.labeler = new GraphLabeler();
-		this.bfs = new BreadthFirstSearch();
-		this.dijksta = new Dijkstra();
-		this.kruskal = new Kruskal();
-		this.prim = new Prim();
-		this.generator = new RandomSimple();
 	}
 
 	public FileExtension getFileHandler() {
@@ -62,22 +54,6 @@ public class Model {
 		this.graph = graph;
 	}
 
-	public BreadthFirstSearch getBfs() {
-		return bfs;
-	}
-
-	public void setBfs(BreadthFirstSearch bfs) {
-		this.bfs = bfs;
-	}
-
-	public Dijkstra getDijksta() {
-		return dijksta;
-	}
-
-	public void setDijksta(Dijkstra dijksta) {
-		this.dijksta = dijksta;
-	}
-
 	public List<String> getGraphAsText() {
 		return graphAsText;
 	}
@@ -86,31 +62,28 @@ public class Model {
 		this.graphAsText = graphAsText;
 	}
 
-	public Kruskal getKruskal() {
-		return kruskal;
-	}
-
-	public Prim getPrim() {
-		return prim;
-	}
-
-	public RandomSimple getGenerator() {
-		return generator;
-	}
-
 	public GraphModifer getModifier() {
 		return modifier;
 	}
 
 	public GraphLabeler getLabeler() {
 		return labeler;
-	}	
-	
-	
-	
-	
-	
-	
-	
+	}
+
+	public ShortestPath getShortestPath(String string) {
+		return ShortestPathFactory.getInstance(string);
+	}
+
+	public MinimalSpanningTree getMinimalSpanningTree(String string) {
+		return MinimalSpanningTreeFactory.getInstance(string);
+	}
+
+	public EulerTour getEulerCircle(String string) {
+		return EulerTourFactory.getInstance(string);
+	}
+
+	public GraphGenerator getGraphGenerator(String string) {
+		return GraphGeneratorFactory.getInstance(string);
+	}
 
 }

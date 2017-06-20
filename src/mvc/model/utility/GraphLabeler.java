@@ -27,14 +27,13 @@ public class GraphLabeler {
 		 */
 		for (int i = 0; i < path.size(); i++) {
 			path.get(i).addAttribute("ui.style", "fill-color: rgb(" + r + "," + g + "," + b + ");");
-
+			System.out.println(path.get(i).getId().toString());
 			if (i < path.size() - 1) {
-				if (graph.getEdge(path.get(i).toString() + path.get(i + 1).toString()) != null) {
-					graph.getEdge(path.get(i).toString() + path.get(i + 1).toString()).addAttribute("ui.style",
-							"fill-color: rgb(" + r + "," + g + "," + b + ");");
-
-				} else if (graph.getEdge(path.get(i + 1).toString() + path.get(i).toString()) != null) {
-					graph.getEdge(path.get(i + 1).toString() + path.get(i).toString()).addAttribute("ui.style",
+				
+				// Die Edges werden vom BSF benötigt, diese hier findet er nicht = path.get(i).getId().toString() node
+				// Die die Edges hier berechnen
+				if (graph.getEdge(path.get(i).getId().toString()) != null) {
+					graph.getEdge(path.get(i).getId().toString()).addAttribute("ui.style",
 							"fill-color: rgb(" + r + "," + g + "," + b + ");");
 
 				}
@@ -50,7 +49,10 @@ public class GraphLabeler {
 
 		for (int i = 0; i < path.size(); i++) {
 
-			String name = path.get(i).getSourceNode().toString() + path.get(i).getTargetNode().toString();
+			//String name = path.get(i).getSourceNode().toString() + path.get(i).getTargetNode().toString();
+			
+			String name = path.get(i).getId();
+			
 			graph.getEdge(name).addAttribute("ui.style", "fill-color: rgb(" + r + "," + g + "," + b + ");");
 
 		}
@@ -67,7 +69,8 @@ public class GraphLabeler {
 			for (int i2 = 0; i2 < listList.get(i).size(); i2++) {
 				Node source = listList.get(i).get(i2).getSourceNode();
 				Node target = listList.get(i).get(i2).getTargetNode();
-				String name = source.toString() + target.toString();
+				//String name = source.toString() + target.toString();
+				String name = listList.get(i).get(i2).getId();
 
 				graph.getEdge(name).addAttribute("ui.style",
 						"fill-color: rgb(" + nextColorR + "," + nextColorG + "," + nextColorB + ");");

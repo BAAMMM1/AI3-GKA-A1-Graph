@@ -204,7 +204,7 @@ public class RandomSimple extends GraphGenerator{
 	 * @return Zufällige Gewichtung
 	 */
 	private int getRandomWeight() {
-		return random.nextInt(this.maxWeight - 1) + 1;
+		return random.nextInt(this.maxWeight) + 1;
 	}
 
 	public static void main(String[] args) {

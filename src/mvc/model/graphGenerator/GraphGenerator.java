@@ -23,9 +23,6 @@ public abstract class GraphGenerator {
 		} else if(edgeSize <= 0){
 			throw new IllegalArgumentException("edgeSize uncorrect");
 			
-		} else if(maxWeight <= 0){
-			throw new IllegalArgumentException("maxWeight uncorrect");
-			
 		}
 	}
 
