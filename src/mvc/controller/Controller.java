@@ -3,6 +3,7 @@ package mvc.controller;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,7 @@ public class Controller {
 		this.view.getMntmLoadGraph().addActionListener(e -> this.menuFileLoadAction());
 		this.view.getMntmSaveGraph().addActionListener(e -> this.menuFileSaveAction());
 		this.view.getMntmUndirectedDirected().addActionListener(e -> this.menuModifierUndirectedToDirected());
+		this.view.getMntmClose().addActionListener(e -> this.menueCloseAction());
 		this.view.getRdbtnmntmAutolayout().addActionListener(e -> this.menuRdbTnAutolayoutAction());
 
 		/*
@@ -108,6 +110,12 @@ public class Controller {
 		this.setGraphToPanel();
 		this.setGrapgBuilderTextArea();
 
+	}
+
+	private void menueCloseAction() {
+		//this.view.getFrameMain().setState(this.view.getFrameMain().ICONIFIED);
+		//this.view.getFrameMain().setExtendedState(this.view.getFrameMain().MAXIMIZED_BOTH);
+		this.view.getFrameMain().dispatchEvent(new WindowEvent(this.view.getFrameMain(), WindowEvent.WINDOW_CLOSING));
 	}
 
 	private void populateComboBoxes() {

@@ -102,6 +102,7 @@ public class View {
 	private JPanel panel_6;
 	private JPanel panel_7;
 	private JPanel panel_8;
+	private JMenuItem mntmClose;
 
 	public View() {
 		// Look and Fell in Controller? Oder View?
@@ -619,6 +620,9 @@ public class View {
 		
 		mntmSaveGraph = new JMenuItem("Save Graph...");
 		mnFile.add(mntmSaveGraph);
+		
+		mntmClose = new JMenuItem("Close");
+		mnFile.add(mntmClose);
 		
 		mnSettings = new JMenu("Settings");
 		menuBar.add(mnSettings);
@@ -1208,4 +1212,16 @@ public class View {
 	public JComboBox getComboBoxEuler() {
 		return comboBoxEuler;
 	}
+
+
+	public JMenuItem getMntmClose() {
+		return mntmClose;
+	}
+
+
+	public void setMntmClose(JMenuItem mntmClose) {
+		this.mntmClose = mntmClose;
+	}
+	
+	
 }
