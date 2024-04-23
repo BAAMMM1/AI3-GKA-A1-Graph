@@ -20,7 +20,7 @@ Windows:
 .\gradlew.bat run
 ```
 
-## Hot to run the test?
+## How to run the test?
 Linux:
 ```
 ./gradlew clean test -i
