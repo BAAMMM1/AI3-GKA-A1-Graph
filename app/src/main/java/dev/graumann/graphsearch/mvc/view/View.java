@@ -639,7 +639,7 @@ public class View {
 		mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		
-		mntmAboutGkaagraph = new JMenuItem("About GKA-A1-Graph");
+		mntmAboutGkaagraph = new JMenuItem("About GKA-A1-GraphSearch");
 		mnHelp.add(mntmAboutGkaagraph);
 		
 		frameMain.setVisible(true);				
