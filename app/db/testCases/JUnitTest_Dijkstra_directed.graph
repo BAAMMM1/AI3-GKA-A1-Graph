@@ -1,0 +1,16 @@
+#directed;
+Start,Umweg :: 3;
+Start,BesserWeg :: 2;
+Umweg,Zwischenschritt :: 3;
+BesserWeg,Zwischenschritt :: 2;
+Start,Zwischenschritt :: 5;
+Graph_ausserhalb_Knoten_1,Graph_ausserhalb_Knoten_2 :: 5;
+Graph_ausserhalb_Knoten_2,Graph_ausserhalb_Knoten_3 :: 5;
+Graph_ausserhalb_Knoten_3,Graph_ausserhalb_Knoten_1 :: 5;
+Zwischenschritt,Ziel :: 2;
+Start,SackgassenZyklus :: 3;
+Zwischenschritt,SackgassenZyklus :: 4;
+SackgassenZyklus,Zyklus_1 :: 1;
+Zyklus_1,Zyklus_2 :: 1;
+Zyklus_2,SackgassenZyklus :: 1;
+unerreichbares_Ziel,Zwischenschritt :: 1;
