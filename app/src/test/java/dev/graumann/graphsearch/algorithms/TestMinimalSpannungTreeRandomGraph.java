@@ -1,4 +1,4 @@
-package dev.graumann.graphsearch.test.algorithms;
+package dev.graumann.graphsearch.algorithms;
 
 import org.graphstream.graph.Graph;
 

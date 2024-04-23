@@ -1,4 +1,4 @@
-package dev.graumann.graphsearch.test.algorithms;
+package dev.graumann.graphsearch.algorithms;
 
 import static org.junit.Assert.assertEquals;
 
@@ -113,9 +113,7 @@ public class JUnitTestBFS {
 		
 		// Test 5 - 9.1.2.2		
 		assertEquals(bfs5.calculate(graph2, source_05.toString(), target_05.toString()), new ArrayList<Node>());
-		
 
-		
 	}
 
 }

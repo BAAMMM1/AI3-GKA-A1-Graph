@@ -19,3 +19,14 @@ Windows:
 ```
 .\gradlew.bat run
 ```
+
+## Hot to run the test?
+Linux:
+```
+./gradlew clean test -i
+```
+
+Windows:
+```
+.\gradlew.bat clean test -i
+```

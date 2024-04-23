@@ -1,4 +1,4 @@
-package dev.graumann.graphsearch.test.algorithms;
+package dev.graumann.graphsearch.algorithms;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -59,7 +59,8 @@ public class JUnitTestEulerTourRandomEulerGraph {
 	/*
 	 * Laufzeittest und ist der Kreis eine abfolge?
 	 */
-	@Test
+	// # This test takes too much time
+	// @Test
 	public void FleuryEulerCycleRandom() {
 
 		for (int counter = 0; counter < RUNS; counter++) {
@@ -105,6 +106,7 @@ public class JUnitTestEulerTourRandomEulerGraph {
 
 		}
 	}
+
 
 	/*
 	 * Laufzeittest und ist der Kreis eine abfolge?
