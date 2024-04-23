@@ -6,7 +6,7 @@ plugins {
 }
 
 project.ext {
-   javaMainClass = 'main.Main'
+   javaMainClass = 'dev.graumann.graphsearch.Main'
 }
 
 repositories {
