@@ -2,7 +2,6 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 project.ext {
@@ -22,24 +21,17 @@ dependencies {
 }
 
 
-// java & javafx config
-javafx {
-    version = "21"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
-}
-
+// java
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-
 // gradle task's
 application {
     mainClass.set(javaMainClass)
 }
-
 
 jar {
     manifest {

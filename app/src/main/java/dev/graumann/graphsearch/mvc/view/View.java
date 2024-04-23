@@ -176,7 +176,7 @@ public class View {
 		
 		
 		// TODO Headline über den Konstruktor
-		frameMain.setTitle("GKA-A1-Graph");
+		frameMain.setTitle("GKA-A1-GraphSearch");
 		frameMain.setBounds(100, 100, 1280, 866);
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panelDijkstra.setLayout(gl_panelDijkstra);
