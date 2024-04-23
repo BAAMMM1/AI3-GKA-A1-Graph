@@ -1,2 +1,2 @@
-rootProject.name = 'AI3-GKA-A1-Graph'
+rootProject.name = 'AI3-GKA-A1-GraphSearch'
 include('app')
