@@ -4,7 +4,7 @@
 ## Description
 Project for the GKA practical training at HAW Hamburg.
 
-![]()
+![](https://github.com/BAAMMM1/AI3-GKA-A1-Graph/blob/fe2461553e13d2f0debe1a4afe7cdb7dc3556e5a/images/teaser.gif)
 
 ## Requirements
 - Java JDK v21 installed on your machine
