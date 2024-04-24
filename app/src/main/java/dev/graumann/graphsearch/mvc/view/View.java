@@ -29,7 +29,6 @@ import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.Viewer;
 import java.awt.GridLayout;
 import java.awt.Font;
-import javax.swing.JCheckBoxMenuItem;
 import java.awt.SystemColor;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
@@ -75,7 +74,7 @@ public class View {
 	private JTextField weightSize;
 	private JTextField edgeSize;
 	private JTextField nodeSize;
-	private JComboBox comboBoxGenerator;
+	private JComboBox<String> comboBoxGenerator;
 	private JPanel panel_3;
 	private JLabel label_4;
 	private JLabel label_5;
@@ -83,11 +82,11 @@ public class View {
 	private JButton btnSTP;
 	private JTextField target;
 	private JTextField source;
-	private JComboBox comboBoxShortestPath;
+	private JComboBox<String> comboBoxShortestPath;
 	private JPanel panel_4;
 	private JLabel label_7;
 	private JButton btnMST;
-	private JComboBox comboBoxMST;
+	private JComboBox<String> comboBoxMST;
 	private JTextArea textAreaConsole;
 	private JButton btnGenerator;
 	private JTabbedPane tabbedPane;
@@ -95,7 +94,7 @@ public class View {
 	private JMenuItem mntmUndirectedDirected;
 	private JMenuItem mntmAboutGkaagraph;
 	private JButton btnEuler;
-	private JComboBox comboBoxEuler;
+	private JComboBox<String> comboBoxEuler;
 	private JTabbedPane tabbedPane_1;
 	private JLayeredPane layeredPane;
 	private JLayeredPane layeredPane_1;
@@ -111,7 +110,6 @@ public class View {
 			        UIManager.getSystemLookAndFeelClassName());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -175,7 +173,6 @@ public class View {
 		);
 		
 		
-		// TODO Headline über den Konstruktor
 		frameMain.setTitle("GKA-A1-GraphSearch");
 		frameMain.setBounds(100, 100, 1280, 866);
 		frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -241,7 +238,7 @@ public class View {
 		nodeSize = new JTextField();
 		nodeSize.setColumns(10);
 		
-		comboBoxGenerator = new JComboBox();
+		comboBoxGenerator = new JComboBox<String>();
 		
 		btnGenerator = new JButton("Generieren");
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -315,7 +312,7 @@ public class View {
 		source = new JTextField();
 		source.setColumns(10);
 		
-		comboBoxShortestPath = new JComboBox();
+		comboBoxShortestPath = new JComboBox<String>();
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.TRAILING)
@@ -365,7 +362,7 @@ public class View {
 		
 		btnMST = new JButton("Anzeigen");
 		
-		comboBoxMST = new JComboBox();		
+		comboBoxMST = new JComboBox<String>();		
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.TRAILING)
@@ -402,7 +399,7 @@ public class View {
 		
 		btnEuler = new JButton("Anzeigen");
 		
-		comboBoxEuler = new JComboBox();
+		comboBoxEuler = new JComboBox<String>();
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.TRAILING)
@@ -1044,12 +1041,12 @@ public class View {
 	}
 
 
-	public JComboBox getComboBoxGenerator() {
+	public JComboBox<String> getComboBoxGenerator() {
 		return comboBoxGenerator;
 	}
 
 
-	public void setComboBoxGenerator(JComboBox comboBoxGenerator) {
+	public void setComboBoxGenerator(JComboBox<String> comboBoxGenerator) {
 		this.comboBoxGenerator = comboBoxGenerator;
 	}
 
@@ -1124,12 +1121,12 @@ public class View {
 	}
 
 
-	public JComboBox getComboBoxShortestPath() {
+	public JComboBox<String> getComboBoxShortestPath() {
 		return comboBoxShortestPath;
 	}
 
 
-	public void setComboBoxShortestPath(JComboBox comboBoxShortestPath) {
+	public void setComboBoxShortestPath(JComboBox<String> comboBoxShortestPath) {
 		this.comboBoxShortestPath = comboBoxShortestPath;
 	}
 
@@ -1164,12 +1161,12 @@ public class View {
 	}
 
 
-	public JComboBox getComboBoxMST() {
+	public JComboBox<String> getComboBoxMST() {
 		return comboBoxMST;
 	}
 
 
-	public void setComboBoxMST(JComboBox comboBoxMST) {
+	public void setComboBoxMST(JComboBox<String> comboBoxMST) {
 		this.comboBoxMST = comboBoxMST;
 	}
 
@@ -1209,7 +1206,7 @@ public class View {
 	}
 
 
-	public JComboBox getComboBoxEuler() {
+	public JComboBox<String> getComboBoxEuler() {
 		return comboBoxEuler;
 	}
 

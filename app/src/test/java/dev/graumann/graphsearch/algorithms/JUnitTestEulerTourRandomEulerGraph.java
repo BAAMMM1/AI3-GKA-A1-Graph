@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.graphstream.graph.Edge;
@@ -18,14 +17,12 @@ import org.junit.Test;
 import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTour;
 import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTourFactory;
 import dev.graumann.graphsearch.mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
-import dev.graumann.graphsearch.mvc.model.graphGenerator.GraphGenerator;
 import dev.graumann.graphsearch.mvc.model.graphGenerator.GraphGeneratorFactory;
 
 public class JUnitTestEulerTourRandomEulerGraph {
 
 	private EulerTour fleury;
 	private EulerTour hierholzer;
-	private GraphGenerator randomEuler;
 	private LinkedList<Graph> graphs;
 
 	private static final int RUNS = 20;
@@ -37,7 +34,7 @@ public class JUnitTestEulerTourRandomEulerGraph {
 	@Before
 	public void setUp() throws Exception {
 		GraphFileExtensionHandler fileHandler = new GraphFileExtensionHandler();
-		this.randomEuler = GraphGeneratorFactory.getInstance("Euler");
+		GraphGeneratorFactory.getInstance("Euler");
 
 		this.fleury = EulerTourFactory.getInstance("Fleury");
 		this.hierholzer = EulerTourFactory.getInstance("Hierholzer");

@@ -13,7 +13,6 @@ import dev.graumann.graphsearch.utility.Printer;
 
 public class KruskalDFS extends MinimalSpanningTree {
 
-	// TODO getKantengewichtsSumme
 	private LinkedList<Edge> sortedEdges;
 	private List<Edge> resultF;
 	private Graph minimalSpanningTree;

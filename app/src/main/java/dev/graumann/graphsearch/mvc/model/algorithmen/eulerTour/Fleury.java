@@ -9,7 +9,6 @@ import org.graphstream.graph.Node;
 import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.ShortestPath;
 import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.ShortestPathFactory;
 import dev.graumann.graphsearch.utility.Printer;
-import scala.util.Random;
 
 /**
  * Der Algorithmus von Fleury findet in einem zusammenhängend, ungerichtet

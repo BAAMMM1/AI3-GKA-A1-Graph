@@ -67,8 +67,6 @@ public class GraphLabeler {
 			int nextColorB = this.getRandom(256);
 
 			for (int i2 = 0; i2 < listList.get(i).size(); i2++) {
-				Node source = listList.get(i).get(i2).getSourceNode();
-				Node target = listList.get(i).get(i2).getTargetNode();
 				//String name = source.toString() + target.toString();
 				String name = listList.get(i).get(i2).getId();
 

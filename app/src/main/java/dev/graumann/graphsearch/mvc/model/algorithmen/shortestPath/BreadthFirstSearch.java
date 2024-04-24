@@ -20,8 +20,6 @@ public class BreadthFirstSearch extends ShortestPath {
 	private static final int LAMBDA_START = 0;
 	private boolean directed = false;
 
-
-	// TODO Graph graph, Node source, Node target kann weg
 	/**
 	 * Diese Mehtode stellt die Handlungsvorschrift des BFS-Algorithmus da
 	 */
@@ -119,8 +117,6 @@ public class BreadthFirstSearch extends ShortestPath {
 	}
 
 
-
-	// TODO testen gegen die Standardimplementierung
 	private Node getNextSmallerBFS(Node node) {
 		
 		/*

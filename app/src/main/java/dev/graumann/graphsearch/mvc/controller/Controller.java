@@ -1,34 +1,22 @@
 package dev.graumann.graphsearch.mvc.controller;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.GroupLayout;
 import javax.swing.JFileChooser;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.GroupLayout.Alignment;
-
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.view.Viewer;
 
 import dev.graumann.graphsearch.mvc.model.Model;
 import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTour;
-import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTourFactory;
 import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.Hierholzer;
 import dev.graumann.graphsearch.mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTree;
-import dev.graumann.graphsearch.mvc.model.algorithmen.minimalSpanningTree.MinimalSpanningTreeFactory;
 import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.ShortestPath;
-import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.ShortestPathFactory;
 import dev.graumann.graphsearch.mvc.model.graphGenerator.GraphGenerator;
-import dev.graumann.graphsearch.mvc.model.graphGenerator.GraphGeneratorFactory;
-import dev.graumann.graphsearch.mvc.model.graphGenerator.RandomSimple;
 import dev.graumann.graphsearch.mvc.view.View;
 
 public class Controller {
@@ -170,9 +158,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * TODO Graph zur Console hinzufügen
-	 */
 	private void menuModifierUndirectedToDirected() {
 		this.model.setGraph(this.model.getModifier().converteUndirectedToDirected(this.model.getGraph()));
 		this.setGraphToPanel();
@@ -277,32 +262,7 @@ public class Controller {
 		setGraphToPanel();
 	}
 
-	private void addTab() {
-
-		JLayeredPane layerGraph = new JLayeredPane();
-		layerGraph.setForeground(Color.LIGHT_GRAY);
-		layerGraph.setBackground(Color.LIGHT_GRAY);
-		this.view.getTabbedPane().addTab("Tab", null, layerGraph, null);
-
-		JPanel panelGraphStream = new JPanel();
-		GroupLayout gl_layerGraph = new GroupLayout(layerGraph);
-		gl_layerGraph.setHorizontalGroup(gl_layerGraph.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_layerGraph.createSequentialGroup().addContainerGap()
-						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
-						.addContainerGap()));
-		gl_layerGraph.setVerticalGroup(gl_layerGraph.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
-				gl_layerGraph.createSequentialGroup().addContainerGap()
-						.addComponent(panelGraphStream, GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
-						.addContainerGap()));
-		panelGraphStream.setLayout(new GridLayout(1, 0, 0, 0));
-		layerGraph.setLayout(gl_layerGraph);
-
-		panelGraphStream.removeAll();
-		panelGraphStream.add((Component) viewer_view);
-		panelGraphStream.revalidate();
-		panelGraphStream.repaint();
-
-	}
+	
 
 	/*
 	 * -----------------------------------------------------

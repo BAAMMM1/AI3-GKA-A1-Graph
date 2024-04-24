@@ -242,8 +242,6 @@ public class GraphFileConverter extends FileConverter {
 				part2 = part2 + ":" + edge.getNode1().getAttribute("attr2");
 			}
 
-			// TODO Kantenbezeichnung abspeichern geht noch nicht
-
 			if (edge.getAttribute("weight") != null) {
 				part2 = part2 + " :: " + edge.getAttribute("weight");
 			}

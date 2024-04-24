@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.Dijkstra;
-import dev.graumann.graphsearch.mvc.model.exceptions.IllegalDirectedGraph;
 import dev.graumann.graphsearch.mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestDijkstra {

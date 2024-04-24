@@ -59,10 +59,6 @@ public class Dijkstra extends ShortestPath {
 		} else if(!this.isGraphCorrectWeighted(graph)){
 			throw new IllegalWeightedGraph("Dijkstra only for weight > 0");
 		}		
-		/* TODO
-		 * Der Graph muss zusammenhängend sein
-		 * Wie prüfen?
-		 */
 		
 	}
 
@@ -115,7 +111,6 @@ public class Dijkstra extends ShortestPath {
 		if (nextNode == null) {
 			run = false;
 		} else {
-			List<Node> temp = new ArrayList<Node>(this.getGraph().getNodeSet());
 			path.add(this.getTarget());
 		}
 
@@ -127,7 +122,6 @@ public class Dijkstra extends ShortestPath {
 			if (nextNode != this.getSource().getId()) {
 
 				if (this.getGraph().getNode(nextNode).getAttribute("Vorg") != null) {
-					String nextNodeVorgänger = this.getGraph().getNode(nextNode).getAttribute("Vorg");
 					path.add(this.getGraph().getNode(nextNode));
 					nextNode = this.getGraph().getNode(nextNode).getAttribute("Vorg");
 				} else {

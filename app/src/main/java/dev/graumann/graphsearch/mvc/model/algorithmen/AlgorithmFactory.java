@@ -4,9 +4,6 @@ import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.Dijkstra;
 
 public class AlgorithmFactory {
 
-	public AlgorithmFactory() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	public static Algorithm getInstance(String typ){
 		
@@ -17,10 +14,6 @@ public class AlgorithmFactory {
 		}
 		return null;
 		
-	}
-	
-	public static void main(String[] args) {
-		Dijkstra algortihm  = (Dijkstra) AlgorithmFactory.getInstance("Dijkstra");
 	}
 
 }

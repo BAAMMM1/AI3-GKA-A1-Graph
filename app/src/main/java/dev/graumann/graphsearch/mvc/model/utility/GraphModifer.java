@@ -21,23 +21,20 @@ public class GraphModifer {
 	/**
 	 * Konvertiert einen undirected Graph zu einem directed Graph, damit der
 	 * Algorithmus auf ihn ausgeführt werden kann Nicht gut hier
-	 * 
-	 * TODO Kantengewichtungen an beide Kanten
-	 * 
+	 *  
 	 * @param graph
 	 *            Graph der konvertiert werden soll
 	 * @return Konvertierter Graph mit directed = true
 	 */
 	public Graph converteUndirectedToDirected(Graph graph) {
 
-		List<Edge> edges = new ArrayList();
+		List<Edge> edges = new ArrayList<Edge>();
 		edges.addAll(graph.getEdgeSet());
 
 		for (int i = 0; i < edges.size(); i++) {
 			Edge toLook = edges.get(i);
 			System.out.println(i);
 			System.out.println("Schaue an: " + toLook.toString());
-			boolean needToAdd = true;
 			Node source = toLook.getSourceNode();
 			Node target = toLook.getTargetNode();
 
