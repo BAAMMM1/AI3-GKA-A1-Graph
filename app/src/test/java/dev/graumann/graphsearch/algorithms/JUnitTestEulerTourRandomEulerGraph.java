@@ -41,7 +41,7 @@ public class JUnitTestEulerTourRandomEulerGraph {
 		this.graphs = new LinkedList<Graph>();
 
 		for (int counter = 0; counter < RUNS; counter++) {
-			Graph graph = fileHandler.loadGraph("db/testCases/eulercircle/randomEulerGraph" + counter + ".graph");
+			Graph graph = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/randomEulerGraph" + counter + ".graph");
 			this.graphs.add(graph);
 			System.out.println("load: " + counter);
 			System.out.println(graph.getNodeSet().size());

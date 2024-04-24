@@ -133,10 +133,10 @@ public class Controller {
 			System.out.println("Die zu öffnende Datei ist: " + chooser.getSelectedFile().getName());
 			System.out.println("Die zu öffnende Datei ist: " + chooser.getSelectedFile().getPath());
 
-			model.setGraph(model.getFileHandler().loadGraph(chooser.getSelectedFile().getPath()));
+			model.setGraph(model.getFileHandler().loadGraphFromFile(chooser.getSelectedFile().getPath()));
 			setGraphToPanel();
 
-			model.setGraphAsText(model.getFileHandler().loadFile(chooser.getSelectedFile().getPath()));
+			model.setGraphAsText(model.getFileHandler().loadFileFromFile(chooser.getSelectedFile().getPath()));
 			setGrapgBuilderTextArea();
 		}
 	}

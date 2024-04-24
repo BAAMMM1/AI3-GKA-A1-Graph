@@ -45,7 +45,7 @@ public class JUnitTestBFS {
 		this.fileHandler = new GraphFileExtensionHandler();
 						
 		// Test 1 - 9.1.1.1
-		this.graph1 = fileHandler.loadGraph("db/testCases/JUnitTest_BFS_directed.graph");
+		this.graph1 = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/JUnitTest_BFS_directed.graph");
 		this.bfs1 = new BreadthFirstSearch();		
 		this.shortestPathTest1 = new ArrayList<Node>();	
 		source_01 = graph1.getNode("Start");
@@ -68,7 +68,7 @@ public class JUnitTestBFS {
 		
 		
 		// Test 4 - 9.1.2.1
-		this.graph2 = fileHandler.loadGraph("db/testCases/JUnitTest_BFS_undirected.graph");
+		this.graph2 = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/JUnitTest_BFS_undirected.graph");
 		this.bfs4 = new BreadthFirstSearch();		
 		this.shortestPathTest4 = new ArrayList<Node>();	
 		source_04 = graph2.getNode("Start");

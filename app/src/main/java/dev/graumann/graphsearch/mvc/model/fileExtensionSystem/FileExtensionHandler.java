@@ -42,13 +42,23 @@ public abstract class FileExtensionHandler implements FileExtension{
 	}
 
 	@Override
-	public final Graph loadGraph(String path) {
+	public final Graph loadGraphFromFile(String path) {
 		return this.getConverter().fileToGraphObject(this.getReader().readFromFile(path));
+	}
+
+	@Override
+	public final Graph loadGraphFromResources(String path) {
+		return this.getConverter().fileToGraphObject(this.getReader().readFromResources(path));
 	}
 	
 	@Override
-	public final List<String> loadFile(String path) {
+	public final List<String> loadFileFromFile(String path) {
 		return this.getReader().readFromFile(path);
+	}
+
+	@Override
+	public final List<String> loadFileFromResources(String path) {
+		return this.getReader().readFromResources(path);
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class JUnitTestMinimalSpannungTree {
 		this.prim_random100_200 = new Prim();
 		this.stdKruskal_random100_200 = new org.graphstream.algorithm.Kruskal();
 		this.stdPrim_random100_200 = new org.graphstream.algorithm.Prim();
-		this.initAlgorithmus("db/random/random100_200.graph", kruskal_random100_200, prim_random100_200,
+		this.initAlgorithmus("/dev/graumann/graphsearch/testcases/random/random100_200.graph", kruskal_random100_200, prim_random100_200,
 				stdKruskal_random100_200, stdPrim_random100_200);
 
 		// Precondition
@@ -45,7 +45,7 @@ public class JUnitTestMinimalSpannungTree {
 	private void initAlgorithmus(String path, Kruskal kruskal, Prim prim,
 			org.graphstream.algorithm.Kruskal standardKruskal, org.graphstream.algorithm.Prim standardPrim) {
 
-		Graph graph = this.fileHandler.loadGraph(path);
+		Graph graph = this.fileHandler.loadGraphFromResources(path);
 
 		kruskal.calculate(graph);
 		prim.calculate(graph);
@@ -63,14 +63,14 @@ public class JUnitTestMinimalSpannungTree {
 	@Test(expected = IllegalDirectedGraph.class)
 	public void preconditionKruskalUndirectedGraph() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/directed.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/directed.graph");
 		this.kruskalPreconditions.calculate(graphPreConditions);
 	}
 
 	@Test(expected = IllegalDirectedGraph.class)
 	public void preconditionPrimUndirectedGraph() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/directed.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/directed.graph");
 		this.primPreconditions.calculate(graphPreConditions);
 	}
 
@@ -80,14 +80,14 @@ public class JUnitTestMinimalSpannungTree {
 	@Test(expected = IllegalWeightedGraph.class)
 	public void preconditionKruskalWeighted() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/unweighted.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/unweighted.graph");
 		this.kruskalPreconditions.calculate(graphPreConditions);
 	}
 
 	@Test(expected = IllegalWeightedGraph.class)
 	public void preconditionPrimWeighted() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/unweighted.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/unweighted.graph");
 		this.primPreconditions.calculate(graphPreConditions);
 	}
 
@@ -97,7 +97,7 @@ public class JUnitTestMinimalSpannungTree {
 	@Test(expected = IllegalWeightedGraph.class)
 	public void preconditionKruskalNegativWeighted() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/negativeWeighted.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/negativeWeighted.graph");
 		graphPreConditions.getEdge(0).setAttribute("weight", Integer.valueOf(-1));
 		this.kruskalPreconditions.calculate(graphPreConditions);
 	}
@@ -105,7 +105,7 @@ public class JUnitTestMinimalSpannungTree {
 	@Test(expected = IllegalWeightedGraph.class)
 	public void preconditionPrimNegativWeighted() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/negativeWeighted.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/negativeWeighted.graph");
 		graphPreConditions.getEdge(0).setAttribute("weight", Integer.valueOf(-1));
 		this.primPreconditions.calculate(graphPreConditions);
 	}
@@ -116,14 +116,14 @@ public class JUnitTestMinimalSpannungTree {
 	@Test(expected = IllegalNotConnectedGraph.class)
 	public void preconditionKruskalConnected() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/unconnected.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/unconnected.graph");
 		this.kruskalPreconditions.calculate(graphPreConditions);
 	}
 
 	@Test(expected = IllegalNotConnectedGraph.class)
 	public void preconditionPrimConnected() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/unconnected.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/unconnected.graph");
 		this.primPreconditions.calculate(graphPreConditions);
 	}
 
@@ -174,7 +174,7 @@ public class JUnitTestMinimalSpannungTree {
 	@Test
 	public void minimalSpanningTree() {
 		Graph graphPreConditions;
-		graphPreConditions = this.fileHandler.loadGraph("db/testCases/minimalSpanningTree/minimalSpanningTree.graph");
+		graphPreConditions = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/minimalSpanningTree/minimalSpanningTree.graph");
 
 		double result = 0;
 		for(Edge egde : graphPreConditions.getEdgeSet()){

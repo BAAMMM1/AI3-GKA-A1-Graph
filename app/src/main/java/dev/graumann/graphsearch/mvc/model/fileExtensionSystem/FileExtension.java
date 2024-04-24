@@ -8,8 +8,11 @@ public interface FileExtension {
 	
 	
 	public void saveGraph(Graph graph, String path);
-	public List<String> loadFile(String path);	
-	public Graph loadGraph(String path);
-	public Graph loadGraphFromList(List<String> list);	
+	public List<String> loadFileFromFile(String path);	
+	public Graph loadGraphFromFile(String path);
 
+	public List<String> loadFileFromResources(String path);	
+	public Graph loadGraphFromResources(String path);
+
+	public Graph loadGraphFromList(List<String> list);
 }

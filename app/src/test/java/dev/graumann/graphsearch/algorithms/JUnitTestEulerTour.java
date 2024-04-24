@@ -41,14 +41,14 @@ public class JUnitTestEulerTour {
 	@Test(expected = IllegalArgumentException.class)
 	public void preFleuryUnConnected() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler03UnconnectedPart.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler03UnconnectedPart.graph");
 		this.fleury.calculate(graph);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void preHierholzerUnConnected() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler03UnconnectedPart.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler03UnconnectedPart.graph");
 		this.hierholzer.calculate(graph);
 	}
 
@@ -58,14 +58,14 @@ public class JUnitTestEulerTour {
 	@Test(expected = IllegalArgumentException.class)
 	public void preFleuryDirected() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler04Directed.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler04Directed.graph");
 		this.fleury.calculate(graph);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void preHierholzerDirected() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler04Directed.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler04Directed.graph");
 		this.hierholzer.calculate(graph);
 	}
 
@@ -75,14 +75,14 @@ public class JUnitTestEulerTour {
 	@Test(expected = IllegalArgumentException.class)
 	public void preFleuryNotAllEven() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler05NotAllEven.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler05NotAllEven.graph");
 		this.fleury.calculate(graph);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void preHierholzerNotAllEven() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler05NotAllEven.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler05NotAllEven.graph");
 		this.hierholzer.calculate(graph);
 	}
 
@@ -92,14 +92,14 @@ public class JUnitTestEulerTour {
 	@Test(expected = IllegalArgumentException.class)
 	public void preFleuryEdgesLowerThenNodes() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler06EdgesLowerThenNodes.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler06EdgesLowerThenNodes.graph");
 		this.fleury.calculate(graph);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void preHierholzerEdgesLowerThenNodes() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler06EdgesLowerThenNodes.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler06EdgesLowerThenNodes.graph");
 		this.hierholzer.calculate(graph);
 	}
 
@@ -115,7 +115,7 @@ public class JUnitTestEulerTour {
 	@Test
 	public void FleuryEulerCycleComplete() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler01.graph");
 		List<Edge> result = this.fleury.calculate(graph);
 		
 		assertEquals(result.size(), graph.getEdgeSet().size());
@@ -128,7 +128,7 @@ public class JUnitTestEulerTour {
 	@Test
 	public void HierholzerCycleComplete() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler01.graph");
 		List<Edge> result = this.hierholzer.calculate(graph);
 		
 		assertEquals(result.size(), graph.getEdgeSet().size());
@@ -145,7 +145,7 @@ public class JUnitTestEulerTour {
 	@Test
 	public void FleuryEulerCycleIsSequence() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler01.graph");
 
 		List<Edge> eulerCircle = this.fleury.calculate(graph);
 
@@ -176,7 +176,7 @@ public class JUnitTestEulerTour {
 	@Test
 	public void HierholzerEulerCycleIsSequence() {
 		Graph graph;
-		graph = this.fileHandler.loadGraph("db/testCases/eulercircle/euler01.graph");
+		graph = this.fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/eulercircle/euler01.graph");
 
 		List<Edge> eulerCircle = this.hierholzer.calculate(graph);
 

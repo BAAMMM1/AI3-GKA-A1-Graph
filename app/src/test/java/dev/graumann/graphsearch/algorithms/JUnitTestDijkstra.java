@@ -48,7 +48,7 @@ public class JUnitTestDijkstra {
 		this.fileHandler = new GraphFileExtensionHandler();
 		
 		// Test 1 - 9.2.1.1
-		this.graph1 = fileHandler.loadGraph("db/testCases/JUnitTest_Dijkstra_directed.graph");
+		this.graph1 = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/JUnitTest_Dijkstra_directed.graph");
 		this.djk1 = new Dijkstra();
 		this.shortestPathTest1 = new ArrayList<Node>();	
 		source_01 = graph1.getNode("Start");
@@ -74,7 +74,7 @@ public class JUnitTestDijkstra {
 		target_03 = graph1.getNode("unerreichbares_Ziel");
 		
 		// Test 4 - 9.2.2.1
-		this.graph2 = fileHandler.loadGraph("db/testCases/JUnitTest_Dijkstra_ungerichtet.graph");
+		this.graph2 = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/testcases/JUnitTest_Dijkstra_ungerichtet.graph");
 		this.djk4 = new Dijkstra();
 		this.shortestPathTest4 = new ArrayList<Node>();	
 		source_04 = graph2.getNode("Start");

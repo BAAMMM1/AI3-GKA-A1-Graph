@@ -33,8 +33,8 @@ public class Model {
 	public void initializeModel() {
 		this.fileHandler = new GraphFileExtensionHandler();
 
-		this.graph = fileHandler.loadGraph("db/fleury/fleury01.graph");
-		this.graphAsText = fileHandler.loadFile("db/fleury/fleury01.graph");
+		this.graph = fileHandler.loadGraphFromResources("/dev/graumann/graphsearch/graph/fleury/fleury01.graph");
+		this.graphAsText = fileHandler.loadFileFromResources("/dev/graumann/graphsearch/graph/fleury/fleury01.graph");
 		this.modifier = new GraphModifer();
 		this.labeler = new GraphLabeler();
 	}
