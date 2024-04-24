@@ -32,6 +32,7 @@ public class Model {
 
 	public void initializeModel() {
 		this.fileHandler = new GraphFileExtensionHandler();
+
 		this.graph = fileHandler.loadGraph("db/fleury/fleury01.graph");
 		this.graphAsText = fileHandler.loadFile("db/fleury/fleury01.graph");
 		this.modifier = new GraphModifer();

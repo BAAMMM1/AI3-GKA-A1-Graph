@@ -160,4 +160,6 @@ gradle-app.setting
 .history
 .ionide
 
+bin/
+
 # End of https://www.toptal.com/developers/gitignore/api/gradle,intellij
