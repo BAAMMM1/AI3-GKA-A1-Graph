@@ -13,9 +13,9 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTour;
-import dev.graumann.graphsearch.mvc.model.algorithmen.eulerTour.EulerTourFactory;
-import dev.graumann.graphsearch.mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import dev.graumann.graphsearch.model.algorithmen.eulerTour.EulerTour;
+import dev.graumann.graphsearch.model.algorithmen.eulerTour.EulerTourFactory;
+import dev.graumann.graphsearch.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestEulerTour {
 

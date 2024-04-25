@@ -1,8 +1,8 @@
 package dev.graumann.graphsearch;
 
-import dev.graumann.graphsearch.mvc.controller.Controller;
-import dev.graumann.graphsearch.mvc.model.Model;
-import dev.graumann.graphsearch.mvc.view.View;
+import dev.graumann.graphsearch.controller.Controller;
+import dev.graumann.graphsearch.model.Model;
+import dev.graumann.graphsearch.view.View;
 
 public class Main {
 

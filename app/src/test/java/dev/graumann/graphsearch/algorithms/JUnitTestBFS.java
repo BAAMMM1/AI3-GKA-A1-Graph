@@ -10,8 +10,8 @@ import org.graphstream.graph.Node;
 import org.junit.Before;
 import org.junit.Test;
 
-import dev.graumann.graphsearch.mvc.model.algorithmen.shortestPath.BreadthFirstSearch;
-import dev.graumann.graphsearch.mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import dev.graumann.graphsearch.model.algorithmen.shortestPath.BreadthFirstSearch;
+import dev.graumann.graphsearch.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestBFS {
 	GraphFileExtensionHandler fileHandler;

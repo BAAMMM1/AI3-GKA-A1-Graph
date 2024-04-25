@@ -7,12 +7,12 @@ import org.graphstream.graph.Graph;
 import org.junit.Before;
 import org.junit.Test;
 
-import dev.graumann.graphsearch.mvc.model.algorithmen.minimalSpanningTree.Kruskal;
-import dev.graumann.graphsearch.mvc.model.algorithmen.minimalSpanningTree.Prim;
-import dev.graumann.graphsearch.mvc.model.exceptions.IllegalDirectedGraph;
-import dev.graumann.graphsearch.mvc.model.exceptions.IllegalNotConnectedGraph;
-import dev.graumann.graphsearch.mvc.model.exceptions.IllegalWeightedGraph;
-import dev.graumann.graphsearch.mvc.model.fileExtensionSystem.GraphFileExtensionHandler;
+import dev.graumann.graphsearch.model.algorithmen.minimalSpanningTree.Kruskal;
+import dev.graumann.graphsearch.model.algorithmen.minimalSpanningTree.Prim;
+import dev.graumann.graphsearch.model.exceptions.IllegalDirectedGraph;
+import dev.graumann.graphsearch.model.exceptions.IllegalNotConnectedGraph;
+import dev.graumann.graphsearch.model.exceptions.IllegalWeightedGraph;
+import dev.graumann.graphsearch.model.fileExtensionSystem.GraphFileExtensionHandler;
 
 public class JUnitTestMinimalSpannungTree {
 
